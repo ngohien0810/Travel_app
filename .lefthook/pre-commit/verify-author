@@ -1,0 +1,18 @@
+AUTHORS=(
+  'vietnamtravel:vietnamtravel@gmail.com'
+)
+
+# AUTHOR_CONFIG="$GIT_AUTHOR_NAME:$GIT_AUTHOR_EMAIL"
+
+# if [[ ! " ${AUTHORS[*]} " =~ " ${AUTHOR_CONFIG} " ]]; then
+#   echo ⛔️🚫⛔️🚫⛔️🚫⛔️🚫⛔️🚫⛔️🚫⛔️🚫⛔️🚫⛔️🚫⛔️🚫⛔️🚫⛔️🚫⛔️🚫
+#   echo "Your name should be the same as your username."
+#   echo "Example: vietnamtravel <vietnamtravel@gmail.com>"
+#   echo
+#   echo "Fix your username by using:"
+#   echo "git config user.name vietnamtravel"
+#   echo "git config user.email vietnamtravel@gmail.com"
+#   echo "Then try commiting again"
+#   echo ⛔️🚫⛔️🚫⛔️🚫⛔️🚫⛔️🚫⛔️🚫⛔️🚫⛔️🚫⛔️🚫⛔️🚫⛔️🚫⛔️🚫⛔️🚫
+#   exit 1
+# fi
