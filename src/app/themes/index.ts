@@ -1,5 +1,9 @@
 import { Theme, useTheme as useThemeRN } from '@react-navigation/native';
 import { ColorDark, ColorDefault } from '@theme/color';
+import { Dimensions } from 'react-native';
+
+export const WIDTH_SCREEN = Dimensions.get('screen').width
+export const HEIGHT_SCREEN = Dimensions.get('screen').height
 
 type ColorDefault = typeof ColorDefault;
 type ColorDark = typeof ColorDark;

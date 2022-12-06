@@ -34,18 +34,18 @@ export const RootNavigation = () => {
   // render
   return (
     <RootStack.Navigator screenOptions={{ headerShown: false }}>
-      {token === undefined ? (
+      {/* {token === undefined ? (
         <RootStack.Group
           screenOptions={{
             animationTypeForReplace: 'pop',
           }}>
           <RootStack.Screen name={APP_SCREEN.LOGIN} component={Login} />
         </RootStack.Group>
-      ) : (
-        <RootStack.Group>
-          <RootStack.Screen name={APP_SCREEN.HOME} component={Home} />
-        </RootStack.Group>
-      )}
+      ) : ( */}
+      <RootStack.Group>
+        <RootStack.Screen name={APP_SCREEN.HOME} component={Home} />
+      </RootStack.Group>
+      {/* )} */}
     </RootStack.Navigator>
   );
 };
