@@ -6,13 +6,9 @@ import { InputOutline } from './components/out-line';
 import { TextFieldProps } from './type';
 
 export const TextField = forwardRef<any, TextFieldProps>((props, refs) => {
-  // state
-  const { typeInput } = props;
+    // state
+    const { typeInput } = props;
 
-  // render
-  return typeInput === 'flat' ? (
-    <InputFlat {...props} ref={refs} />
-  ) : (
-    <InputOutline {...props} ref={refs} />
-  );
+    // render
+    return typeInput === 'flat' ? <InputFlat {...props} ref={refs} /> : <InputOutline {...props} ref={refs} />;
 });

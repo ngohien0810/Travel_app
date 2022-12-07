@@ -5,10 +5,6 @@ import { Switch as SwitchIOS } from './switch-ios';
 import { SwitchProps } from './type';
 
 export const Switch = (props: SwitchProps) => {
-  // render
-  return props.type === 'android' ? (
-    <SwitchAndroid {...props} />
-  ) : (
-    <SwitchIOS {...props} />
-  );
+    // render
+    return props.type === 'android' ? <SwitchAndroid {...props} /> : <SwitchIOS {...props} />;
 };

@@ -12,23 +12,23 @@ import { Input } from './input';
 import { FormLoginProps } from '../type';
 
 export const FormLogin = ({ onSubmit }: FormLoginProps) => {
-  // state
-  const formMethod = useForm<FormLoginType>({
-    mode: 'all',
-    resolver: yupResolver(loginValidation),
-  });
+    // state
+    const formMethod = useForm<FormLoginType>({
+        mode: 'all',
+        resolver: yupResolver(loginValidation),
+    });
 
-  // function
-  const onSubmitKey = () => {
-    formMethod.handleSubmit(onSubmit)();
-  };
-  // render
-  return (
-    <FormProvider {...formMethod}>
-      <Input<FormLoginType> name={'email'} label={'Email'} />
-      <Input<FormLoginType> name={'password'} label={'Password'} />
+    // function
+    const onSubmitKey = () => {
+        formMethod.handleSubmit(onSubmit)();
+    };
+    // render
+    return (
+        <FormProvider {...formMethod}>
+            <Input<FormLoginType> name={'email'} label={'Email'} />
+            <Input<FormLoginType> name={'password'} label={'Password'} />
 
-      <Button title={'Submit'} onPress={onSubmitKey} />
-    </FormProvider>
-  );
+            <Button title={'Submit'} onPress={onSubmitKey} />
+        </FormProvider>
+    );
 };

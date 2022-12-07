@@ -2,32 +2,32 @@
 import { I18nKeys } from '@utils/i18n/locales';
 
 export type ResponseBase<T = any, TStatus = boolean> = {
-  code: number;
+    code: number;
 } & (TStatus extends true
-  ? {
-      data: T;
+    ? {
+          data: T;
 
-      status: true;
-    }
-  : {
-      status: false;
+          status: true;
+      }
+    : {
+          status: false;
 
-      msg?: string | null;
-    });
+          msg?: string | null;
+      });
 export interface ParamsNetwork {
-  url: string;
-  params?: Record<string, string | number>;
-  path?: Record<string, string | number>;
-  body?: Record<string, unknown>;
+    url: string;
+    params?: Record<string, string | number>;
+    path?: Record<string, string | number>;
+    body?: Record<string, unknown>;
 }
 
 export enum SLICE_NAME {
-  APP = 'APP_',
-  AUTHENTICATION = 'AUTHENTICATION_',
+    APP = 'APP_',
+    AUTHENTICATION = 'AUTHENTICATION_',
 }
 
 export type ValidateMessageObject = {
-  keyT: I18nKeys;
-  optionsTx?: Record<string, I18nKeys>;
-  options?: Record<string, string | number>;
+    keyT: I18nKeys;
+    optionsTx?: Record<string, I18nKeys>;
+    options?: Record<string, string | number>;
 };

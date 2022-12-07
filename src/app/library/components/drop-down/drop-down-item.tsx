@@ -9,40 +9,31 @@ import { ItemProps } from './type';
 import { Icon } from '../icon';
 
 const DropDownItemComponent = ({
-  item,
-  labelStyle,
-  activeItemStyle,
-  activeLabelStyle,
-  containerStyleItem,
-  onPressItem,
-  customTickIcon,
-  selected = false,
+    item,
+    labelStyle,
+    activeItemStyle,
+    activeLabelStyle,
+    containerStyleItem,
+    onPressItem,
+    customTickIcon,
+    selected = false,
 }: ItemProps) => {
-  // function
-  const _onItemPress = () => {
-    onPressItem && item && onPressItem(item.value ?? '');
-  };
+    // function
+    const _onItemPress = () => {
+        onPressItem && item && onPressItem(item.value ?? '');
+    };
 
-  // render
-  return (
-    <TouchableOpacity onPress={_onItemPress}>
-      <View
-        style={[
-          styles.container,
-          containerStyleItem,
-          selected && activeItemStyle,
-        ]}>
-        <Text
-          style={[styles.labelStyle, labelStyle, selected && activeLabelStyle]}>
-          {item.label}
-        </Text>
-        <View style={[styles.wrapIcon]}>
-          {selected &&
-            (customTickIcon ? customTickIcon() : <Icon icon={'check'} />)}
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
+    // render
+    return (
+        <TouchableOpacity onPress={_onItemPress}>
+            <View style={[styles.container, containerStyleItem, selected && activeItemStyle]}>
+                <Text style={[styles.labelStyle, labelStyle, selected && activeLabelStyle]}>{item.label}</Text>
+                <View style={[styles.wrapIcon]}>
+                    {selected && (customTickIcon ? customTickIcon() : <Icon icon={'check'} />)}
+                </View>
+            </View>
+        </TouchableOpacity>
+    );
 };
 
 export const DropDownItem = memo(DropDownItemComponent, isEqual);

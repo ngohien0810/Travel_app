@@ -6,21 +6,22 @@ import { Block, Button, Screen, Text, Wallpaper } from '@components';
 import { goBack } from '@navigation/navigation-service';
 
 const RegisterComponent = () => {
-  // render
-  return (
-    <Block block>
-      <Wallpaper />
-      <Screen>
-        <Block block justifyContent={'center'} middle>
-          <Button
-            onPress={() => {
-              goBack();
-            }}>
-            <Text color={'red'}>Back</Text>
-          </Button>
+    // render
+    return (
+        <Block block>
+            <Wallpaper />
+            <Screen>
+                <Block block justifyContent={'center'} middle>
+                    <Button
+                        onPress={() => {
+                            goBack();
+                        }}
+                    >
+                        <Text color={'red'}>Back</Text>
+                    </Button>
+                </Block>
+            </Screen>
         </Block>
-      </Screen>
-    </Block>
-  );
+    );
 };
 export const Register = memo(RegisterComponent, isEqual);
