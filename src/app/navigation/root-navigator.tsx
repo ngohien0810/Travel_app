@@ -7,6 +7,7 @@ import { selectAppToken } from '@redux-selector/app';
 import BootSplash from 'react-native-bootsplash';
 import { useSelector } from 'react-redux';
 import BottomTab from './bottom-tab';
+import { Login } from '@features/un-authentication/login';
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
@@ -32,18 +33,19 @@ export const RootNavigation = () => {
     // render
     return (
         <RootStack.Navigator screenOptions={{ headerShown: false }}>
-            {/* {token === undefined ? (
-        <RootStack.Group
-          screenOptions={{
-            animationTypeForReplace: 'pop',
-          }}>
-          <RootStack.Screen name={APP_SCREEN.LOGIN} component={Login} />
-        </RootStack.Group>
-      ) : ( */}
-            <RootStack.Group>
-                <RootStack.Screen name={APP_SCREEN.AUTHORIZE} component={BottomTab} />
-            </RootStack.Group>
-            {/* )} */}
+            {token === undefined ? (
+                <RootStack.Group
+                    screenOptions={{
+                        animationTypeForReplace: 'pop',
+                    }}
+                >
+                    <RootStack.Screen name={APP_SCREEN.LOGIN} component={Login} />
+                </RootStack.Group>
+            ) : (
+                <RootStack.Group>
+                    <RootStack.Screen name={APP_SCREEN.AUTHORIZE} component={BottomTab} />
+                </RootStack.Group>
+            )}
         </RootStack.Navigator>
     );
 };

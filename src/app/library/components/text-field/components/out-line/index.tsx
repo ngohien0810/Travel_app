@@ -13,8 +13,8 @@ import { InputOutlineProps } from './type';
 
 import { Text } from '../../../text';
 
-const UN_ACTIVE_COLOR = 'rgb(159,152,146)';
-const ACTIVE_COLOR = 'rgb(0,87,231)';
+const UN_ACTIVE_COLOR = '#9B9B9B';
+const ACTIVE_COLOR = '#15898F';
 const ERROR_COLOR = 'rgb(214,45,32)';
 
 export const InputOutline = forwardRef<any, InputOutlineProps>((props, ref) => {

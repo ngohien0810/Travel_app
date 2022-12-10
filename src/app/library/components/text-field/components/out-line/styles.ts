@@ -3,10 +3,11 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
     container: {
         paddingVertical: 15,
+        paddingHorizontal: 10,
         borderWidth: StyleSheet.hairlineWidth * 2,
-        borderRadius: 5,
-        borderColor: 'gray',
+        borderColor: 'rgba(155, 155, 155, 1)',
         justifyContent: 'center',
+        borderRadius: 10,
     },
     input: {
         color: '#000',

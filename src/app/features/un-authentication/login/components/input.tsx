@@ -7,6 +7,7 @@ import { CustomOmit } from '@common';
 import { HelperText, TextField } from '@components';
 import { InputFlatProps } from '@components/text-field/components/flat/type';
 import { FormLoginType } from '@model/authentication';
+import { View } from 'react-native';
 
 interface InputProps<T extends Record<string, any>>
     extends CustomOmit<InputFlatProps, 'nameTrigger'>,
@@ -33,7 +34,7 @@ export const Input = <T extends Record<string, any>>({
     });
     // render
     return (
-        <>
+        <View style={{ marginBottom: 5 }}>
             <TextField
                 onSubmit={onSubmit}
                 ref={field.ref}
@@ -44,10 +45,10 @@ export const Input = <T extends Record<string, any>>({
                 onChangeText={field.onChange}
                 onBlur={field.onBlur}
                 defaultValue={(getValues() as Record<string, string>)[name as string]}
-                typeInput={'flat'}
+                typeInput="outline"
                 {...rest}
             />
             <HelperText visible={error?.message !== undefined} msg={error?.message ?? ''} type={'error'} />
-        </>
+        </View>
     );
 };

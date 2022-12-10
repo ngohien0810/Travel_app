@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'react-native';
+import { View } from 'react-native';
 
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -9,6 +9,8 @@ import { loginValidation } from '@validate/login';
 
 import { Input } from './input';
 
+import { Block, Button, Text } from '@components';
+import { useLoginStyle } from '../style';
 import { FormLoginProps } from '../type';
 
 export const FormLogin = ({ onSubmit }: FormLoginProps) => {
@@ -25,10 +27,29 @@ export const FormLogin = ({ onSubmit }: FormLoginProps) => {
     // render
     return (
         <FormProvider {...formMethod}>
-            <Input<FormLoginType> name={'email'} label={'Email'} />
-            <Input<FormLoginType> name={'password'} label={'Password'} />
+            <View style={useLoginStyle().login_container}>
+                <Text
+                    style={{ marginBottom: 22, marginTop: 5 }}
+                    textAlign="center"
+                    fontSize={22}
+                    fontWeight="500"
+                    colorTheme="button"
+                >
+                    Đăng nhập
+                </Text>
 
-            <Button title={'Submit'} onPress={onSubmitKey} />
+                <Input<FormLoginType> name={'email'} label={'09xxxxxxxxx'} />
+                <Input<FormLoginType> name={'password'} label={'Password'} />
+
+                <Button
+                    buttonColorTheme="button"
+                    textStyle={{ textAlign: 'center', fontWeight: 'bold' }}
+                    style={{ paddingVertical: 16, borderRadius: 12, marginTop: 20 }}
+                    textColorTheme="background"
+                    onPress={onSubmitKey}
+                    text="Tiếp tục"
+                />
+            </View>
         </FormProvider>
     );
 };

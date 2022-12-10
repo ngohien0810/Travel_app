@@ -10,6 +10,7 @@ export const images = {
     user: require('./source/user.png'),
     clock: require('./source/clock.png'),
     calendar: require('./source/calendar.png'),
+    location_login: require('./source/location_login.png'),
     header_gradient_bg: require('./source/header_gradient_bg.png'),
 };
 
