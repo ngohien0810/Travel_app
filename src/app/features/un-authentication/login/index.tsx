@@ -10,12 +10,24 @@ import { FormLogin } from './components/form-login';
 import FastImage from 'react-native-fast-image';
 import { images } from '@assets/image';
 import { HEIGHT_SCREEN } from '@theme';
+import { FormRegister } from './components/form-register';
+import { navigate } from '@navigation/navigation-service';
+import { APP_SCREEN } from '@navigation/screen-types';
+import { useDispatch } from 'react-redux';
 
 export const Login = () => {
+    const [isRegister, setIsRegister] = React.useState(false);
+    // const dispatch=useDispatch
     // function
     const onSubmit = (data: FormLoginType) => {
         dispatch(appActions.setAppTheme('dark'));
-        Alert.alert(JSON.stringify(data));
+
+        if (data.phone === '0987654321' && data.password === '123456') {
+            dispatch(appActions.setToken('demo'));
+            navigate(APP_SCREEN.HOME);
+        } else {
+            Alert.alert(JSON.stringify(data));
+        }
     };
 
     // render
@@ -30,21 +42,26 @@ export const Login = () => {
                 backgroundColor={'transparent'}
             >
                 <Block direction="column" height={HEIGHT_SCREEN}>
-                    <Block flex={1}>
+                    <Block flex={isRegister ? 0.35 : 0.9}>
                         <Block direction="row" height="100%" justifyContent="center" alignItems="center">
-                            <FastImage style={{ height: 128, width: 128 }} source={images.location_login} />
+                            <FastImage
+                                style={{ height: isRegister ? 80 : 128, width: isRegister ? 80 : 128 }}
+                                source={images.location_login}
+                            />
                         </Block>
                     </Block>
                     <Block flex={1} direction="column" justifyContent="space-between">
-                        <FormLogin onSubmit={onSubmit} />
-                        <Block direction="row" style={{ marginBottom: 40 }} alignItems="center" justifyContent="center">
+                        {isRegister ? <FormRegister onSubmit={onSubmit} /> : <FormLogin onSubmit={onSubmit} />}
+
+                        <Block direction="row" style={{ marginBottom: 50 }} alignItems="center" justifyContent="center">
                             <Text fontSize={16} colorTheme="background">
                                 Bạn chưa có tài khoản?
                             </Text>
                             <Button
                                 textStyle={{ fontSize: 16, textDecorationLine: 'underline' }}
                                 textColorTheme="background"
-                                text=" Đăng ký"
+                                text={isRegister ? 'Đăng nhập' : 'Đăng ký'}
+                                onPress={() => (isRegister ? setIsRegister(false) : setIsRegister(true))}
                             />
                         </Block>
                     </Block>

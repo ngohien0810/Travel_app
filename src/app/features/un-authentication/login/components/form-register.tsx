@@ -4,20 +4,20 @@ import { View } from 'react-native';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { FormLoginType } from '@model/authentication';
-import { loginValidation } from '@validate/login';
+import { FormLoginType, FormRegisterType } from '@model/authentication';
+import { registerValidation } from '@validate/login';
 
 import { Input } from './input';
 
 import { Block, Button, Text } from '@components';
 import { useLoginStyle } from '../style';
-import { FormLoginProps } from '../type';
+import { FormRegisterProps } from '../type';
 
-export const FormLogin = ({ onSubmit }: FormLoginProps) => {
+export const FormRegister = ({ onSubmit }: FormRegisterProps) => {
     // state
-    const formMethod = useForm<FormLoginType>({
+    const formMethod = useForm<FormRegisterType>({
         mode: 'all',
-        resolver: yupResolver(loginValidation),
+        resolver: yupResolver(registerValidation),
     });
 
     // function
@@ -35,21 +35,33 @@ export const FormLogin = ({ onSubmit }: FormLoginProps) => {
                     fontWeight="500"
                     colorTheme="button"
                 >
-                    Đăng nhập
+                    Đăng ký
                 </Text>
+                <Text style={{ marginBottom: 5 }} colorTheme="button">
+                    Họ tên
+                </Text>
+                <Input<FormRegisterType> name={'full_name'} label={'Nhập họ tên'} />
+
                 <Text style={{ marginBottom: 5 }} colorTheme="button">
                     Số điện thoại
                 </Text>
-                <Input<FormLoginType> name={'phone'} label={'Nhập số điện thoại'} />
+                <Input<FormRegisterType> name={'phone'} label={'Nhập số điện thoại'} />
+
+                <Text style={{ marginBottom: 5 }} colorTheme="button">
+                    Email
+                </Text>
+                <Input<FormRegisterType> name={'email'} label={'Nhập email'} />
+
                 <Text style={{ marginBottom: 5 }} colorTheme="button">
                     Mật khẩu
                 </Text>
-                <Input<FormLoginType> name={'password'} label={'Mật khẩu'} secureTextEntry />
-                <Block direction="row" justifyContent="flex-end">
-                    <Text style={{ marginBottom: 5 }} colorTheme="button">
-                        Quên mật khẩu?
-                    </Text>
-                </Block>
+                <Input<FormRegisterType> name={'password'} label={'Mật khẩu'} />
+
+                <Text style={{ marginBottom: 5 }} colorTheme="button">
+                    Nhập lại mật khẩu
+                </Text>
+                <Input<FormRegisterType> name={'re_password'} label={'Nhập lại mật khẩu'} />
+
                 <Button
                     buttonColorTheme="button"
                     textStyle={{ textAlign: 'center', fontWeight: 'bold' }}
