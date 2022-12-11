@@ -55,12 +55,12 @@ export const Login = () => {
 
                         <Block direction="row" style={{ marginBottom: 50 }} alignItems="center" justifyContent="center">
                             <Text fontSize={16} colorTheme="background">
-                                Bạn chưa có tài khoản?
+                                {isRegister ? 'Bạn đã có tài khoản?' : 'Bạn chưa có tài khoản?'}
                             </Text>
                             <Button
                                 textStyle={{ fontSize: 16, textDecorationLine: 'underline' }}
                                 textColorTheme="background"
-                                text={isRegister ? 'Đăng nhập' : 'Đăng ký'}
+                                text={isRegister ? ' Đăng nhập' : ' Đăng ký'}
                                 onPress={() => (isRegister ? setIsRegister(false) : setIsRegister(true))}
                             />
                         </Block>

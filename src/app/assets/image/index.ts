@@ -12,6 +12,8 @@ export const images = {
     calendar: require('./source/calendar.png'),
     location_login: require('./source/location_login.png'),
     header_gradient_bg: require('./source/header_gradient_bg.png'),
+    noti:require('./source/noti.png'),
+    calendar_home: require('./source/calendar_home.png'),
 };
 
 export type ImageTypes = keyof typeof images;
