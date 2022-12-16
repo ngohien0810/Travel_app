@@ -24,6 +24,7 @@ export const handleResponseAxios = <T = Record<string, unknown>>(res: AxiosRespo
     return responseDefault as ResponseBase<T>;
 };
 export const handleErrorAxios = <T = Record<string, unknown>>(error: AxiosError): ResponseBase<T> => {
+    console.log(error);
     if (error.code === STATUS_TIME_OUT) {
         // timeout
         return handleErrorApi(CODE_TIME_OUT) as unknown as ResponseBase<T>;

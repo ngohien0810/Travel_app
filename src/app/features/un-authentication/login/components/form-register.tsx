@@ -50,17 +50,17 @@ export const FormRegister = ({ onSubmit }: FormRegisterProps) => {
                 <Text style={{ marginBottom: 5 }} colorTheme="button">
                     Email
                 </Text>
-                <Input<FormRegisterType> name={'email'} label={'Nhập email'} />
+                <Input<FormRegisterType> autoCapitalize="none" name={'email'} label={'Nhập email'} />
 
                 <Text style={{ marginBottom: 5 }} colorTheme="button">
                     Mật khẩu
                 </Text>
-                <Input<FormRegisterType> name={'password'} label={'Mật khẩu'} />
+                <Input<FormRegisterType> secureTextEntry name={'password'} label={'Mật khẩu'} />
 
                 <Text style={{ marginBottom: 5 }} colorTheme="button">
                     Nhập lại mật khẩu
                 </Text>
-                <Input<FormRegisterType> name={'re_password'} label={'Nhập lại mật khẩu'} />
+                <Input<FormRegisterType> secureTextEntry name={'re_password'} label={'Nhập lại mật khẩu'} />
 
                 <Button
                     buttonColorTheme="button"

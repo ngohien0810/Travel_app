@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 
 import { dispatch } from '@common';
 import { Block, Button, Screen, Text, Wallpaper } from '@components';
-import { FormLoginType } from '@model/authentication';
+import { FormLoginType, FormRegisterType } from '@model/authentication';
 import { appActions } from '@redux-slice';
 
 import { FormLogin } from './components/form-login';
@@ -14,19 +14,44 @@ import { FormRegister } from './components/form-register';
 import { navigate } from '@navigation/navigation-service';
 import { APP_SCREEN } from '@navigation/screen-types';
 import { useDispatch } from 'react-redux';
+import { authService } from './service';
 
 export const Login = () => {
     const [isRegister, setIsRegister] = React.useState(false);
     // const dispatch=useDispatch
     // function
-    const onSubmit = (data: FormLoginType) => {
-        dispatch(appActions.setAppTheme('dark'));
-
-        if (data.phone === '0987654321' && data.password === '123456') {
-            dispatch(appActions.setToken('demo'));
-            navigate(APP_SCREEN.HOME);
+    const onSubmit = (data: any) => {
+        // dispatch(appActions.setAppTheme('dark'));
+        // if (data.phone === '0987654321' && data.password === '123456') {
+        //     dispatch(appActions.setToken('demo'));
+        //     navigate(APP_SCREEN.HOME);
+        // } else {
+        // }
+        if (isRegister) {
+            authService
+                .register({
+                    Username: data.full_name,
+                    Email: data.email,
+                    Phone: data.phone,
+                    Password: data.password,
+                })
+                .then((res) => {
+                    Alert.alert('Đăng ký tài khoản thành công');
+                    setIsRegister(false);
+                    // dispatch(appActions.setToken('demo'));
+                    // navigate(APP_SCREEN.HOME);
+                });
         } else {
-            Alert.alert(JSON.stringify(data));
+            authService
+                .login({
+                    Phone: data.phone,
+                    Password: data.password,
+                })
+                .then((res) => {
+                    console.log(res);
+                    dispatch(appActions.setToken('demo'));
+                    navigate(APP_SCREEN.HOME);
+                });
         }
     };
 
