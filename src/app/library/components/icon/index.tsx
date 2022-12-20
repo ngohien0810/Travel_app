@@ -8,14 +8,17 @@ import { useTheme } from '@theme';
 
 import { IconProps } from './type';
 
-const SIZE = 24;
+const SIZE = 40;
 
-export const Icon = ({ icon, color, colorTheme, onPress, size = SIZE, resizeMode = 'contain' }: IconProps) => {
+export const Icon = ({ icon, color, colorTheme, onPress, size = SIZE, resizeMode = 'contain', rotate }: IconProps) => {
     // state
 
     const theme = useTheme();
     // style
-    const style = useMemo<StyleProp<ImageStyle>>(() => [{ width: size, height: size }], [size]);
+    const style = useMemo<StyleProp<ImageStyle>>(
+        () => [{ width: size, height: size, transform: rotate ? [{ rotate: '90deg' }] : [] }],
+        [size, rotate]
+    );
 
     // render
     return (

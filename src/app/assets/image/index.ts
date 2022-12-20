@@ -15,6 +15,7 @@ export const images = {
     noti: require('./source/noti.png'),
     calendar_home: require('./source/calendar_home.png'),
     avatar: require('./source/avatar.png'),
+    bg_result_search: require('./source/bg_result_search.png'),
 };
 
 export type ImageTypes = keyof typeof images;

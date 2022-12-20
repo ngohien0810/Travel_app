@@ -10,6 +10,7 @@ export const icons = {
     user: require('./source/ic_user.png'),
     arrow_down: require('./source/arrow_down.png'),
     check: require('./source/check.png'),
+    filter: require('./source/filter.png'),
 };
 
 export type IconTypes = keyof typeof icons;

@@ -37,4 +37,6 @@ export interface IconProps {
      * @default contain
      */
     resizeMode?: ResizeMode;
+
+    rotate?: boolean;
 }

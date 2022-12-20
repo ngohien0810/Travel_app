@@ -5,9 +5,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { HeaderProps } from './header.props';
 import { goBack } from '@navigation/navigation-service';
-import { Button } from 'src/app/components/Button';
-import { Icon } from '@components';
-import { Text } from 'src/app/components/Text';
+import { Button } from '../../components/Button';
+import { Icon, Text } from '@components';
 import { SPACING } from '@theme';
 import { ColorDefault } from '@theme/color';
 
@@ -30,7 +29,7 @@ const RIGHT: ViewStyle = { width: 2 };
  * Header that appears on many screens. Will hold navigation buttons and screen title.
  */
 const Header = (props: HeaderProps) => {
-    const { onRightPress, rightIcon, leftIcon, headerText, style, titleStyle, onBack } = props;
+    const { onRightPress, rightIcon, leftIcon, headerText, style, titleStyle, onBack, children } = props;
     const header = headerText || '';
     const insets = useSafeAreaInsets();
 
@@ -44,17 +43,17 @@ const Header = (props: HeaderProps) => {
                         goBack();
                     }}
                 >
-                    <Icon icon="back" />
+                    <Icon icon="arrow_down" rotate color="#fff" />
                 </Button>
             ) : (
                 <View style={LEFT} />
             )}
-            <View style={TITLE_MIDDLE}>
-                <Text preset="bold" size="xl" style={[TITLE, titleStyle]} text={header} />
-            </View>
+
+            <View style={TITLE_MIDDLE}>{children ? children : <Text style={[TITLE, titleStyle]} text={header} />}</View>
+
             {rightIcon ? (
                 <Button preset="link" onPress={onRightPress}>
-                    <Icon icon={rightIcon} />
+                    <Icon size={35} icon={rightIcon} />
                 </Button>
             ) : (
                 <View style={RIGHT} />

@@ -42,4 +42,6 @@ export interface HeaderProps {
      */
     titleStyle?: StyleProp<TextStyle>;
     onBack?: any;
+
+    children?: any;
 }

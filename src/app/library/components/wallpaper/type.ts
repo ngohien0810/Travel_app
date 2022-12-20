@@ -6,4 +6,5 @@ export interface WallpaperProps {
      * @default undefined
      */
     backgroundImage?: ImageTypes;
+    deviceH50?: boolean;
 }

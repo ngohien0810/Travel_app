@@ -11,6 +11,8 @@ import Swiper from 'react-native-swiper';
 import FastImage from 'react-native-fast-image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Rating } from 'react-native-ratings';
+import { navigate, navigationRef } from '@navigation/navigation-service';
+import { APP_SCREEN } from '@navigation/screen-types';
 
 const HomeComponent = () => {
     const insets = useSafeAreaInsets();
@@ -33,9 +35,9 @@ const HomeComponent = () => {
                         </Block>
                     </View>
 
-                    <View style={[styles.notifi_tour]}>
+                    <TouchableOpacity style={[styles.notifi_tour]}>
                         <Image style={styles.noti_icon} source={images.noti} />
-                    </View>
+                    </TouchableOpacity>
                 </Block>
             </ImageBackground>
             <View style={styles.wrapper_tour_special}>
@@ -48,7 +50,7 @@ const HomeComponent = () => {
                 /> */}
 
                 <Text style={styles.text_tour_special}>Tour nổi bật</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigate(APP_SCREEN.SEARCH_RESULT)}>
                     <Text style={styles.text_more}>Xem thêm</Text>
                 </TouchableOpacity>
             </View>
@@ -346,6 +348,7 @@ const styles = StyleSheet.create({
         paddingLeft: 25,
         borderTopLeftRadius: 30,
         borderBottomLeftRadius: 30,
+        zIndex: 999,
     },
     noti_icon: {
         width: 19,

@@ -10,10 +10,13 @@ import { LocalImage } from '../local-image';
 
 const deviceH = Dimensions.get('screen').height;
 
-const WallpaperComponent = ({ backgroundImage = 'bg_wallpaper' }: WallpaperProps) => {
+const WallpaperComponent = ({ backgroundImage = 'bg_wallpaper', deviceH50 }: WallpaperProps) => {
     // state
     const { width } = useWindowDimensions();
-    const containerStyle = useMemo<ViewStyle>(() => ({ width, height: deviceH }), [width]);
+    const containerStyle = useMemo<ViewStyle>(
+        () => ({ width, height: deviceH50 ? deviceH / 2 : deviceH }),
+        [width, deviceH50]
+    );
 
     // render
     return (
