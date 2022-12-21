@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import BottomTab from './bottom-tab';
 import { Login } from '@features/un-authentication/login';
 import ResultSearchScreen from '@features/authentication/result_search';
+import TourDetailScreen from '@features/authentication/tour/Tour.Detail';
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
@@ -46,6 +47,7 @@ export const RootNavigation = () => {
                 <RootStack.Group>
                     <RootStack.Screen name={APP_SCREEN.AUTHORIZE} component={BottomTab} />
                     <RootStack.Screen name={APP_SCREEN.SEARCH_RESULT} component={ResultSearchScreen} />
+                    <RootStack.Screen name={APP_SCREEN.TOUR_DETAIL} component={TourDetailScreen} />
                 </RootStack.Group>
             )}
         </RootStack.Navigator>

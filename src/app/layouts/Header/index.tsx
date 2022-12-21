@@ -29,7 +29,20 @@ const RIGHT: ViewStyle = { width: 2 };
  * Header that appears on many screens. Will hold navigation buttons and screen title.
  */
 const Header = (props: HeaderProps) => {
-    const { onRightPress, rightIcon, leftIcon, headerText, style, titleStyle, onBack, children } = props;
+    const {
+        iconLeft = '#fff',
+        leftIconStyled,
+        rightIconStyled,
+        onRightPress,
+        rightIcon,
+        leftIcon,
+        headerText,
+        style,
+        titleStyle,
+        onBack,
+        children,
+        iconLeftSize = 40,
+    } = props;
     const header = headerText || '';
     const insets = useSafeAreaInsets();
 
@@ -42,8 +55,9 @@ const Header = (props: HeaderProps) => {
                         onBack && onBack();
                         goBack();
                     }}
+                    style={leftIconStyled}
                 >
-                    <Icon icon="arrow_down" rotate color="#fff" />
+                    <Icon icon="arrow_down" size={iconLeftSize} rotate color={iconLeft} />
                 </Button>
             ) : (
                 <View style={LEFT} />
@@ -52,7 +66,7 @@ const Header = (props: HeaderProps) => {
             <View style={TITLE_MIDDLE}>{children ? children : <Text style={[TITLE, titleStyle]} text={header} />}</View>
 
             {rightIcon ? (
-                <Button preset="link" onPress={onRightPress}>
+                <Button style={rightIconStyled} preset="link" onPress={onRightPress}>
                     <Icon size={35} icon={rightIcon} />
                 </Button>
             ) : (

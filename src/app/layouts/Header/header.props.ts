@@ -44,4 +44,8 @@ export interface HeaderProps {
     onBack?: any;
 
     children?: any;
+    leftIconStyled?: any;
+    rightIconStyled?: any;
+    iconLeft?: any;
+    iconLeftSize?: any;
 }
