@@ -11,4 +11,6 @@ const CardTour = () => {
 
 export default CardTour;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    
+});
