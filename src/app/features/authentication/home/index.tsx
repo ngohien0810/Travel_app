@@ -5,17 +5,26 @@ import isEqual from 'react-fast-compare';
 import LinearGradient from 'react-native-linear-gradient';
 
 import { images } from '@assets/image';
-import { WIDTH_SCREEN } from '@theme';
 import { Block, Screen, Text, TextField } from '@components';
-import Swiper from 'react-native-swiper';
-import FastImage from 'react-native-fast-image';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Rating } from 'react-native-ratings';
-import { navigate, navigationRef } from '@navigation/navigation-service';
+import { navigate } from '@navigation/navigation-service';
 import { APP_SCREEN } from '@navigation/screen-types';
+import { WIDTH_SCREEN } from '@theme';
+import { Rating } from 'react-native-ratings';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Swiper from 'react-native-swiper';
+import { homeService } from './service';
 
 const HomeComponent = () => {
+    const [hotTour, setHotTour] = React.useState([]);
+
     const insets = useSafeAreaInsets();
+
+    React.useEffect(() => {
+        homeService.getHotTour().then((res: any) => {
+            console.log('🚀 ~ file: index.tsx:24 ~ homeService.getHotTour ~ res', res);
+        });
+    }, []);
+
     // render
     return (
         <Screen scroll unsafe style={{ backgroundColor: '#f2f2f2', paddingBottom: 140 }}>
@@ -261,13 +270,13 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#c9c9c9',
     },
-    linear_header: {
-        position: 'absolute',
-        top: -80,
-        right: 0,
-        left: 0,
-        height: 140,
-    },
+    // linear_header: {
+    //     position: 'absolute',
+    //     top: -80,
+    //     right: 0,
+    //     left: 0,
+    //     height: 140,
+    // },
     wrapper: {
         flex: 1,
         height: 200,
