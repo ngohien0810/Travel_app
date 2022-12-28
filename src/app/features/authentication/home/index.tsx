@@ -13,15 +13,18 @@ import { Rating } from 'react-native-ratings';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Swiper from 'react-native-swiper';
 import { homeService } from './service';
+import moment from 'moment';
+import CardTour from '../../../components/CardTour';
 
 const HomeComponent = () => {
     const [hotTour, setHotTour] = React.useState([]);
+    console.log('🚀 ~ file: index.tsx:19 ~ HomeComponent ~ hotTour', hotTour);
 
     const insets = useSafeAreaInsets();
 
     React.useEffect(() => {
         homeService.getHotTour().then((res: any) => {
-            console.log('🚀 ~ file: index.tsx:24 ~ homeService.getHotTour ~ res', res);
+            setHotTour(res.data.data);
         });
     }, []);
 
@@ -65,20 +68,22 @@ const HomeComponent = () => {
             </View>
             <FlatList
                 style={{ paddingHorizontal: 20, flexGrow: 0 }}
-                data={['1', '2']}
-                keyExtractor={(record) => record}
-                renderItem={() => (
-                    <ImageBackground style={styles.tour_image} source={images.tour_image}>
+                data={hotTour}
+                keyExtractor={(record: any) => record?.id}
+                renderItem={({ item }: any) => (
+                    <ImageBackground style={styles.tour_image} source={item?.ImageUrl}>
                         <LinearGradient
                             colors={['rgba(0,0,0,.01)', 'rgba(0,0,0,.55)']}
                             start={{ x: 0, y: 0 }}
                             end={{ x: 0, y: 1 }}
                             style={styles.wrapper_time_tour}
                         >
-                            <Text style={styles.title_tour}>Tour du lịch ABC XYZ gì đó sẽ hiển thị 2 dòng ở đây</Text>
+                            <Text style={styles.title_tour}>{item?.Title}</Text>
                             <View style={styles.time_tour}>
                                 <Text style={styles.text_time}>4 ngày 3 đêm</Text>
-                                <Text style={styles.text_calendar}>26/12/2022</Text>
+                                <Text style={styles.text_calendar}>
+                                    {moment(item?.CreatedDate).format('DD/MM/YYYY')}
+                                </Text>
                             </View>
                         </LinearGradient>
                     </ImageBackground>
@@ -114,93 +119,8 @@ const HomeComponent = () => {
                     <Text style={styles.text_more}>Xem thêm</Text>
                 </TouchableOpacity>
             </View>
-            <View style={styles.wrapper_history_tour}>
-                <View style={styles.card_shadow}>
-                    <View style={styles.card_history_tour}>
-                        <View>
-                            <Image style={styles.image_history_tour} source={images.tour_image} />
-                        </View>
-                        <View style={{ flex: 1 }}>
-                            <Text numberOfLines={2} color={'#21A8B0'} fontWeight="500" fontSize={16}>
-                                Tour du lịch ABC XYZ gì đó sẽ hiển thị 2 dòng ở đây
-                            </Text>
-                            <View style={styles.wrapper_clock_style}>
-                                <Image style={styles.clock_style} source={images.clock} />
-                                <Text>4 ngày 3 đêm</Text>
-                            </View>
-                            <View style={styles.wrapper_calendar_style}>
-                                <Image style={styles.calendar_style} source={images.calendar} />
-                                <Text>22/12/2022</Text>
-                            </View>
-                            <Block direction="row" justifyContent="flex-start">
-                                <Rating startingValue={5} imageSize={16} style={{ paddingVertical: 10 }} />
-                            </Block>
 
-                            <Text colorTheme="button" fontWeight="600" fontSize={18}>
-                                25.000.000 VNĐ
-                            </Text>
-                        </View>
-                    </View>
-                </View>
-            </View>
-            <View style={styles.wrapper_history_tour}>
-                <View style={styles.card_shadow}>
-                    <View style={styles.card_history_tour}>
-                        <View>
-                            <Image style={styles.image_history_tour} source={images.tour_image} />
-                        </View>
-                        <View style={{ flex: 1 }}>
-                            <Text numberOfLines={2} color={'#21A8B0'} fontWeight="500" fontSize={16}>
-                                Tour du lịch ABC XYZ gì đó sẽ hiển thị 2 dòng ở đây
-                            </Text>
-                            <View style={styles.wrapper_clock_style}>
-                                <Image style={styles.clock_style} source={images.clock} />
-                                <Text>4 ngày 3 đêm</Text>
-                            </View>
-                            <View style={styles.wrapper_calendar_style}>
-                                <Image style={styles.calendar_style} source={images.calendar} />
-                                <Text>22/12/2022</Text>
-                            </View>
-                            <Block direction="row" justifyContent="flex-start">
-                                <Rating startingValue={5} imageSize={16} style={{ paddingVertical: 10 }} />
-                            </Block>
-
-                            <Text colorTheme="button" fontWeight="600" fontSize={18}>
-                                25.000.000 VNĐ
-                            </Text>
-                        </View>
-                    </View>
-                </View>
-            </View>
-            <View style={styles.wrapper_history_tour}>
-                <View style={styles.card_shadow}>
-                    <View style={styles.card_history_tour}>
-                        <View>
-                            <Image style={styles.image_history_tour} source={images.tour_image} />
-                        </View>
-                        <View style={{ flex: 1 }}>
-                            <Text numberOfLines={2} color={'#21A8B0'} fontWeight="500" fontSize={16}>
-                                Tour du lịch ABC XYZ gì đó sẽ hiển thị 2 dòng ở đây
-                            </Text>
-                            <View style={styles.wrapper_clock_style}>
-                                <Image style={styles.clock_style} source={images.clock} />
-                                <Text>4 ngày 3 đêm</Text>
-                            </View>
-                            <View style={styles.wrapper_calendar_style}>
-                                <Image style={styles.calendar_style} source={images.calendar} />
-                                <Text>22/12/2022</Text>
-                            </View>
-                            <Block direction="row" justifyContent="flex-start">
-                                <Rating startingValue={5} imageSize={16} style={{ paddingVertical: 10 }} />
-                            </Block>
-
-                            <Text colorTheme="button" fontWeight="600" fontSize={18}>
-                                25.000.000 VNĐ
-                            </Text>
-                        </View>
-                    </View>
-                </View>
-            </View>
+            <CardTour title="demo" start_tour="12/12/2022" price="99.999" />
         </Screen>
     );
 };
@@ -293,55 +213,6 @@ const styles = StyleSheet.create({
     header_gradient_bg: {
         bottom: -100,
         position: 'absolute',
-    },
-    wrapper_history_tour: {
-        paddingHorizontal: 20,
-        paddingBottom: 15,
-    },
-    card_shadow: {
-        borderRadius: 12,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.22,
-        shadowRadius: 2.22,
-
-        elevation: 1,
-    },
-    card_history_tour: {
-        borderRadius: 12,
-        padding: 10,
-        backgroundColor: '#fff',
-        flexDirection: 'row',
-        overflow: 'hidden',
-    },
-    image_history_tour: {
-        height: 160,
-        width: 130,
-        borderRadius: 12,
-        marginRight: 10,
-    },
-    wrapper_clock_style: {
-        alignItems: 'center',
-        flexDirection: 'row',
-        marginVertical: 6,
-        marginTop: 15,
-    },
-    clock_style: {
-        height: 17,
-        width: 17,
-        marginRight: 10,
-    },
-    wrapper_calendar_style: {
-        alignItems: 'center',
-        flexDirection: 'row',
-    },
-    calendar_style: {
-        height: 18,
-        width: 18,
-        marginRight: 10,
     },
     search_tour: {
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
