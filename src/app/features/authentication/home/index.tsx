@@ -71,7 +71,7 @@ const HomeComponent = () => {
                 data={hotTour}
                 keyExtractor={(record: any) => record?.id}
                 renderItem={({ item }: any) => (
-                    <ImageBackground style={styles.tour_image} source={item?.ImageUrl}>
+                    <ImageBackground style={styles.tour_image} source={{ uri: item?.ImageUrl }}>
                         <LinearGradient
                             colors={['rgba(0,0,0,.01)', 'rgba(0,0,0,.55)']}
                             start={{ x: 0, y: 0 }}
