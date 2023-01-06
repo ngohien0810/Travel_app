@@ -24,7 +24,8 @@ const HomeComponent = () => {
 
     React.useEffect(() => {
         homeService.getHotTour().then((res: any) => {
-            setHotTour(res.data.data);
+            console.log('🚀 ~ file: index.tsx:27 ~ homeService.getHotTour ~ res', res);
+            setHotTour(res.data);
         });
     }, []);
 

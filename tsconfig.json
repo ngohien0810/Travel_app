@@ -38,6 +38,7 @@
         "baseUrl": "." /* Base directory to resolve non-absolute module names. */,
         "paths": {
             "@assets/*": ["./src/app/assets/*"],
+            "@apis/*": ["./src/apis/*"],
             "@common": ["./src/app/common/index"],
             "@hooks": ["./src/app/common/hooks/index"],
             "@native-module": ["./src/app/common/native-module/index"],
@@ -48,6 +49,7 @@
             "@features/*": ["./src/app/features/*"],
             "@components": ["./src/app/library/components/index"],
             "@components/*": ["./src/app/library/components/*"],
+            "@com/*": ["./src/app/components/*"],
             "@utils/*": ["./src/app/library/utils/*"],
             "@storage": ["./src/app/library/utils/storage/index"],
             "@networking": ["./src/app/library/networking/index"],

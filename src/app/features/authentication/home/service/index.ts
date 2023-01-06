@@ -1,9 +1,7 @@
-import { NetWorkService } from '@networking';
+import AxiosClient from '@apis/AxiosClient';
 
 export const homeService = {
     getHotTour: () => {
-        return NetWorkService.Get({
-            url: '/tours',
-        });
+        return AxiosClient.get('/tours');
     },
 };

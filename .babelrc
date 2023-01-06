@@ -11,6 +11,7 @@
                 "root": ["./"],
                 "alias": {
                     "@assets": "./src/app/assets",
+                    "@apis": "./src/apis",
                     "@common": "./src/app/common",
                     "@hooks": "./src/app/common/hooks",
                     "@validate": "./src/app/common/yup-validate",
@@ -20,6 +21,7 @@
                     "@config": "./src/app/config",
                     "@features": "./src/app/features",
                     "@components": "./src/app/library/components",
+                    "@com": "./src/app/components",
                     "@networking": "./src/app/library/networking",
                     "@utils": "./src/app/library/utils",
                     "@storage": "./src/app/library/utils/storage",

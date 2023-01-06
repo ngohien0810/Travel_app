@@ -55,7 +55,7 @@ function Request<T = Record<string, unknown>>(config: AxiosRequestConfig, isChec
         timeout: TIME_OUT,
         headers: {
             'Content-Type': 'application/json',
-            [tokenKeyHeader]: token ?? '',
+            // [tokenKeyHeader]: token ?? '',
         },
     };
     return new Promise<ResponseBase<T> | null>((rs) => {

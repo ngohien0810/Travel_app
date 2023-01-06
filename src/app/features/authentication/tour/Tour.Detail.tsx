@@ -8,6 +8,10 @@ import { VectorIcon } from '@assets/vector-icon/vector-icon';
 import { Rating } from 'react-native-ratings';
 import { HEIGHT_SCREEN } from '@theme';
 import LinearGradient from 'react-native-linear-gradient';
+import { FlatList } from 'react-native';
+import { APP_SCREEN } from '@navigation/screen-types';
+import { navigate } from '@navigation/navigation-service';
+import CardTour from '@com/CardTour';
 
 const TourDetailScreen = () => {
     return (
@@ -107,7 +111,6 @@ const TourDetailScreen = () => {
                 start={{ x: 0, y: 0 }}
                 end={{ x: 0, y: 1 }}
                 style={{
-                    height: HEIGHT_SCREEN,
                     marginTop: 30,
                     padding: 20,
                     paddingTop: 30,
@@ -250,6 +253,33 @@ const TourDetailScreen = () => {
                     </TouchableOpacity>
                 </Block>
             </LinearGradient>
+
+            <Block>
+                <Block padding={20} direction="row" alignItems="center" justifyContent="space-between">
+                    <Text fontWeight="bold" fontSize={17} colorTheme="button">
+                        Các tour du lịch đã xem
+                    </Text>
+                    <TouchableOpacity>
+                        <Text style={{ textDecorationLine: 'underline' }} color="#666">
+                            Xem thêm
+                        </Text>
+                    </TouchableOpacity>
+                </Block>
+
+                <Block>
+                    <FlatList
+                        data={[1, 2, 3, 4]}
+                        keyExtractor={(item) => item.toString()}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity onPress={() => navigate(APP_SCREEN.TOUR_DETAIL)}>
+                                <CardTour title="demo" start_tour="12/12/2022" price="99.999" />
+                            </TouchableOpacity>
+                        )}
+                    />
+                </Block>
+            </Block>
         </Screen>
     );
 };

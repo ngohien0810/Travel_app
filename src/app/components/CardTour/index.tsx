@@ -18,18 +18,18 @@ const CardTour = ({ title, start_tour, price }: { title: string; start_tour: str
                         </Text>
                         <View style={styles.wrapper_clock_style}>
                             <Image style={styles.clock_style} source={images.clock} />
-                            <Text>4 ngày 3 đêm</Text>
+                            <Text color="#5B5B5B">4 ngày 3 đêm</Text>
                         </View>
                         <View style={styles.wrapper_calendar_style}>
                             <Image style={styles.calendar_style} source={images.calendar} />
-                            <Text>{start_tour}</Text>
+                            <Text color="#5B5B5B">{start_tour}</Text>
                         </View>
                         <Block direction="row" justifyContent="flex-start">
                             <Rating startingValue={5} imageSize={16} style={{ paddingVertical: 10 }} />
                         </Block>
 
-                        <Text colorTheme="button" fontWeight="600" fontSize={18}>
-                            {price} VNĐ
+                        <Text colorTheme="button" fontWeight="600" fontSize={17}>
+                            {price} vnđ
                         </Text>
                     </View>
                 </View>
@@ -42,7 +42,7 @@ export default CardTour;
 
 const styles = StyleSheet.create({
     wrapper_history_tour: {
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
         paddingBottom: 15,
     },
     card_shadow: {
@@ -59,22 +59,22 @@ const styles = StyleSheet.create({
     },
     card_history_tour: {
         borderRadius: 12,
-        padding: 10,
+        padding: 6,
         backgroundColor: '#fff',
         flexDirection: 'row',
         overflow: 'hidden',
     },
     image_history_tour: {
-        height: 160,
-        width: 130,
+        height: 150,
+        width: 120,
         borderRadius: 12,
-        marginRight: 10,
+        marginRight: 16,
     },
     wrapper_clock_style: {
         alignItems: 'center',
         flexDirection: 'row',
         marginVertical: 6,
-        marginTop: 15,
+        marginTop: 10,
     },
     clock_style: {
         height: 17,
@@ -88,6 +88,6 @@ const styles = StyleSheet.create({
     calendar_style: {
         height: 18,
         width: 18,
-        marginRight: 10,
+        marginRight: 8,
     },
 });
