@@ -10,6 +10,7 @@ import { APP_SCREEN } from './screen-types';
 import * as Animatable from 'react-native-animatable';
 import FavoriteScreen from '@features/authentication/favorite';
 import UserScreen from '@features/authentication/user';
+import MapScreen from '@features/authentication/maps';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -83,6 +84,12 @@ const BottomTabArr = [
         label: 'Lịch trình',
         icon: images.tour,
         component: TourScreen,
+    },
+    {
+        route: APP_SCREEN.MAPS,
+        label: 'Maps',
+        icon: images.tour,
+        component: MapScreen,
     },
     {
         route: APP_SCREEN.FAVORITE,
