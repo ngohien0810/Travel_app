@@ -8,27 +8,36 @@ import { useTheme } from '@theme';
 
 import { IconProps } from './type';
 
-const SIZE = 40;
+const SIZE = 24;
 
-export const Icon = ({ icon, color, colorTheme, onPress, size = SIZE, resizeMode = 'contain', rotate }: IconProps) => {
-    // state
+export const Icon = ({
+  icon,
+  color,
+  colorTheme,
+  onPress,
+  size = SIZE,
+  resizeMode = 'contain',
+}: IconProps) => {
+  // state
 
-    const theme = useTheme();
-    // style
-    const style = useMemo<StyleProp<ImageStyle>>(
-        () => [{ width: size, height: size, transform: rotate ? [{ rotate: '90deg' }] : [] }],
-        [size, rotate]
-    );
+  const theme = useTheme();
+  // style
+  const style = useMemo<StyleProp<ImageStyle>>(
+    () => [{ width: size, height: size }],
+    [size],
+  );
 
-    // render
-    return (
-        <TouchableOpacity disabled={typeof onPress !== 'function'} onPress={onPress}>
-            <FastImage
-                style={style}
-                tintColor={colorTheme ? theme.colors[colorTheme] : color}
-                resizeMode={resizeMode}
-                source={icons[icon]}
-            />
-        </TouchableOpacity>
-    );
+  // render
+  return (
+    <TouchableOpacity
+      disabled={typeof onPress !== 'function'}
+      onPress={onPress}>
+      <FastImage
+        style={style}
+        tintColor={colorTheme ? theme.colors[colorTheme] : color}
+        resizeMode={resizeMode}
+        source={icons[icon]}
+      />
+    </TouchableOpacity>
+  );
 };

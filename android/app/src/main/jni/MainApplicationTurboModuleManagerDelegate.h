@@ -17,7 +17,7 @@ namespace facebook
         public:
             // Adapt it to the package you used for your Java class.
             static constexpr auto kJavaDescriptor =
-                "Lcom/vietnamtravel/newarchitecture/modules/MainApplicationTurboModuleManagerDelegate;";
+                "Lcom/travel_app/newarchitecture/modules/MainApplicationTurboModuleManagerDelegate;";
 
             static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject>);
 

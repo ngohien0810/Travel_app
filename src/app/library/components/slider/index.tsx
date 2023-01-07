@@ -5,6 +5,10 @@ import { SliderRange } from './slider-range';
 import { SliderProps } from './type';
 
 export const Slider = (props: SliderProps) => {
-    // render
-    return props.type === 'range' ? <SliderRange {...props} /> : <SliderLinear {...props} />;
+  // render
+  return props.type === 'range' ? (
+    <SliderRange {...props} />
+  ) : (
+    <SliderLinear {...props} />
+  );
 };

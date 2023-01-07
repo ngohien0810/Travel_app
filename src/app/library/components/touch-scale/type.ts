@@ -1,20 +1,24 @@
 import React from 'react';
-import { StyleProp, TouchableWithoutFeedbackProps, ViewStyle } from 'react-native';
+import {
+  StyleProp,
+  TouchableWithoutFeedbackProps,
+  ViewStyle,
+} from 'react-native';
 export interface TouchableScaleProps extends TouchableWithoutFeedbackProps {
-    /**
-     * Children of Touchable
-     */
-    children: React.ReactNode;
+  /**
+   * Children of Touchable
+   */
+  children: React.ReactNode;
 
-    /**
-     * Min scale when touch
-     * @default 0.9
-     */
-    minScale?: number;
+  /**
+   * Min scale when touch
+   * @default 0.9
+   */
+  minScale?: number;
 
-    /**
-     * Custom container style
-     * @default undefined
-     */
-    containerStyle?: StyleProp<ViewStyle>;
+  /**
+   * Custom container style
+   * @default undefined
+   */
+  containerStyle?: StyleProp<ViewStyle>;
 }

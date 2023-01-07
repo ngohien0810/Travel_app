@@ -1,6 +1,7 @@
 import { subscribeActionMiddleware } from '@common';
 import { configureStore } from '@reduxjs/toolkit';
 import { allReducer } from '@store/all-reducers';
+import reduxDebugger from 'redux-flipper';
 
 import { listenerMiddleware } from '../listener';
 
@@ -16,12 +17,17 @@ import { listenerMiddleware } from '../listener';
 
 const devMode = __DEV__;
 const middleware = [subscribeActionMiddleware];
+if (devMode) {
+  middleware.push(reduxDebugger());
+}
 
 export const store = configureStore({
-    reducer: allReducer,
-    devTools: devMode,
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({ serializableCheck: false }).prepend(listenerMiddleware.middleware).concat(middleware),
+  reducer: allReducer,
+  devTools: devMode,
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({ serializableCheck: false })
+      .prepend(listenerMiddleware.middleware)
+      .concat(middleware),
 });
 /**
  * export const persistore = persistStore(store);

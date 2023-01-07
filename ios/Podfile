@@ -5,14 +5,13 @@ platform :ios, '13'
 install! 'cocoapods', :deterministic_uuids => false
 
 # dynamic_frameworks = ['libWantToUseUserFramework']
-target 'VietnamTravel' do
+target 'Travel_app' do
   config = use_native_modules!
-  rn_maps_path = '../node_modules/react-native-maps'
-  pod 'react-native-google-maps', :path => rn_maps_path
-  pod 'IQKeyboardManagerSwift'
+  
   # Flags change depending on the env values.
   flags = get_default_flags()
-
+  rn_maps_path = '../node_modules/react-native-maps'
+  pod 'react-native-google-maps', :path => rn_maps_path
   use_react_native!(
     :path => config[:reactNativePath],
     # Hermes is now enabled by default. Disable by setting this flag to false.
@@ -28,11 +27,6 @@ target 'VietnamTravel' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
-
-  target 'VietnamTravelTests' do
-    inherit! :complete
-    # Pods for testing
-  end
 
   # If u want to enable use_frameworks for one or more library.
   # unconment below and dynamic_frameworks (Line 5)

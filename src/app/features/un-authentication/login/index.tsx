@@ -1,97 +1,197 @@
-import React from 'react';
-import { Alert } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Alert, StyleSheet } from 'react-native';
+
+import LinearGradient from 'react-native-linear-gradient';
 
 import { dispatch } from '@common';
-import { Block, Button, Screen, Text, Wallpaper } from '@components';
-import { FormLoginType, FormRegisterType } from '@model/authentication';
+import {
+  ActionSheet,
+  Block,
+  Button,
+  CheckBox,
+  Divider,
+  DropDown,
+  HelperText,
+  LightBox,
+  Otp,
+  Progress,
+  RadioButton,
+  Screen,
+  Select,
+  Slider,
+  Spacer,
+  Switch,
+  Text,
+  TextInput,
+  TouchableScale,
+  Wallpaper,
+} from '@components';
+import { useAnimatedState } from '@hooks';
+import { FormLoginType } from '@model/authentication';
 import { appActions } from '@redux-slice';
 
 import { FormLogin } from './components/form-login';
-import FastImage from 'react-native-fast-image';
-import { images } from '@assets/image';
-import { HEIGHT_SCREEN } from '@theme';
-import { FormRegister } from './components/form-register';
-import { navigate } from '@navigation/navigation-service';
-import { APP_SCREEN } from '@navigation/screen-types';
-import { useDispatch } from 'react-redux';
-import { authService } from './service';
 
 export const Login = () => {
-    const [isRegister, setIsRegister] = React.useState(false);
-    // const dispatch=useDispatch
-    // function
-    const onSubmit = (data: any) => {
-        // dispatch(appActions.setAppTheme('dark'));
-        // if (data.phone === '0987654321' && data.password === '123456') {
-        //     dispatch(appActions.setToken('demo'));
-        //     navigate(APP_SCREEN.HOME);
-        // } else {
-        // }
-        if (isRegister) {
-            authService
-                .register({
-                    Username: data.full_name,
-                    Email: data.email,
-                    Phone: data.phone,
-                    Password: data.password,
-                })
-                .then((res) => {
-                    Alert.alert('Đăng ký tài khoản thành công');
-                    setIsRegister(false);
-                    // dispatch(appActions.setToken('demo'));
-                    // navigate(APP_SCREEN.HOME);
-                });
-        } else {
-            authService
-                .login({
-                    Phone: data.phone,
-                    Password: data.password,
-                })
-                .then((res) => {
-                    console.log(res);
-                    dispatch(appActions.setToken('demo'));
-                    navigate(APP_SCREEN.HOME);
-                });
-        }
-    };
+  // state
+  const _refAction = useRef<ActionSheet>();
+  const [visible, setVisible] = useAnimatedState<boolean>(false);
+  const [progress] = useState(10);
+  const [sliderProgress, setSliderProgress] = useState<number>(0);
+  const [sliderRangeProgress, setSliderRangeProgress] = useState<{
+    lower: number;
+    upper: number;
+  }>({ lower: 0, upper: 0 });
 
-    // render
-    return (
-        <Block block paddingTop={0} paddingHorizontal={15}>
-            <Wallpaper />
+  // function
+  const onSubmit = (data: FormLoginType) => {
+    dispatch(appActions.setAppTheme('dark'));
+    Alert.alert(JSON.stringify(data));
+  };
 
-            <Screen
-                unsafe
-                bottomInsetColor="transparent"
-                style={{ paddingVertical: 0, paddingHorizontal: 10 }}
-                backgroundColor={'transparent'}
-            >
-                <Block direction="column" height={HEIGHT_SCREEN}>
-                    <Block flex={isRegister ? 0.35 : 0.9}>
-                        <Block direction="row" height="100%" justifyContent="center" alignItems="center">
-                            <FastImage
-                                style={{ height: isRegister ? 80 : 128, width: isRegister ? 80 : 128 }}
-                                source={images.location_login}
-                            />
-                        </Block>
-                    </Block>
-                    <Block flex={1} direction="column" justifyContent="space-between">
-                        {isRegister ? <FormRegister onSubmit={onSubmit} /> : <FormLogin onSubmit={onSubmit} />}
+  const _onShowAction = async () => {
+    _refAction.current?.show();
+  };
 
-                        <Block direction="row" style={{ marginBottom: 50 }} alignItems="center" justifyContent="center">
-                            <Text fontSize={16} colorTheme="background">
-                                {isRegister ? 'Bạn đã có tài khoản?' : 'Bạn chưa có tài khoản?'}
-                            </Text>
-                            <Button
-                                textStyle={{ fontSize: 16, textDecorationLine: 'underline' }}
-                                textColorTheme="background"
-                                text={isRegister ? ' Đăng nhập' : ' Đăng ký'}
-                                onPress={() => (isRegister ? setIsRegister(false) : setIsRegister(true))}
-                            />
-                        </Block>
-                    </Block>
-                </Block>
-            </Screen>
+  // render
+  return (
+    <Block block paddingTop={0} paddingHorizontal={15}>
+      <Wallpaper />
+      <LinearGradient
+        style={StyleSheet.absoluteFillObject}
+        colors={['rgba(255,255,255,.2)', 'rgba(255,255,255,.1)']}
+      />
+      <Screen
+        bottomInsetColor="transparent"
+        scroll
+        style={{ paddingVertical: 0, paddingHorizontal: 10 }}
+        backgroundColor={'transparent'}>
+        <FormLogin onSubmit={onSubmit} />
+        <Block block height={150}>
+          <LightBox
+            source={{
+              uri: 'https://images.unsplash.com/photo-1650704098443-241484a53bd7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80',
+            }}
+          />
         </Block>
-    );
+
+        <Block paddingVertical={15} middle direction={'row'}>
+          <Text>Action Sheet</Text>
+          <Spacer width={10} />
+          <Button onPress={_onShowAction}>
+            <Text>Show Action</Text>
+          </Button>
+          <ActionSheet
+            ref={_refAction}
+            title={'Select'}
+            option={[{ text: 'Option1' }, { text: 'Option2' }]}
+          />
+        </Block>
+        <Block paddingVertical={15} middle direction={'row'}>
+          <Text>Check box</Text>
+          <Spacer width={10} />
+          <CheckBox onToggle={setVisible} />
+        </Block>
+        <Block paddingVertical={15} middle direction={'row'}>
+          <Text>OTP</Text>
+          <Spacer width={10} />
+          <Otp length={5} />
+        </Block>
+        <Block paddingVertical={15} middle direction={'row'}>
+          <Text>DropDown</Text>
+          <Spacer width={10} />
+          <DropDown
+            data={[
+              { label: 'Option1', value: 1 },
+              { label: 'Option2', value: 2 },
+            ]}
+          />
+        </Block>
+        <Block paddingVertical={15} middle direction={'row'}>
+          <Text>Select</Text>
+          <Spacer width={10} />
+          <Select data={[{ text: 'Option1' }, { text: 'Option2' }]} />
+        </Block>
+        <Block paddingVertical={15} middle direction={'row'}>
+          <Text>Helper text</Text>
+          <Spacer width={10} />
+          <Block>
+            <HelperText visible={visible} msg={'Helper text'} type={'error'} />
+            <HelperText visible={visible} msg={'Helper text'} type={'info'} />
+          </Block>
+        </Block>
+        <Block paddingVertical={15} middle direction={'row'}>
+          <Text>Divider</Text>
+          <Spacer width={10} />
+          <Divider />
+        </Block>
+        <Block paddingVertical={15} middle direction={'row'}>
+          <Text>Progress Circle</Text>
+          <Spacer width={10} />
+          <Progress type={'circle'} progress={progress} />
+        </Block>
+        <Block paddingVertical={15} middle direction={'row'}>
+          <Text>Progress Line</Text>
+          <Spacer width={10} />
+          <Progress type={'linear'} progress={progress} />
+        </Block>
+        <Block paddingVertical={15} middle direction={'row'}>
+          <Text>Radio Button</Text>
+          <Spacer width={10} />
+          <RadioButton />
+        </Block>
+        <Block paddingVertical={15} middle direction={'row'}>
+          <Text>Slider Linear</Text>
+          <Spacer width={10} />
+          <Block block>
+            <Text>{sliderProgress}</Text>
+            <Slider type={'linear'} onChangeLinear={setSliderProgress} />
+          </Block>
+        </Block>
+        <Block paddingVertical={15} middle direction={'row'}>
+          <Text>Slider Range</Text>
+          <Spacer width={10} />
+          <Block block>
+            <Text>
+              {sliderRangeProgress.lower} - {sliderRangeProgress.upper}
+            </Text>
+            <Spacer height={20} />
+            <Slider
+              type={'range'}
+              onChangeRange={setSliderRangeProgress}
+              initialRange={[0, 50]}
+            />
+          </Block>
+        </Block>
+        <Block paddingVertical={15} middle direction={'row'}>
+          <Text>TextInput</Text>
+          <Spacer width={10} />
+          <Block block>
+            <TextInput label={'TextInput'} />
+          </Block>
+        </Block>
+        <Spacer height={10} />
+        <Block paddingVertical={15} middle direction={'row'}>
+          <Text>TouchableScale</Text>
+          <Spacer width={10} />
+          <TouchableScale>
+            <Block padding={5} color={'#bbb'}>
+              <Text>Press me!</Text>
+            </Block>
+          </TouchableScale>
+        </Block>
+        <Spacer height={10} />
+        <Block paddingVertical={15} middle direction={'row'}>
+          <Text>Switch IOS</Text>
+          <Spacer width={10} />
+          <Switch />
+        </Block>
+        <Block paddingVertical={15} middle direction={'row'}>
+          <Text>Switch Android</Text>
+          <Spacer width={10} />
+          <Switch type={'android'} />
+        </Block>
+      </Screen>
+    </Block>
+  );
 };

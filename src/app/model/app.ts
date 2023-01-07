@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ThemeType } from '@theme';
 export interface AppState {
-    internetState: boolean;
+  internetState: boolean;
 
-    profile: any;
+  profile: any;
 
-    token: string | undefined;
+  token: string | undefined;
 
-    loadingApp: boolean;
+  loadingApp: boolean;
 
-    showDialog: boolean;
+  showDialog: boolean;
 
-    theme: ThemeType;
+  theme: ThemeType;
 }

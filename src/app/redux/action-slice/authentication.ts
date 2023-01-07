@@ -5,22 +5,25 @@ import * as Action from '@redux-action-type/authentication';
 import { createAction, createSlice } from '@reduxjs/toolkit';
 
 const initialState: AuthenticationState = {
-    loading: false,
+  loading: false,
 };
 const authenticationSlice = createSlice({
-    name: SLICE_NAME.AUTHENTICATION,
-    initialState: initialState,
-    reducers: {
-        reset: () => initialState,
-    },
+  name: SLICE_NAME.AUTHENTICATION,
+  initialState: initialState,
+  reducers: {
+    reset: () => initialState,
+  },
 });
 
-const login = createAction(Action.LOGIN, (body: any, onSucceeded: () => void, onFailure: (msg: string) => void) => ({
+const login = createAction(
+  Action.LOGIN,
+  (body: any, onSucceeded: () => void, onFailure: (msg: string) => void) => ({
     payload: {
-        body,
-        onSucceeded,
-        onFailure,
+      body,
+      onSucceeded,
+      onFailure,
     },
-}));
+  }),
+);
 export const authenticationActions = { ...authenticationSlice.actions, login };
 export const authenticationReducer = authenticationSlice.reducer;

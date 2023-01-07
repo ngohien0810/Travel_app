@@ -1,8 +1,8 @@
 export interface CommentLoadingProps {
-    overlayColor?: string;
+  overlayColor?: string;
 }
 
 export interface ItemCommentProps {
-    index: number;
-    overlayColor: string;
+  index: number;
+  overlayColor: string;
 }

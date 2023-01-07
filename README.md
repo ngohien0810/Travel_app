@@ -1,4 +1,4 @@
-# VietnamTravel
+# Travel_app
 
 # Setup
 
