@@ -17,6 +17,10 @@ export const images = {
     avatar: require('./source/avatar.png'),
     bg_result_search: require('./source/bg_result_search.png'),
     detail_tour: require('./source/detail_tour.png'),
+    maps: require('./source/maps.png'),
+    point_tour: require('./source/point_tour.png'),
+    arrow_hori: require('./source/arrow_hori.png'),
+    location: require('./source/location.png'),
 };
 
 export type ImageTypes = keyof typeof images;

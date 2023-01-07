@@ -12,6 +12,9 @@
       android:usesCleartextTraffic="true"
       android:networkSecurityConfig="@xml/network_security_config"
       android:theme="@style/BootTheme">
+      <meta-data
+      android:name="com.google.android.geo.API_KEY"
+      android:value="AIzaSyD19TvXEIatjZxK6ypOHDXQS_8otzvUN1c"/>
       <activity
         android:usesCleartextTraffic="true"
         android:name=".MainActivity"

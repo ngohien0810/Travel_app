@@ -10,16 +10,17 @@ import { APP_SCREEN } from './screen-types';
 import * as Animatable from 'react-native-animatable';
 import FavoriteScreen from '@features/authentication/favorite';
 import UserScreen from '@features/authentication/user';
+import MapScreen from '@features/authentication/maps';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const animate1 = {
-    0: { scale: 0.5, translateY: 7 },
-    0.92: { translateY: -34 },
-    1: { scale: 1.2, translateY: -24 },
+    0: { scale: 0.5, translateY: 20 },
+    0.92: { translateY: -24 },
+    1: { scale: 1.2, translateY: -10 },
 };
-const animate2 = { 0: { scale: 1.2, translateY: -24 }, 1: { scale: 1, translateY: 7 } };
+const animate2 = { 0: { scale: 1.2, translateY: -10 }, 1: { scale: 1, translateY: 20 } };
 
 const circle1 = {
     0: { scale: 0 },
@@ -52,7 +53,15 @@ const TabButton = (props: any) => {
     return (
         <TouchableOpacity onPress={onPress} activeOpacity={1} style={styles.container}>
             <Animatable.View ref={viewRef} duration={500} style={styles.container}>
-                <View style={styles.btn}>
+                <View
+                    style={[
+                        styles.btn,
+                        {
+                            width: item?.label === 'Maps' ? 54 : 44,
+                            height: item?.label === 'Maps' ? 54 : 44,
+                        },
+                    ]}
+                >
                     <Animatable.View ref={circleRef} style={styles.circle} />
                     {/* <IconSvg
                         type={item.type}
@@ -60,7 +69,11 @@ const TabButton = (props: any) => {
                         color={focused ? Colors.white : Colors.primary}
                     /> */}
                     <Image
-                        style={{ tintColor: focused ? '#fff' : '#C2C2C2', height: 25, width: 25 }}
+                        style={{
+                            tintColor: focused ? '#fff' : '#C2C2C2',
+                            height: item?.label === 'Maps' ? 30 : 25,
+                            width: item?.label === 'Maps' ? 30 : 25,
+                        }}
                         source={item?.icon}
                     />
                 </View>
@@ -83,6 +96,12 @@ const BottomTabArr = [
         label: 'Lịch trình',
         icon: images.tour,
         component: TourScreen,
+    },
+    {
+        route: APP_SCREEN.MAPS,
+        label: 'Maps',
+        icon: images.maps,
+        component: MapScreen,
     },
     {
         route: APP_SCREEN.FAVORITE,
@@ -145,14 +164,21 @@ const styles = StyleSheet.create({
     tabBar: {
         height: 70,
         position: 'absolute',
-        bottom: 16,
+        bottom: 25,
         right: 16,
         left: 16,
         borderRadius: 16,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.18,
+        shadowRadius: 1.0,
+
+        elevation: 1,
     },
     btn: {
-        width: 44,
-        height: 44,
         borderRadius: 25,
         borderWidth: 4,
         borderColor: '#fff',

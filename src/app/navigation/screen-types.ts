@@ -9,6 +9,7 @@ export enum APP_SCREEN {
     AUTHORIZE = 'AUTHORIZE',
     HOME = 'HOME',
     TOUR = 'TOUR',
+    MAPS = 'MAPS',
     FAVORITE = 'FAVORITE',
     USER = 'USER',
 

@@ -50,6 +50,7 @@
             "@components": ["./src/app/library/components/index"],
             "@components/*": ["./src/app/library/components/*"],
             "@com/*": ["./src/app/components/*"],
+            "@layouts/*": ["./src/app/layouts/*"],
             "@utils/*": ["./src/app/library/utils/*"],
             "@storage": ["./src/app/library/utils/storage/index"],
             "@networking": ["./src/app/library/networking/index"],

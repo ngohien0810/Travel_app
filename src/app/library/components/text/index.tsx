@@ -23,7 +23,7 @@ export const Text = ({
     color,
     center,
     children,
-    fontSize,
+    fontSize = 14,
     textAlign,
     fontStyle,
     lineHeight,
