@@ -21,6 +21,8 @@ export const images = {
     point_tour: require('./source/point_tour.png'),
     arrow_hori: require('./source/arrow_hori.png'),
     location: require('./source/location.png'),
+    not_children: require('./source/not_children.png'),
+    children: require('./source/children.png'),
 };
 
 export type ImageTypes = keyof typeof images;

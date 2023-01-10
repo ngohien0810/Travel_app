@@ -1,17 +1,15 @@
-import { ImageBackground, StyleSheet, TouchableOpacity, View, Image } from 'react-native';
-import React from 'react';
-import { Block, Icon, Screen, Text } from '@components';
 import { images } from '@assets/image';
-import Header from '../../../layouts/Header';
-import { ICONS } from '@assets/vector-icon/icon-name';
 import { VectorIcon } from '@assets/vector-icon/vector-icon';
-import { Rating } from 'react-native-ratings';
-import { HEIGHT_SCREEN } from '@theme';
-import LinearGradient from 'react-native-linear-gradient';
-import { FlatList } from 'react-native';
-import { APP_SCREEN } from '@navigation/screen-types';
-import { navigate } from '@navigation/navigation-service';
 import CardTour from '@com/CardTour';
+import { Block, Screen, Text } from '@components';
+import { navigate } from '@navigation/navigation-service';
+import { APP_SCREEN } from '@navigation/screen-types';
+import { ColorDefault } from '@theme/color';
+import React from 'react';
+import { FlatList, Image, ImageBackground, StyleSheet, TouchableOpacity, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import { Rating } from 'react-native-ratings';
+import Header from '../../../layouts/Header';
 
 const TourDetailScreen = () => {
     return (
@@ -278,6 +276,16 @@ const TourDetailScreen = () => {
                             </TouchableOpacity>
                         )}
                     />
+                </Block>
+                <Block paddingHorizontal={20} paddingBottom={40} marginTop={10}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigate(APP_SCREEN.ORDER);
+                        }}
+                        style={[styles.button, { backgroundColor: ColorDefault.button }]}
+                    >
+                        <Text color="#fff">Đặt tour</Text>
+                    </TouchableOpacity>
                 </Block>
             </Block>
         </Screen>

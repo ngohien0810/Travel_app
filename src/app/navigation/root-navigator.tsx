@@ -1,5 +1,9 @@
 import React, { useEffect } from 'react';
 
+import OrderScreen from '@features/authentication/order';
+import ResultSearchScreen from '@features/authentication/result_search';
+import TourDetailScreen from '@features/authentication/tour/Tour.Detail';
+import { Login } from '@features/un-authentication/login';
 import { AppModule } from '@native-module';
 import { APP_SCREEN, RootStackParamList } from '@navigation/screen-types';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -7,9 +11,7 @@ import { selectAppToken } from '@redux-selector/app';
 import BootSplash from 'react-native-bootsplash';
 import { useSelector } from 'react-redux';
 import BottomTab from './bottom-tab';
-import { Login } from '@features/un-authentication/login';
-import ResultSearchScreen from '@features/authentication/result_search';
-import TourDetailScreen from '@features/authentication/tour/Tour.Detail';
+import ContactScreen from '@features/authentication/order/Contact';
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
@@ -48,6 +50,8 @@ export const RootNavigation = () => {
                     <RootStack.Screen name={APP_SCREEN.AUTHORIZE} component={BottomTab} />
                     <RootStack.Screen name={APP_SCREEN.SEARCH_RESULT} component={ResultSearchScreen} />
                     <RootStack.Screen name={APP_SCREEN.TOUR_DETAIL} component={TourDetailScreen} />
+                    <RootStack.Screen name={APP_SCREEN.ORDER} component={OrderScreen} />
+                    <RootStack.Screen name={APP_SCREEN.CONTACT} component={ContactScreen} />
                 </RootStack.Group>
             )}
         </RootStack.Navigator>

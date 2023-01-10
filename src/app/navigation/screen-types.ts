@@ -16,6 +16,8 @@ export enum APP_SCREEN {
     // screen not bottom tab
     SEARCH_RESULT = 'SEARCH_RESULT',
     TOUR_DETAIL = 'TOUR_DETAIL',
+    ORDER = 'ORDER',
+    CONTACT = 'CONTACT',
 }
 
 export type UnAuthorizeParamsList = {
@@ -29,6 +31,8 @@ export type AuthorizeParamsList = {
     [APP_SCREEN.TOUR]: undefined;
     [APP_SCREEN.SEARCH_RESULT]: undefined;
     [APP_SCREEN.TOUR_DETAIL]: undefined;
+    [APP_SCREEN.ORDER]: undefined;
+    [APP_SCREEN.CONTACT]: undefined;
 };
 
 export type RootStackParamList = {
