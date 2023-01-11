@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { Block, Screen, Text } from '@components';
 import Header from '@layouts/Header';
@@ -6,18 +6,44 @@ import { FormContactType } from '@model/contact';
 import { Input } from './components/input';
 import { FormProvider, useForm } from 'react-hook-form';
 import { ColorDefault } from '@theme/color';
+import { orderService } from './service';
+import { useSelector } from 'react-redux';
+import { navigate } from '@navigation/navigation-service';
+import { APP_SCREEN } from '@navigation/screen-types';
 
 const ContactScreen = () => {
     // state
     const formMethod = useForm<FormContactType>();
-
+    const state: any = useSelector((state: any) => {
+        return state;
+    });
     // function
     const onSubmitKey = () => {
         formMethod.handleSubmit(onSubmit)();
     };
 
     const onSubmit = (data: any) => {
-        console.log('🚀 ~ file: contact.tsx:19 ~ onSubmit ~ data', data);
+        orderService
+            .createOrder({
+                CustomerID: state?.app?.token?.data?.user?.id,
+                Code: 'ORDER-0001',
+                CodeTour: 'MB20221208',
+                AdultTicket: 1,
+                ChildTicket: 1,
+                PaymentMethod: 1,
+                TotalPrice: 1500000,
+                StatusOrder: 0,
+            })
+            .then((res) => {
+                Alert.alert('Thông báo', 'Đặt vé thành công', [
+                    {
+                        text: 'OK',
+                        onPress: () => {
+                            navigate(APP_SCREEN.HOME);
+                        },
+                    },
+                ]);
+            });
     };
 
     return (

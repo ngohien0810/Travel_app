@@ -23,8 +23,8 @@ export const handleResponseAxios = <T = Record<string, unknown>>(res: AxiosRespo
     }
     return responseDefault as ResponseBase<T>;
 };
-export const handleErrorAxios = <T = Record<string, unknown>>(error: AxiosError): ResponseBase<T> => {
-    console.log(error);
+export const handleErrorAxios = <T = Record<string, unknown>>(error: any): ResponseBase<T> => {
+    console.log('error', error?.response?.data);
     if (error.code === STATUS_TIME_OUT) {
         // timeout
         return handleErrorApi(CODE_TIME_OUT) as unknown as ResponseBase<T>;
@@ -33,7 +33,7 @@ export const handleErrorAxios = <T = Record<string, unknown>>(error: AxiosError)
         if (error.response.status === RESULT_CODE_PUSH_OUT) {
             return handleErrorApi(RESULT_CODE_PUSH_OUT) as unknown as ResponseBase<T>;
         } else {
-            return handleErrorApi(error.response.status) as unknown as ResponseBase<T>;
+            return handleErrorApi(error.response.status, error?.response?.data?.message) as unknown as ResponseBase<T>;
         }
     }
     return handleErrorApi(ERROR_NETWORK_CODE) as unknown as ResponseBase<T>;

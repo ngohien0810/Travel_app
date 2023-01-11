@@ -31,11 +31,11 @@ const OrderScreen = () => {
                         <Text lineHeight={40} color="#5B5B5B">
                             ( 120cm trở lên )
                         </Text>
-                        <Block paddingVertical={15}>
-                            <Text>demo</Text>
+                        <Block paddingVertical={5}>
+                            <Text>Số lượng: 1</Text>
                         </Block>
                         <Text fontSize={20} colorTheme="button" fontWeight="700">
-                            25.000.000 vnđ
+                            1.000.000 vnđ
                         </Text>
                     </Block>
                     <Block flex={1} position="relative">
@@ -54,11 +54,11 @@ const OrderScreen = () => {
                         <Text lineHeight={40} color="#5B5B5B">
                             ( 120cm trở lên )
                         </Text>
-                        <Block paddingVertical={15}>
-                            <Text>demo</Text>
+                        <Block paddingVertical={5}>
+                            <Text>Số lượng: 1</Text>
                         </Block>
                         <Text fontSize={20} colorTheme="button" fontWeight="700">
-                            25.000.000 vnđ
+                            500.000 vnđ
                         </Text>
                     </Block>
                 </Block>
@@ -67,10 +67,10 @@ const OrderScreen = () => {
                 <Block direction="row">
                     <Block flex={1} paddingHorizontal={16} paddingTop={6}>
                         <Text lineHeight={30} color="#949494">
-                            3 người
+                            2 người
                         </Text>
                         <Text fontSize={16} colorTheme="button" fontWeight="700">
-                            1.120.000đ
+                            1.500.000đ
                         </Text>
                     </Block>
                     <TouchableOpacity

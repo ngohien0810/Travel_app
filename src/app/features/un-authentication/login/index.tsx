@@ -21,6 +21,7 @@ export const Login = () => {
     // const dispatch=useDispatch
     // function
     const onSubmit = (data: any) => {
+        console.log('🚀 ~ file: index.tsx:24 ~ onSubmit ~ data', data);
         // dispatch(appActions.setAppTheme('dark'));
         // if (data.phone === '0987654321' && data.password === '123456') {
         //     dispatch(appActions.setToken('demo'));
@@ -35,7 +36,7 @@ export const Login = () => {
                     Phone: data.phone,
                     Password: data.password,
                 })
-                .then((res) => {
+                .then((res: any) => {
                     Alert.alert('Đăng ký tài khoản thành công');
                     setIsRegister(false);
                     // dispatch(appActions.setToken('demo'));
@@ -47,10 +48,13 @@ export const Login = () => {
                     Phone: data.phone,
                     Password: data.password,
                 })
-                .then((res) => {
-                    console.log(res);
-                    dispatch(appActions.setToken('demo'));
-                    navigate(APP_SCREEN.HOME);
+                .then((res: any) => {
+                    if (res?.msg) {
+                        Alert.alert(res?.msg);
+                    } else {
+                        dispatch(appActions.setToken(res));
+                        navigate(APP_SCREEN.HOME);
+                    }
                 });
         }
     };

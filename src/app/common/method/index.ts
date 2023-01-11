@@ -54,7 +54,7 @@ const handleData = (responseError: ResponseBase<null>) => {
     return responseError;
 };
 
-export const handleErrorApi = (status: number) => {
+export const handleErrorApi = (status: number, msg?: any) => {
     switch (status) {
         case ERROR_NETWORK_CODE:
             return handleData({
@@ -71,7 +71,7 @@ export const handleErrorApi = (status: number) => {
         case 400:
             return handleData({
                 code: status,
-                msg: translate('error:400'),
+                msg,
                 status: false,
             });
         case 401:
