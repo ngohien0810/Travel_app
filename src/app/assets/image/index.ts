@@ -23,6 +23,7 @@ export const images = {
     location: require('./source/location.png'),
     not_children: require('./source/not_children.png'),
     children: require('./source/children.png'),
+    spin: require('./source/spin.gif'),
 };
 
 export type ImageTypes = keyof typeof images;

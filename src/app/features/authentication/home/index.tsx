@@ -9,12 +9,11 @@ import { Block, Screen, Text, TextField } from '@components';
 import { navigate } from '@navigation/navigation-service';
 import { APP_SCREEN } from '@navigation/screen-types';
 import { WIDTH_SCREEN } from '@theme';
-import { Rating } from 'react-native-ratings';
+import moment from 'moment';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Swiper from 'react-native-swiper';
-import { homeService } from './service';
-import moment from 'moment';
 import CardTour from '../../../components/CardTour';
+import { homeService } from './service';
 
 const HomeComponent = () => {
     const [hotTour, setHotTour] = React.useState([]);
@@ -72,22 +71,28 @@ const HomeComponent = () => {
                 data={hotTour}
                 keyExtractor={(record: any) => record?.id}
                 renderItem={({ item }: any) => (
-                    <ImageBackground style={styles.tour_image} source={{ uri: item?.ImageUrl }}>
-                        <LinearGradient
-                            colors={['rgba(0,0,0,.01)', 'rgba(0,0,0,.55)']}
-                            start={{ x: 0, y: 0 }}
-                            end={{ x: 0, y: 1 }}
-                            style={styles.wrapper_time_tour}
-                        >
-                            <Text style={styles.title_tour}>{item?.Title}</Text>
-                            <View style={styles.time_tour}>
-                                <Text style={styles.text_time}>4 ngày 3 đêm</Text>
-                                <Text style={styles.text_calendar}>
-                                    {moment(item?.CreatedDate).format('DD/MM/YYYY')}
-                                </Text>
-                            </View>
-                        </LinearGradient>
-                    </ImageBackground>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigate(APP_SCREEN.TOUR_DETAIL, { id: item?.id });
+                        }}
+                    >
+                        <ImageBackground style={styles.tour_image} source={{ uri: item?.ImageUrl }}>
+                            <LinearGradient
+                                colors={['rgba(0,0,0,.01)', 'rgba(0,0,0,.55)']}
+                                start={{ x: 0, y: 0 }}
+                                end={{ x: 0, y: 1 }}
+                                style={styles.wrapper_time_tour}
+                            >
+                                <Text style={styles.title_tour}>{item?.Title}</Text>
+                                <View style={styles.time_tour}>
+                                    <Text style={styles.text_time}>{item?.feedbacks?.length} đánh giá</Text>
+                                    <Text style={styles.text_calendar}>
+                                        {item?.DateStartTour && moment(item?.DateStartTour).format('DD/MM/YYYY')}
+                                    </Text>
+                                </View>
+                            </LinearGradient>
+                        </ImageBackground>
+                    </TouchableOpacity>
                 )}
                 horizontal
                 showsHorizontalScrollIndicator={false}
