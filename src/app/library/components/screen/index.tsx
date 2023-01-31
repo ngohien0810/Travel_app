@@ -10,6 +10,7 @@ import { styles } from './styles';
 import { InsetComponentProps, InsetProps, ScreenComponentProps, ScreenProps } from './type';
 
 import { FocusAwareStatusBar } from '../focus-aware-status-bar';
+import { RefreshControl } from 'react-native-gesture-handler';
 
 const INSETS: Edge[] = ['top', 'bottom', 'left', 'right'];
 
@@ -136,6 +137,8 @@ function ScreenWithScrolling(Wrapper: React.ComponentType<ViewProps | SafeAreaVi
         style = {},
         leftInsetColor = colors.background,
         rightInsetColor = colors.background,
+        onRefresh,
+        refreshing,
     } = props;
 
     // render
@@ -152,6 +155,7 @@ function ScreenWithScrolling(Wrapper: React.ComponentType<ViewProps | SafeAreaVi
                     style={[styles.inner, backgroundColor ? { backgroundColor } : {}]}
                     contentContainerStyle={[style]}
                     children={children}
+                    refreshControl={onRefresh && <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 />
             </Wrapper>
             <InsetComponent

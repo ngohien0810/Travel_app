@@ -14,12 +14,14 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Swiper from 'react-native-swiper';
 import CardTour from '../../../components/CardTour';
 import { homeService } from './service';
-
+export const wait = (timeout: number) => {
+    return new Promise((resolve: any) => setTimeout(resolve, timeout));
+};
 const HomeComponent = () => {
     const [hotTour, setHotTour] = React.useState([]);
-    console.log('🚀 ~ file: index.tsx:19 ~ HomeComponent ~ hotTour', hotTour);
 
     const insets = useSafeAreaInsets();
+    const [callback, setCallback] = React.useState(false);
 
     React.useEffect(() => {
         homeService.getHotTour().then((res: any) => {
@@ -28,9 +30,23 @@ const HomeComponent = () => {
         });
     }, []);
 
+    const [refreshing, setRefreshing] = React.useState(false);
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        setCallback(!callback);
+        wait(1000).then(() => setRefreshing(false));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [callback]);
+
     // render
     return (
-        <Screen scroll unsafe style={{ backgroundColor: '#f2f2f2', paddingBottom: 140 }}>
+        <Screen
+            scroll
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            unsafe
+            style={{ backgroundColor: '#f2f2f2', paddingBottom: 140 }}
+        >
             {/* header */}
             <ImageBackground style={styles.header_image_bg} source={images.header_home_bg}>
                 <Block direction="row" style={{ marginTop: 10 + insets.top }}>

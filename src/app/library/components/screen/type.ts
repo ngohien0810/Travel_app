@@ -80,6 +80,8 @@ export type ScreenProps = {
      * Animated onScroll
      * @default undefined
      */
+    onRefresh?: any;
+    refreshing?: any;
     onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 };
 
