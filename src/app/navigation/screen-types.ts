@@ -39,6 +39,7 @@ export type RootStackParamList = {
     [APP_SCREEN.UN_AUTHORIZE]: undefined;
     [APP_SCREEN.AUTHORIZE]: undefined;
     [APP_SCREEN.TOUR_DETAIL]: any;
+    [APP_SCREEN.MAPS]: any;
 } & UnAuthorizeParamsList &
     AuthorizeParamsList;
 

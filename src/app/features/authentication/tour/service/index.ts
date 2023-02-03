@@ -5,4 +5,13 @@ export const tourService = {
         NetWorkService.Get({
             url: `/tours/${id}`,
         }),
+    updateViewTour: (id: any) =>
+        NetWorkService.Get({
+            url: `/update_view_tours/${id}`,
+        }),
+    createFeedback: (data: any) =>
+        NetWorkService.Post({
+            url: '/feedback',
+            body: data,
+        }),
 };

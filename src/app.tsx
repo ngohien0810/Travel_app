@@ -12,6 +12,7 @@ import { AppModule } from '@native-module';
 import { AppContainer } from '@navigation/app-navigation';
 import { store } from '@store/store';
 import I18n from '@utils/i18n/i18n';
+import FlashMessage from 'react-native-flash-message';
 
 declare module 'react' {
     // eslint-disable-next-line @typescript-eslint/ban-types
@@ -75,6 +76,7 @@ export const MyApp = () => {
                     </Suspense>
                 </I18nextProvider>
             </Provider>
+            <FlashMessage position="top" />
         </SafeAreaProvider>
     );
 };

@@ -3,7 +3,7 @@ import { StatusBar } from 'react-native';
 
 import { useSelector } from 'react-redux';
 
-import { dispatch, RXStore } from '@common';
+import { dispatch, RXStore, STORAGE_KEY_TOKEN } from '@common';
 import { hideLoading, ProgressDialog, showLoading, SnackBar } from '@components';
 import { ImageTransition } from '@components/light-box/image-transition';
 import { PortalHost } from '@gorhom/portal';
@@ -14,6 +14,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { selectAppConfig } from '@redux-selector/app';
 import { appActions } from '@redux-slice';
 import { MyAppTheme } from '@theme';
+import { loadString } from '@utils/storage';
+import FlashMessage from 'react-native-flash-message';
+import { authService } from '@features/un-authentication/login/service';
 
 export const AppContainer = () => {
     // state
@@ -31,6 +34,14 @@ export const AppContainer = () => {
             hideLoading();
         }
     }, [showDialog]);
+
+    useEffect(() => {
+        if (loadString(STORAGE_KEY_TOKEN)) {
+            authService.getUserInfo(loadString(STORAGE_KEY_TOKEN)).then((res: any) => {
+                dispatch(appActions.setToken(res?.data));
+            });
+        }
+    }, []);
 
     useEffect(() => {
         if (theme === 'dark') {

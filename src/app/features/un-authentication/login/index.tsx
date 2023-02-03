@@ -1,19 +1,18 @@
 import React from 'react';
 import { Alert } from 'react-native';
 
-import { dispatch } from '@common';
+import { dispatch, STORAGE_KEY_TOKEN } from '@common';
 import { Block, Button, Screen, Text, Wallpaper } from '@components';
-import { FormLoginType, FormRegisterType } from '@model/authentication';
 import { appActions } from '@redux-slice';
 
-import { FormLogin } from './components/form-login';
-import FastImage from 'react-native-fast-image';
 import { images } from '@assets/image';
-import { HEIGHT_SCREEN } from '@theme';
-import { FormRegister } from './components/form-register';
 import { navigate } from '@navigation/navigation-service';
 import { APP_SCREEN } from '@navigation/screen-types';
-import { useDispatch } from 'react-redux';
+import { HEIGHT_SCREEN } from '@theme';
+import { save } from '@utils/storage';
+import FastImage from 'react-native-fast-image';
+import { FormLogin } from './components/form-login';
+import { FormRegister } from './components/form-register';
 import { authService } from './service';
 
 export const Login = () => {
@@ -36,7 +35,7 @@ export const Login = () => {
                     Phone: data.phone,
                     Password: data.password,
                 })
-                .then((res: any) => {
+                .then(() => {
                     Alert.alert('Đăng ký tài khoản thành công');
                     setIsRegister(false);
                     // dispatch(appActions.setToken('demo'));
@@ -52,7 +51,8 @@ export const Login = () => {
                     if (res?.msg) {
                         Alert.alert(res?.msg);
                     } else {
-                        dispatch(appActions.setToken(res));
+                        save(STORAGE_KEY_TOKEN, res.data.user?.id);
+                        dispatch(appActions.setToken(res.data.user));
                         navigate(APP_SCREEN.HOME);
                     }
                 });

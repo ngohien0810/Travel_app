@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { FlatList, Image, ImageBackground, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, ImageBackground, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import isEqual from 'react-fast-compare';
 import LinearGradient from 'react-native-linear-gradient';
@@ -14,19 +14,24 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Swiper from 'react-native-swiper';
 import CardTour from '../../../components/CardTour';
 import { homeService } from './service';
+import { tourService } from '../tour/service';
 export const wait = (timeout: number) => {
     return new Promise((resolve: any) => setTimeout(resolve, timeout));
 };
 const HomeComponent = () => {
     const [hotTour, setHotTour] = React.useState([]);
+    const [news, setNews] = React.useState([]);
 
     const insets = useSafeAreaInsets();
     const [callback, setCallback] = React.useState(false);
 
     React.useEffect(() => {
         homeService.getHotTour().then((res: any) => {
-            console.log('🚀 ~ file: index.tsx:27 ~ homeService.getHotTour ~ res', res);
             setHotTour(res.data);
+        });
+
+        homeService.getNews().then((res: any) => {
+            setNews(res?.data);
         });
     }, []);
 
@@ -54,8 +59,10 @@ const HomeComponent = () => {
                         <TextField
                             unActiveTintLabelColor="#0C656A"
                             unActiveTintBorderColor="#0C656A"
+                            activeTintLabelColor="#0C656A"
+                            activeTintBorderColor="#0C656A"
                             typeInput="flat"
-                            label={'Bạn muốn đi đâu?'}
+                            label="Bạn muốn đi đâu?"
                         />
                         <Block direction="row" alignItems="center" style={styles.calendar_home}>
                             <Image style={styles.noti_icon} source={images.calendar_home} />
@@ -70,12 +77,6 @@ const HomeComponent = () => {
             </ImageBackground>
             <View style={styles.wrapper_tour_special}>
                 <Image style={styles.header_gradient_bg} source={images.header_gradient_bg} />
-                {/* <LinearGradient
-                    colors={['rgba(242, 242, 242, .01)', '#F2F2F2']}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 0, y: 1 }}
-                    style={styles.linear_header}
-                /> */}
 
                 <Text style={styles.text_tour_special}>Tour nổi bật</Text>
                 <TouchableOpacity onPress={() => navigate(APP_SCREEN.SEARCH_RESULT)}>
@@ -89,7 +90,9 @@ const HomeComponent = () => {
                 renderItem={({ item }: any) => (
                     <TouchableOpacity
                         onPress={() => {
-                            navigate(APP_SCREEN.TOUR_DETAIL, { id: item?.id });
+                            tourService.updateViewTour(item?.id).then(() => {
+                                navigate(APP_SCREEN.TOUR_DETAIL, { id: item?.id });
+                            });
                         }}
                     >
                         <ImageBackground style={styles.tour_image} source={{ uri: item?.ImageUrl }}>
@@ -120,20 +123,34 @@ const HomeComponent = () => {
                 </TouchableOpacity>
             </View>
             <View style={styles.wrapper}>
-                <Swiper
-                    activeDotColor="rgba(33, 168, 176, 1)"
-                    activeDotStyle={{ paddingHorizontal: 12 }}
-                    dotStyle={{ paddingHorizontal: 2 }}
-                    dotColor="#C9C9C9"
-                    autoplay
-                    paginationStyle={{
-                        bottom: -25,
-                    }}
-                >
-                    <ImageBackground style={styles.slide} source={images.slide} />
-                    <ImageBackground style={styles.slide} source={images.slide} />
-                    <ImageBackground style={styles.slide} source={images.slide} />
-                </Swiper>
+                {news && (
+                    <Swiper
+                        activeDotColor="rgba(33, 168, 176, 1)"
+                        activeDotStyle={{ paddingHorizontal: 12 }}
+                        dotStyle={{ paddingHorizontal: 2 }}
+                        dotColor="#C9C9C9"
+                        autoplay
+                        paginationStyle={{
+                            bottom: -25,
+                        }}
+                    >
+                        {news.map((item: any, index: number) => {
+                            return (
+                                <Pressable style={styles.slide} key={index}>
+                                    <ImageBackground
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                        }}
+                                        source={{
+                                            uri: item.ImageUrl,
+                                        }}
+                                    />
+                                </Pressable>
+                            );
+                        })}
+                    </Swiper>
+                )}
             </View>
             <View style={[styles.wrapper_tour_special, { marginTop: 40 }]}>
                 <Text style={styles.text_tour_special}>Các tour du lịch đã xem</Text>
@@ -233,7 +250,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
     },
     header_gradient_bg: {
-        bottom: -100,
+        bottom: -240,
         position: 'absolute',
     },
     search_tour: {

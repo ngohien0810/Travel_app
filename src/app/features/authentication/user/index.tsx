@@ -1,16 +1,14 @@
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-import React from 'react';
-import { Block, Button, Screen, Text } from '@components';
-import { navigate } from '@navigation/navigation-service';
-import { APP_SCREEN } from '@navigation/screen-types';
-import { useDispatch } from 'react-redux';
-import { appActions } from '@redux-slice';
-import { logout } from '@common';
 import { images } from '@assets/image';
 import { VectorIcon } from '@assets/vector-icon/vector-icon';
+import { logout } from '@common';
+import { Block, Screen, Text } from '@components';
+import { selectAppToken } from '@redux-selector/app';
+import React from 'react';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { useSelector } from 'react-redux';
 
 const UserScreen = () => {
-    const dispatch = useDispatch();
+    const userInfo: any = useSelector(selectAppToken);
 
     return (
         <Screen unsafe style={{ backgroundColor: '#fff' }}>
@@ -30,10 +28,10 @@ const UserScreen = () => {
                 </Block>
                 <Block style={{ paddingLeft: 20 }}>
                     <Text fontSize={20} lineHeight={40} color="#fff">
-                        Lê Tiến Dũng
+                        {userInfo?.Name}
                     </Text>
                     <Text fontSize={14} color="#f3f3f3">
-                        0987654321
+                        {userInfo?.Phone}
                     </Text>
                 </Block>
             </Block>
@@ -117,5 +115,4 @@ const styles = StyleSheet.create({
         width: 80,
         height: 80,
     },
-    infor: {},
 });

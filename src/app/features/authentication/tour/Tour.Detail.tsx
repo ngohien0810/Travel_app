@@ -4,43 +4,64 @@ import CardTour from '@com/CardTour';
 import { Block, Modal, Screen, Skeleton, Text } from '@components';
 import { navigate } from '@navigation/navigation-service';
 import { APP_SCREEN } from '@navigation/screen-types';
+import { selectAppToken } from '@redux-selector/app';
 import { ColorDefault } from '@theme/color';
+import moment from 'moment';
 import React from 'react';
 import {
     FlatList,
     Image,
     ImageBackground,
     StyleSheet,
-    useWindowDimensions,
+    TextInput,
     TouchableOpacity,
+    useWindowDimensions,
     View,
-    ActivityIndicator,
 } from 'react-native';
+import { showMessage } from 'react-native-flash-message';
 import LinearGradient from 'react-native-linear-gradient';
 import { Rating } from 'react-native-ratings';
+import RenderHtml from 'react-native-render-html';
+import { useSelector } from 'react-redux';
 import Header from '../../../layouts/Header';
 import { tourService } from './service';
-import RenderHtml from 'react-native-render-html';
-import moment from 'moment';
 
 const TourDetailScreen = ({ route }: any) => {
     const { id } = route.params;
+    const userInfo: any = useSelector(selectAppToken);
+    console.log('🚀 ~ file: Tour.Detail.tsx:34 ~ TourDetailScreen ~ userInfo', userInfo);
+
     const [detailTour, setDetailTour] = React.useState<any>(null);
     const { width } = useWindowDimensions();
     const [loading, setLoading] = React.useState(false);
     const [page, setPage] = React.useState(1);
-    const [recordFeedback, setRecordFeedback] = React.useState(1);
+    const [recordFeedback, setRecordFeedback] = React.useState(3);
+    const [modalFeedback, setModalFeedback] = React.useState(false);
+
+    const [callback, setCallback] = React.useState(false);
+    const [rate, setRate] = React.useState(0);
+    const [note, setNote] = React.useState('');
+
+    const caculateRate =
+        detailTour?.feedbacks?.length > 0
+            ? (
+                  detailTour?.feedbacks?.reduce((prev: any, curr: any) => {
+                      return prev + curr.Rate;
+                  }, 0) / detailTour?.feedbacks?.length
+              ).toFixed(1)
+            : 0;
 
     React.useEffect(() => {
         if (!id) return;
         setLoading(true);
         tourService.getTourDetail(id).then((res: any) => {
-            setDetailTour(res.data);
+            setDetailTour({
+                ...res.data,
+                feedbacks: res?.data?.feedbacks?.reverse() || [],
+            });
             setLoading(false);
         });
-    }, [id]);
-
-    const [modalFeedback, setModalFeedback] = React.useState(false);
+    }, [id, callback]);
 
     return (
         <Screen unsafe scroll style={{ backgroundColor: '#fff' }}>
@@ -86,7 +107,7 @@ const TourDetailScreen = ({ route }: any) => {
                     >
                         <VectorIcon icon="eye" colorTheme="button" />
                         <Block paddingLeft={6}>
-                            <Text colorTheme="button">1000</Text>
+                            <Text colorTheme="button">{detailTour?.Views || 0}</Text>
                         </Block>
                     </Block>
                     <Block
@@ -100,9 +121,9 @@ const TourDetailScreen = ({ route }: any) => {
                         }}
                     >
                         <Block paddingRight={6}>
-                            <Text colorTheme="button">4.5/5</Text>
+                            <Text colorTheme="button">{caculateRate}/5</Text>
                         </Block>
-                        <Rating startingValue={5} imageSize={16} style={{ paddingVertical: 10 }} />
+                        <Rating jumpValue={caculateRate} imageSize={16} style={{ paddingVertical: 10 }} />
                     </Block>
                 </Block>
             </ImageBackground>
@@ -149,7 +170,14 @@ const TourDetailScreen = ({ route }: any) => {
             </Block>
 
             <Block paddingHorizontal={20}>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity
+                    onPress={() =>
+                        navigate(APP_SCREEN.MAPS, {
+                            tourId: detailTour?.id,
+                        })
+                    }
+                    style={styles.button}
+                >
                     <Text color="#333" fontWeight="bold">
                         Lộ trình gợi ý
                     </Text>
@@ -179,11 +207,24 @@ const TourDetailScreen = ({ route }: any) => {
                 >
                     <Block direction="row" alignItems="center">
                         <Text fontSize={40} color="#fff">
-                            5.0
+                            {caculateRate}
                         </Text>
                         <View style={{ marginLeft: 10 }}>
-                            <Rating readonly startingValue={5} imageSize={18} style={{ paddingVertical: 6 }} />
-                            <Text color="#e5d5d5">(128 đánh giá)</Text>
+                            <Rating
+                                readonly
+                                jumpValue={caculateRate}
+                                imageSize={18}
+                                style={{
+                                    paddingVertical: 6,
+                                    paddingHorizontal: 10,
+                                    backgroundColor: '#fff',
+                                    borderRadius: 10,
+                                }}
+                            />
+
+                            <Block paddingHorizontal={10} paddingTop={3}>
+                                <Text color="#e5d5d5">( {detailTour?.feedbacks?.length} đánh giá )</Text>
+                            </Block>
                         </View>
                     </Block>
                     <TouchableOpacity onPress={() => setModalFeedback(true)}>
@@ -243,7 +284,7 @@ const TourDetailScreen = ({ route }: any) => {
                     );
                 })}
 
-                {detailTour?.feedbacks?.length > 1 && recordFeedback < detailTour?.feedbacks?.length && (
+                {detailTour?.feedbacks?.length > 3 && recordFeedback < detailTour?.feedbacks?.length && (
                     <Block direction="row" marginTop={20} justifyContent="center">
                         <TouchableOpacity
                             style={{
@@ -301,7 +342,7 @@ const TourDetailScreen = ({ route }: any) => {
             </Block>
             <Modal hasGesture={false} swipingDirection="down" isVisible={modalFeedback}>
                 <Block height="100%" justifyContent="flex-end">
-                    <Block height="50%" borderTopLeftRadius={32} padding={20} borderTopRightRadius={32} color="#fff">
+                    <Block height="55%" borderTopLeftRadius={32} padding={20} borderTopRightRadius={32} color="#fff">
                         <Block direction="row" justifyContent="flex-end">
                             <TouchableOpacity style={{ paddingHorizontal: 10 }} onPress={() => setModalFeedback(false)}>
                                 <Text fontWeight="bold" fontSize={16}>
@@ -315,10 +356,51 @@ const TourDetailScreen = ({ route }: any) => {
                         <Block paddingBottom={30} marginTop={40}>
                             <Text textAlign="center">Bạn đánh giá tour này như thế nào?</Text>
                         </Block>
-                        <Rating jumpValue={0} imageSize={50} />
+                        <Rating startingValue={0} onFinishRating={(rating: any) => setRate(rating)} imageSize={50} />
                         <Block paddingBottom={20} marginTop={30}>
                             <Text textAlign="center">Cho chúng tôi biết thêm chi tiết nhé?</Text>
                         </Block>
+                        <TextInput
+                            style={{
+                                borderColor: '#ccc',
+                                borderWidth: 1,
+                                paddingTop: 14,
+                                paddingBottom: 14,
+                                paddingHorizontal: 14,
+                                borderRadius: 16,
+                                height: 100,
+                            }}
+                            placeholder="Điểm nào bạn thích, chưa thích ở tour này. Hay bất cứ điều gì bạn muốn chia sẻ"
+                            multiline={true}
+                            numberOfLines={5}
+                            onChangeText={(text) => setNote(text)}
+                            // value={this.state.text}
+                        />
+                        <TouchableOpacity
+                            onPress={() => {
+                                tourService
+                                    .createFeedback({
+                                        Name: userInfo?.Name,
+                                        Phone: userInfo?.Phone,
+                                        Email: userInfo?.Email,
+                                        Rate: rate,
+                                        Note: note,
+                                        TourId: detailTour?.id,
+                                    })
+                                    .then(() => {
+                                        setCallback(!callback);
+                                        setModalFeedback(false);
+                                        showMessage({
+                                            message: 'Đánh giá thành công',
+                                            titleStyle: { textAlign: 'center' },
+                                            type: 'success',
+                                        });
+                                    });
+                            }}
+                            style={[styles.button, { backgroundColor: ColorDefault.button, marginTop: 20 }]}
+                        >
+                            <Text color="#fff">Gửi đánh giá</Text>
+                        </TouchableOpacity>
                     </Block>
                 </Block>
             </Modal>

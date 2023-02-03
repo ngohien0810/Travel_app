@@ -51,6 +51,7 @@ target 'VietnamTravel' do
   # end
   
   post_install do |installer|
+    $RNMapboxMaps.post_install(installer)
     react_native_post_install(
       installer,
       # Set `mac_catalyst_enabled` to `true` in order to apply patches
