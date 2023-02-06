@@ -14,4 +14,10 @@ export const tourService = {
             url: '/feedback',
             body: data,
         }),
+    getDestination: (params: any) => {
+        return NetWorkService.Get({
+            url: '/destination',
+            params,
+        });
+    },
 };

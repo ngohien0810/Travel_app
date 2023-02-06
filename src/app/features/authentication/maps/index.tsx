@@ -1,100 +1,147 @@
 import { images } from '@assets/image';
+import { Block, Icon, Text } from '@components';
+import { goBack, navigate } from '@navigation/navigation-service';
 import MapboxGL, { MarkerView } from '@rnmapbox/maps';
 import { HEIGHT_SCREEN, WIDTH_SCREEN } from '@theme';
 import React from 'react';
-import { Image, Platform, StyleSheet, View } from 'react-native';
+import { Image, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { getAppleMapKitDirections, MapKitTransit } from 'react-native-apple-mapkit-directions';
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
+import { tourService } from '../tour/service';
 
-const GOOGLE_MAPS_APIKEY = 'AIzaSyCEi57ifK06u6Tn2d6lfg9dvz6Z13EplGU';
-const MapScreen = () => {
-    const origin = {
-        latitude: 21.03624,
-        longitude: 105.7912,
-    };
-    const destination = {
-        latitude: 21,
-        longitude: 105.790583,
-    };
-    const transitType = MapKitTransit.AUTOMOBILE;
-    const [state, setState] = React.useState<any>();
-    React.useEffect(() => {
-        const getPoints = async () => {
-            if (Platform.OS === 'ios') {
-                try {
-                    const points = await getAppleMapKitDirections(origin, destination, transitType);
-                    setState(points.coordinates);
-                } catch (error) {
-                    console.log('error', error);
-                }
-            }
-        };
-        getPoints();
-    }, []);
+const GOOGLE_MAPS_APIKEY = 'AIzaSyDYYVsxVI2SU0NZhUkMEpiBw0UY_GbWwMo';
+const MapScreen = ({ route }: any) => {
+    const tour_id = route?.params;
 
-    const camera = React.useRef<any>(null);
+    const [destinations, setDestionations] = React.useState<any>([]);
+    console.log('🚀 ~ file: index.tsx:18 ~ MapScreen ~ destinations', destinations);
 
     React.useEffect(() => {
-        camera.current?.setCamera({
-            centerCoordinate: [105.790583, 21.036237],
-        });
-    }, []);
+        if (!tour_id) return;
+        (async () => {
+            tourService
+                .getDestination({
+                    tour_id,
+                })
+                .then((res: any) => {
+                    setDestionations(res?.data?.data);
+                });
+        })();
+    }, [tour_id]);
 
     return (
-        <View style={styles.container}>
-            <MapView
-                // followsUserLocation
-                // showsUserLocation
-                // mapType="hybrid"
-                style={{ ...styles.map }}
-                region={{ latitude: 21.028511, longitude: 105.804817, latitudeDelta: 0.06, longitudeDelta: 0.0134 }}
+        <View style={{ flex: 1 }}>
+            <Block
+                direction="row"
+                justifyContent="center"
+                zIndex={1}
+                position="absolute"
+                margin={0}
+                padding={0}
+                top={60}
+                left={2}
+                width="100%"
+                flex={1}
             >
-                <MapViewDirections
-                    origin={{
-                        latitude: 21.026118060798776,
-                        longitude: 105.81151992196499,
-                    }}
-                    destination={{
-                        latitude: 21.02973635330122,
-                        longitude: 105.81318291391094,
-                    }}
-                    apikey={GOOGLE_MAPS_APIKEY}
-                    language="vi"
-                    timePrecision="now"
-                    mode="DRIVING"
-                    strokeWidth={5}
-                    strokeColors={['black', 'black', 'green']}
-                />
+                <View style={styles.header}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            goBack();
+                        }}
+                    >
+                        <Icon icon="arrow_down" size={36} rotate color={'black'} />
+                    </TouchableOpacity>
 
-                <Marker
-                    coordinate={{
-                        latitude: 21.02973635330122,
-                        longitude: 105.81318291391094,
-                    }}
-                    title="Nhà Hiền"
+                    {/* <Text>Header</Text> */}
+                </View>
+            </Block>
+            <View style={styles.container}>
+                <MapView
+                    // followsUserLocation
+                    // showsUserLocation
+                    // mapType="hybrid"
+                    style={{ ...styles.map }}
+                    region={{ latitude: 21.028511, longitude: 105.804817, latitudeDelta: 0.06, longitudeDelta: 0.0134 }}
                 >
-                    <Image source={images.location} style={styles.myLocation} />
-                </Marker>
-                <Marker
-                    coordinate={{
-                        latitude: 21.026118060798776,
-                        longitude: 105.81151992196499,
-                    }}
-                    title="Nhà Ý"
-                >
-                    <Image source={images.location} style={styles.myLocation} />
-                </Marker>
-                {/* <Polyline coordinates={state} strokeWidth={2} strokeColor="red" /> */}
-            </MapView>
-            {/* <MapboxGL.MapView
-                styleURL="https://tiles.goong.io/assets/goong_map_web.json?api_key=eBa57AZT6VYUwTlwtgqk0YGmUPN5As9X319FCf72"
-                style={styles.map}
-                zoomEnabled
-                logoEnabled={false}
-            >
-                <MapboxGL.Camera ref={camera} zoomLevel={12} />
-            </MapboxGL.MapView> */}
+                    <MapViewDirections
+                        origin={{
+                            latitude: destinations[0]?.Latitude,
+                            longitude: destinations[0]?.Longtitude,
+                        }}
+                        destination={{
+                            latitude: destinations[1]?.Latitude,
+                            longitude: destinations[1]?.Longtitude,
+                        }}
+                        apikey={GOOGLE_MAPS_APIKEY}
+                        // language="vi"
+                        timePrecision="now"
+                        mode="DRIVING"
+                        strokeWidth={5}
+                        strokeColors={['black', 'black', 'green']}
+                    />
+
+                    <MapViewDirections
+                        origin={{
+                            latitude: destinations[1]?.Latitude,
+                            longitude: destinations[1]?.Longtitude,
+                        }}
+                        destination={{
+                            latitude: destinations[2]?.Latitude,
+                            longitude: destinations[2]?.Longtitude,
+                        }}
+                        apikey={GOOGLE_MAPS_APIKEY}
+                        // language="vi"
+                        timePrecision="now"
+                        mode="DRIVING"
+                        strokeWidth={5}
+                        strokeColors={['black', 'black', 'red']}
+                    />
+
+                    <MapViewDirections
+                        origin={{
+                            latitude: destinations[2]?.Latitude,
+                            longitude: destinations[2]?.Longtitude,
+                        }}
+                        destination={{
+                            latitude: destinations[3]?.Latitude,
+                            longitude: destinations[3]?.Longtitude,
+                        }}
+                        apikey={GOOGLE_MAPS_APIKEY}
+                        // language="vi"
+                        timePrecision="now"
+                        mode="DRIVING"
+                        strokeWidth={5}
+                        strokeColors={['black', 'black', 'yellow']}
+                    />
+
+                    {destinations?.map((item: any, index: number) => {
+                        return (
+                            <>
+                                <Marker
+                                    coordinate={{
+                                        latitude: item?.Latitude,
+                                        longitude: item?.Longtitude,
+                                    }}
+                                    title="Nhà Hiền"
+                                >
+                                    <Image source={images.location} style={styles.myLocation} />
+                                </Marker>
+                            </>
+                        );
+                    })}
+
+                    {/* <Polyline coordinates={state} strokeWidth={2} strokeColor="red" /> */}
+                </MapView>
+                {/* <MapboxGL.MapView
+               styleURL="https://tiles.goong.io/assets/goong_map_web.json?api_key=eBa57AZT6VYUwTlwtgqk0YGmUPN5As9X319FCf72"
+               style={styles.map}
+               zoomEnabled
+               logoEnabled={false}
+           >
+               <MapboxGL.Camera ref={camera} zoomLevel={12} />
+           </MapboxGL.MapView> */}
+            </View>
         </View>
     );
 };
@@ -108,6 +155,24 @@ const styles = StyleSheet.create({
         width: 400,
         justifyContent: 'flex-end',
         alignItems: 'center',
+    },
+    header: {
+        height: 60,
+        backgroundColor: 'rgba(255,255,255,0.7)',
+        width: '92%',
+        borderRadius: 12,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        elevation: 5,
     },
     map: {
         ...StyleSheet.absoluteFillObject,

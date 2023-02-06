@@ -123,7 +123,7 @@ const TourDetailScreen = ({ route }: any) => {
                         <Block paddingRight={6}>
                             <Text colorTheme="button">{caculateRate}/5</Text>
                         </Block>
-                        <Rating jumpValue={caculateRate} imageSize={16} style={{ paddingVertical: 10 }} />
+                        <Rating startingValue={caculateRate} imageSize={16} style={{ paddingVertical: 10 }} />
                     </Block>
                 </Block>
             </ImageBackground>
@@ -170,14 +170,7 @@ const TourDetailScreen = ({ route }: any) => {
             </Block>
 
             <Block paddingHorizontal={20}>
-                <TouchableOpacity
-                    onPress={() =>
-                        navigate(APP_SCREEN.MAPS, {
-                            tourId: detailTour?.id,
-                        })
-                    }
-                    style={styles.button}
-                >
+                <TouchableOpacity onPress={() => navigate(APP_SCREEN.MAPS, detailTour?.id)} style={styles.button}>
                     <Text color="#333" fontWeight="bold">
                         Lộ trình gợi ý
                     </Text>
@@ -212,7 +205,7 @@ const TourDetailScreen = ({ route }: any) => {
                         <View style={{ marginLeft: 10 }}>
                             <Rating
                                 readonly
-                                jumpValue={caculateRate}
+                                startingValue={caculateRate}
                                 imageSize={18}
                                 style={{
                                     paddingVertical: 6,
