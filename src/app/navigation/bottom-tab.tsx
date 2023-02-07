@@ -11,6 +11,7 @@ import * as Animatable from 'react-native-animatable';
 import FavoriteScreen from '@features/authentication/favorite';
 import UserScreen from '@features/authentication/user';
 import MapScreen from '@features/authentication/maps';
+import NewsScreen from '@features/authentication/news';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -92,10 +93,10 @@ const BottomTabArr = [
         component: Home,
     },
     {
-        route: APP_SCREEN.TOUR,
-        label: 'Lịch trình',
+        route: APP_SCREEN.NEWS,
+        label: 'Tin tức',
         icon: images.tour,
-        component: TourScreen,
+        component: NewsScreen,
     },
     {
         route: APP_SCREEN.MAPS,
