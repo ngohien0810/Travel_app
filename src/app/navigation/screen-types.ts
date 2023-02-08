@@ -13,6 +13,7 @@ export enum APP_SCREEN {
     FAVORITE = 'FAVORITE',
     USER = 'USER',
     NEWS = 'NEWS',
+    NEWS_DETAIL = 'NEWS_DETAIL',
 
     // screen not bottom tab
     SEARCH_RESULT = 'SEARCH_RESULT',

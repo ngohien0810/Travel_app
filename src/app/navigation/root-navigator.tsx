@@ -12,6 +12,7 @@ import BootSplash from 'react-native-bootsplash';
 import { useSelector } from 'react-redux';
 import BottomTab from './bottom-tab';
 import ContactScreen from '@features/authentication/order/Contact';
+import NewsDetailScreen from '@features/authentication/news/News.Detail';
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
@@ -50,6 +51,7 @@ export const RootNavigation = () => {
                     <RootStack.Screen name={APP_SCREEN.AUTHORIZE} component={BottomTab} />
                     <RootStack.Screen name={APP_SCREEN.SEARCH_RESULT} component={ResultSearchScreen} />
                     <RootStack.Screen name={APP_SCREEN.TOUR_DETAIL} component={TourDetailScreen} />
+                    <RootStack.Screen name={APP_SCREEN.NEWS_DETAIL} component={NewsDetailScreen} />
                     <RootStack.Screen name={APP_SCREEN.ORDER} component={OrderScreen} />
                     <RootStack.Screen name={APP_SCREEN.CONTACT} component={ContactScreen} />
                 </RootStack.Group>

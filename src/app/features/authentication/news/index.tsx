@@ -1,18 +1,85 @@
-import { View, TextInput, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import {
+    View,
+    TextInput,
+    StyleSheet,
+    ScrollView,
+    TouchableOpacity,
+    Image,
+    ImageBackground,
+    FlatList,
+} from 'react-native';
 import React from 'react';
 import { Block, Icon, Screen, Text } from '@components';
 import Header from '@layouts/Header';
+import FastImage from 'react-native-fast-image';
+import { images } from '@assets/image';
+import { navigate } from '@navigation/navigation-service';
+import { APP_SCREEN } from '@navigation/screen-types';
+const data = [
+    { key: 'A' },
+    { key: 'B' },
+    { key: 'C' },
+    { key: 'C' },
+    { key: 'C' },
+    { key: 'C' },
+    { key: 'C' },
+    { key: 'C' },
+    // Add more items here
+];
 
+const Item = ({ title }: any) => (
+    <Block direction="row" marginBottom={16}>
+        <FastImage source={images.bg_wallpaper} style={{ height: 120, width: 120, borderRadius: 8 }} />
+        <Block padding={16} justifyContent="space-between" flex={1}>
+            <Text numberOfLines={2} color="black" fontWeight="600">
+                Đại diện tỉnh Đắk Nông tham gia chương trình “Mentorship And Knowledge Exchange” tại Bồ Đào Nha
+            </Text>
+            <Text fontSize={13} color="#6B6B6B">
+                12/11/2019 09:15
+            </Text>
+        </Block>
+    </Block>
+);
 const storyList = [
     {
         id: 1,
-        name: 'Story 1',
-        image: require('../../../assets/image/source/avatar.png'),
+        name: 'Di sản đá, khoáng vật, khoáng sản',
+        image: require('../../../assets/image/source/bg_result_search.png'),
     },
     {
         id: 2,
         name: 'Story 2',
-        image: require('../../../assets/image/source/avatar.png'),
+        image: require('../../../assets/image/source/bg_result_search.png'),
+    },
+    {
+        id: 3,
+        name: 'Story 1',
+        image: require('../../../assets/image/source/bg_result_search.png'),
+    },
+    {
+        id: 4,
+        name: 'Story 2',
+        image: require('../../../assets/image/source/bg_result_search.png'),
+    },
+    {
+        id: 5,
+        name: 'Story 1',
+        image: require('../../../assets/image/source/bg_result_search.png'),
+    },
+    {
+        id: 6,
+        name: 'Story 2',
+        image: require('../../../assets/image/source/bg_result_search.png'),
+    },
+    {
+        id: 7,
+        name: 'Story 1',
+        image: require('../../../assets/image/source/bg_result_search.png'),
+    },
+    {
+        id: 8,
+        name: 'Story 2',
+        image: require('../../../assets/image/source/bg_result_search.png'),
     },
     // ...
 ];
@@ -26,7 +93,7 @@ const NewsScreen = () => {
                 headerText="Tin tức"
             />
             <View style={styles.body}>
-                <Block padding={22}>
+                <Block paddingVertical={16} paddingHorizontal={22}>
                     <View style={styles.container_search}>
                         <Icon color="rgba(107, 107, 107, 1)" icon="search" size={24} />
                         <TextInput
@@ -36,19 +103,74 @@ const NewsScreen = () => {
                         />
                     </View>
                 </Block>
-                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                <ScrollView
+                    style={{ flexGrow: 0, paddingHorizontal: 14, paddingBottom: 6 }}
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                >
                     {storyList.map((story) => (
-                        <TouchableOpacity key={story.id}>
-                            <View style={{ width: 80, height: 80, marginRight: 16 }}>
-                                <Image
-                                    source={story.image}
-                                    style={{ width: '100%', height: '100%', borderRadius: 999 }}
+                        <TouchableOpacity
+                            key={story.id}
+                            style={{
+                                shadowColor: 'red',
+                                shadowOffset: {
+                                    width: 0,
+                                    height: 1,
+                                },
+                                shadowOpacity: 0.22,
+                                shadowRadius: 1.22,
+
+                                elevation: 2,
+                            }}
+                        >
+                            <ImageBackground
+                                source={story.image}
+                                style={{
+                                    width: 120,
+                                    height: 170,
+                                    marginRight: 16,
+                                    borderRadius: 8,
+                                    overflow: 'hidden',
+                                    justifyContent: 'flex-end',
+                                    padding: 10,
+                                    position: 'relative',
+                                }}
+                            >
+                                <Block
+                                    position="absolute"
+                                    top={0}
+                                    left={0}
+                                    right={0}
+                                    bottom={0}
+                                    color="rgba(0,0,0,.1)"
                                 />
-                                <Text style={{ fontSize: 12, marginTop: 8 }}>{story.name}</Text>
-                            </View>
+                                <Text color="white" fontWeight="600" style={{ zIndex: 10 }}>
+                                    {story.name}
+                                </Text>
+                            </ImageBackground>
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
+                <Block padding={14} flex={1} paddingBottom={100}>
+                    <FlatList
+                        showsVerticalScrollIndicator={false}
+                        data={data}
+                        renderItem={({ item, index }: any) => (
+                            <TouchableOpacity
+                                onPress={() => {
+                                    navigate(APP_SCREEN.NEWS_DETAIL);
+                                }}
+                                key={index}
+                            >
+                                <Item title={item} />
+                            </TouchableOpacity>
+                        )}
+                        keyExtractor={(item) => item.key}
+                        initialNumToRender={5}
+                        maxToRenderPerBatch={1}
+                        windowSize={5}
+                    />
+                </Block>
             </View>
         </Screen>
     );
