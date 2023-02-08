@@ -1,5 +1,5 @@
 APP_ENV=Dev
-API_URL=http://localhost:5005/api/v2
+API_URL=http://10.0.2.2:5005/api/v2
 APP_DISPLAY_NAME=Vietnam Travel
 APP_PLACEHOLDER_NAME=VietnamTravel
 VERSION_CODE=1
