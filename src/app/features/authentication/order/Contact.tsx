@@ -11,7 +11,9 @@ import { useSelector } from 'react-redux';
 import { navigate } from '@navigation/navigation-service';
 import { APP_SCREEN } from '@navigation/screen-types';
 
-const ContactScreen = () => {
+const ContactScreen = ({ route }: any) => {
+    const data = route.params;
+    console.log('🚀 ~ file: Contact.tsx:16 ~ ContactScreen ~ data', data);
     // state
     const formMethod = useForm<FormContactType>();
     const state: any = useSelector((state: any) => {

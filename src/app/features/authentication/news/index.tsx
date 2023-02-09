@@ -15,76 +15,69 @@ import FastImage from 'react-native-fast-image';
 import { images } from '@assets/image';
 import { navigate } from '@navigation/navigation-service';
 import { APP_SCREEN } from '@navigation/screen-types';
+import { newService } from './service';
+import moment from 'moment';
+import { useDebounce } from '@hooks';
 const data = [
     { key: 'A' },
     { key: 'B' },
     { key: 'C' },
-    { key: 'C' },
-    { key: 'C' },
-    { key: 'C' },
-    { key: 'C' },
-    { key: 'C' },
     // Add more items here
 ];
 
-const Item = ({ title }: any) => (
+const wait = (timeout: number) => {
+    return new Promise((resolve: any) => setTimeout(resolve, timeout));
+};
+
+const Item = ({ item }: any) => (
     <Block direction="row" marginBottom={16}>
-        <FastImage source={images.bg_wallpaper} style={{ height: 120, width: 120, borderRadius: 8 }} />
+        <FastImage source={{ uri: item?.ImageUrl }} style={{ height: 120, width: 120, borderRadius: 8 }} />
         <Block padding={16} justifyContent="space-between" flex={1}>
             <Text numberOfLines={2} color="black" fontWeight="600">
-                Đại diện tỉnh Đắk Nông tham gia chương trình “Mentorship And Knowledge Exchange” tại Bồ Đào Nha
+                {item?.Title}
             </Text>
             <Text fontSize={13} color="#6B6B6B">
-                12/11/2019 09:15
+                {moment(item?.CreatedDate).format('DD/MM/YYYY HH:mm')}
             </Text>
         </Block>
     </Block>
 );
-const storyList = [
-    {
-        id: 1,
-        name: 'Di sản đá, khoáng vật, khoáng sản',
-        image: require('../../../assets/image/source/bg_result_search.png'),
-    },
-    {
-        id: 2,
-        name: 'Story 2',
-        image: require('../../../assets/image/source/bg_result_search.png'),
-    },
-    {
-        id: 3,
-        name: 'Story 1',
-        image: require('../../../assets/image/source/bg_result_search.png'),
-    },
-    {
-        id: 4,
-        name: 'Story 2',
-        image: require('../../../assets/image/source/bg_result_search.png'),
-    },
-    {
-        id: 5,
-        name: 'Story 1',
-        image: require('../../../assets/image/source/bg_result_search.png'),
-    },
-    {
-        id: 6,
-        name: 'Story 2',
-        image: require('../../../assets/image/source/bg_result_search.png'),
-    },
-    {
-        id: 7,
-        name: 'Story 1',
-        image: require('../../../assets/image/source/bg_result_search.png'),
-    },
-    {
-        id: 8,
-        name: 'Story 2',
-        image: require('../../../assets/image/source/bg_result_search.png'),
-    },
-    // ...
-];
 
 const NewsScreen = () => {
+    const [categories, setCategories] = React.useState([]);
+    const [news, setNews] = React.useState([]);
+    console.log('🚀 ~ file: index.tsx:49 ~ NewsScreen ~ news', news);
+    const [search, setSeach] = React.useState('');
+    const debounce = useDebounce(search, 500);
+
+    const [loading, setLoading] = React.useState(false);
+
+    React.useEffect(() => {
+        newService.getCategories().then((res: any) => {
+            setCategories(res.data?.data);
+        });
+    }, []);
+
+    React.useEffect(() => {
+        setLoading(true);
+        newService
+            .getNews({ search: debounce })
+            .then((res: any) => {
+                setNews(res.data?.data);
+            })
+            .finally(() => setLoading(false));
+    }, [debounce, callback]);
+
+    const [callback, setCallback] = React.useState(false);
+
+    const [refreshing, setRefreshing] = React.useState(false);
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        setCallback(!callback);
+        wait(1000).then(() => setRefreshing(false));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [callback]);
+
     return (
         <Screen statusBarStyle="dark-content" unsafe>
             <Header
@@ -97,6 +90,7 @@ const NewsScreen = () => {
                     <View style={styles.container_search}>
                         <Icon color="rgba(107, 107, 107, 1)" icon="search" size={24} />
                         <TextInput
+                            onChangeText={(text) => setSeach(text)}
                             style={styles.input}
                             placeholder="Tìm kiếm tin tức"
                             underlineColorAndroid="transparent"
@@ -108,7 +102,7 @@ const NewsScreen = () => {
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                 >
-                    {storyList.map((story) => (
+                    {categories.map((story: any) => (
                         <TouchableOpacity
                             key={story.id}
                             style={{
@@ -124,7 +118,10 @@ const NewsScreen = () => {
                             }}
                         >
                             <ImageBackground
-                                source={story.image}
+                                loadingIndicatorSource={images.spin}
+                                source={{
+                                    uri: story?.ImageUrl,
+                                }}
                                 style={{
                                     width: 120,
                                     height: 170,
@@ -145,31 +142,44 @@ const NewsScreen = () => {
                                     color="rgba(0,0,0,.1)"
                                 />
                                 <Text color="white" fontWeight="600" style={{ zIndex: 10 }}>
-                                    {story.name}
+                                    {story.Name}
                                 </Text>
                             </ImageBackground>
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
                 <Block padding={14} flex={1} paddingBottom={100}>
-                    <FlatList
-                        showsVerticalScrollIndicator={false}
-                        data={data}
-                        renderItem={({ item, index }: any) => (
-                            <TouchableOpacity
-                                onPress={() => {
-                                    navigate(APP_SCREEN.NEWS_DETAIL);
-                                }}
-                                key={index}
-                            >
-                                <Item title={item} />
-                            </TouchableOpacity>
-                        )}
-                        keyExtractor={(item) => item.key}
-                        initialNumToRender={5}
-                        maxToRenderPerBatch={1}
-                        windowSize={5}
-                    />
+                    {loading ? (
+                        <Block flex={1} justifyContent="center" alignItems="center">
+                            <Image style={{ height: 100, width: 100 }} source={images.spin} />
+                        </Block>
+                    ) : (
+                        <FlatList
+                            refreshing={refreshing}
+                            onRefresh={onRefresh}
+                            showsVerticalScrollIndicator={false}
+                            data={news}
+                            renderItem={({ item }: any) => (
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        navigate(APP_SCREEN.NEWS_DETAIL, item);
+                                    }}
+                                    key={item.id}
+                                >
+                                    <Item item={item} />
+                                </TouchableOpacity>
+                            )}
+                            keyExtractor={(item) => item.key}
+                            initialNumToRender={5}
+                            maxToRenderPerBatch={1}
+                            windowSize={5}
+                            ListEmptyComponent={() => (
+                                <Block justifyContent="center" alignItems="center">
+                                    <Image source={images.empty} style={{ width: 250, height: 250 }} />
+                                </Block>
+                            )}
+                        />
+                    )}
                 </Block>
             </View>
         </Screen>

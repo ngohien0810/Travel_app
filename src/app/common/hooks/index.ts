@@ -512,6 +512,19 @@ const useEventCallback = <Fn extends (...args: any[]) => ReturnType<Fn>>(func: F
     return callbackMemoized;
 };
 
+function useDebounce(value: any, delay: number) {
+    const [debouncedValue, setDebouncedValue] = React.useState(value);
+    React.useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedValue(value);
+        }, delay);
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [value, delay]);
+    return debouncedValue;
+}
+
 export {
     useMessageYupTranslation,
     useDisableBackHandler,
@@ -533,4 +546,5 @@ export {
     useIsKeyboardShown,
     useDidMount,
     useEventCallback,
+    useDebounce,
 };

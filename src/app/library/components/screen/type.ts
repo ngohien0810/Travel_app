@@ -83,6 +83,7 @@ export type ScreenProps = {
     onRefresh?: any;
     refreshing?: any;
     onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+    dialogLoading?: any;
 };
 
 export type InsetComponentProps = Pick<

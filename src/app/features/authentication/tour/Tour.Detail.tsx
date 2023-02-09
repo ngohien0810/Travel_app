@@ -325,7 +325,7 @@ const TourDetailScreen = ({ route }: any) => {
                 <Block paddingHorizontal={20} paddingBottom={40} marginTop={10}>
                     <TouchableOpacity
                         onPress={() => {
-                            navigate(APP_SCREEN.ORDER);
+                            navigate(APP_SCREEN.ORDER, detailTour);
                         }}
                         style={[styles.button, { backgroundColor: ColorDefault.button }]}
                     >

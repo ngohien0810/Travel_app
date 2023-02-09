@@ -17,6 +17,10 @@ export const trimArray = (sourceArr: Array<unknown> = []): Array<unknown> => {
     });
 };
 
+export const currencyFormat = (number: number) => {
+    return number?.toString()?.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+};
+
 export const trimObject = (source: any) => {
     if (!source) {
         return source;

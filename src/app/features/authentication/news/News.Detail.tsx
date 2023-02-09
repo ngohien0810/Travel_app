@@ -1,20 +1,13 @@
 import { images } from '@assets/image';
 import { Block, Screen, Text } from '@components';
 import Header from '@layouts/Header';
+import { WIDTH_SCREEN } from '@theme';
+import moment from 'moment';
 import React from 'react';
-import { FlatList, ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
+import { ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
 import FastImage from 'react-native-fast-image';
-const data = [
-    { key: 'A' },
-    { key: 'B' },
-    { key: 'C' },
-    { key: 'C' },
-    { key: 'C' },
-    { key: 'C' },
-    { key: 'C' },
-    { key: 'C' },
-    // Add more items here
-];
+import RenderHTML from 'react-native-render-html';
+import { wait } from '../home';
 
 const Item = ({ title }: any) => (
     <Block direction="row" marginBottom={16}>
@@ -29,14 +22,25 @@ const Item = ({ title }: any) => (
         </Block>
     </Block>
 );
-const NewsDetailScreen = () => {
+const NewsDetailScreen = ({ route }: any) => {
+    const [loading, setLoading] = React.useState(false);
+
+    const data = route.params;
+    console.log('🚀 ~ file: News.Detail.tsx:29 ~ NewsDetailScreen ~ data', data);
+    React.useEffect(() => {
+        setLoading(true);
+        wait(1000).then(() => {
+            setLoading(false);
+        });
+    }, []);
+
     return (
-        <Screen unsafe scroll style={{ backgroundColor: '#fff' }}>
+        <Screen dialogLoading={loading} unsafe scroll style={{ backgroundColor: '#fff' }}>
             <ImageBackground
                 loadingIndicatorSource={images.spin}
                 style={styles.header_tour_detail}
-                resizeMode="center"
-                source={images.bg_wallpaper}
+                resizeMode="cover"
+                source={data?.ImageUrl ? { uri: data?.ImageUrl } : images.spin}
             >
                 <Header
                     style={{
@@ -51,13 +55,13 @@ const NewsDetailScreen = () => {
                     iconLeft="#222"
                     leftIcon
                 />
-                <Block padding={20}>
-                    <Text fontSize={16} fontWeight="600" color="white">
-                        Đại diện tỉnh Đắk Nông tham gia chương trình “Mentorship And Knowledge Exchange” tại Bồ Đào Nha
+                <Block padding={24} color="rgba(0,0,0,.2)">
+                    <Text fontSize={16} fontWeight="bold" color="white">
+                        {data?.Title}
                     </Text>
                     <Block marginTop={10}>
-                        <Text fontSize={12} color="white">
-                            12/11/2019 09:15
+                        <Text fontSize={13} fontWeight="500" color="white">
+                            {moment(data?.CreatedDate).format('YYYY-MM-DD HH:mm')}
                         </Text>
                     </Block>
                 </Block>
@@ -70,26 +74,21 @@ const NewsDetailScreen = () => {
                 borderTopRightRadius={18}
                 borderTopLeftRadius={18}
             >
-                <Text>Đây là box phía dưới</Text>
-                <Text>Đây là box phía dưới</Text>
-                <Text>Đây là box phía dưới</Text>
-                <Text>Đây là box phía dưới</Text>
-                <Text>Đây là box phía dưới</Text>
-                <Text>Đây là box phía dưới</Text>
-                <Text>Đây là box phía dưới</Text>
-                <Text>Đây là box phía dưới</Text>
-                <Text>Đây là box phía dưới</Text>
-                <Text>Đây là box phía dưới</Text>
+                <RenderHTML
+                    contentWidth={WIDTH_SCREEN}
+                    source={{
+                        html: data?.Description,
+                    }}
+                />
+
                 <Block colorTheme="button" marginTop={10} marginBottom={10} height={0.5} />
-                <Block paddingVertical={12}>
+                <Block paddingVertical={12} marginBottom={16}>
                     <Text fontWeight="600" fontSize={16} colorTheme="button">
                         Những tin tức liên quan
                     </Text>
                 </Block>
-                <FlatList
-                    showsVerticalScrollIndicator={false}
-                    data={data}
-                    renderItem={({ item, index }: any) => (
+                {/* {data?.map((item, index) => {
+                    return (
                         <TouchableOpacity
                             onPress={() => {
                                 // navigate(APP_SCREEN.NEWS_DETAIL);
@@ -98,12 +97,8 @@ const NewsDetailScreen = () => {
                         >
                             <Item title={item} />
                         </TouchableOpacity>
-                    )}
-                    keyExtractor={(item) => item.key}
-                    initialNumToRender={5}
-                    maxToRenderPerBatch={1}
-                    windowSize={5}
-                />
+                    );
+                })} */}
             </Block>
         </Screen>
     );
@@ -115,7 +110,7 @@ const styles = StyleSheet.create({
     header_tour_detail: {
         minHeight: 400,
         maxHeight: 400,
-        width: '100%',
+        width: WIDTH_SCREEN,
         justifyContent: 'space-between',
     },
 });

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useWindowDimensions, View, ViewProps, ViewStyle } from 'react-native';
+import { Image, Platform, StyleSheet, useWindowDimensions, View, ViewProps, ViewStyle } from 'react-native';
 
 import Animated from 'react-native-reanimated';
 import { Edge, SafeAreaView, SafeAreaViewProps, useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -11,6 +11,7 @@ import { InsetComponentProps, InsetProps, ScreenComponentProps, ScreenProps } fr
 
 import { FocusAwareStatusBar } from '../focus-aware-status-bar';
 import { RefreshControl } from 'react-native-gesture-handler';
+import { images } from '@assets/image';
 
 const INSETS: Edge[] = ['top', 'bottom', 'left', 'right'];
 
@@ -182,8 +183,52 @@ export const Screen = (props: ScreenProps) => {
     const Wrapper = useMemo(() => (actualUnsafe ? View : SafeAreaView), [actualUnsafe]);
     // render
     if (props.scroll) {
-        return ScreenWithScrolling(Wrapper, { ...props, actualUnsafe, edges });
+        return (
+            <>
+                {ScreenWithScrolling(Wrapper, { ...props, actualUnsafe, edges })}
+                {props?.dialogLoading && <LoadingProgress />}
+            </>
+        );
     } else {
-        return ScreenWithoutScrolling(Wrapper, { ...props, actualUnsafe, edges });
+        return (
+            <>
+                {ScreenWithoutScrolling(Wrapper, { ...props, actualUnsafe, edges })}
+                {props?.dialogLoading && <LoadingProgress />}
+            </>
+        );
     }
 };
+
+const LoadingProgress = () => {
+    return (
+        <View style={stylesLoading.container}>
+            <View style={stylesLoading.containerLoading}>
+                <Image source={images.spin} style={{ height: 60, width: 60 }} />
+            </View>
+        </View>
+    );
+};
+
+const stylesLoading = StyleSheet.create({
+    container: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        elevation: Platform.OS === 'android' ? 4 : 0,
+    },
+    containerLoading: {
+        height: 100,
+        backgroundColor: 'white',
+        padding: 20,
+        alignContent: 'center',
+        justifyContent: 'center',
+        borderRadius: 10,
+    },
+});
+
+export default LoadingProgress;

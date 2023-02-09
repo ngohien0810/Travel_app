@@ -85,7 +85,7 @@ const HomeComponent = () => {
             </View>
             <FlatList
                 style={{ paddingHorizontal: 20, flexGrow: 0 }}
-                data={hotTour}
+                data={hotTour.filter((item: any) => item?.IsHome)}
                 keyExtractor={(record: any) => record?.id}
                 renderItem={({ item }: any) => (
                     <TouchableOpacity
@@ -118,7 +118,7 @@ const HomeComponent = () => {
             />
             <View style={styles.wrapper_tour_special}>
                 <Text style={styles.text_tour_special}>Tin tức du lịch</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigate(APP_SCREEN.NEWS)}>
                     <Text style={styles.text_more}>Xem thêm</Text>
                 </TouchableOpacity>
             </View>
@@ -134,21 +134,27 @@ const HomeComponent = () => {
                             bottom: -25,
                         }}
                     >
-                        {news.map((item: any, index: number) => {
-                            return (
-                                <Pressable style={styles.slide} key={index}>
-                                    <ImageBackground
-                                        style={{
-                                            width: '100%',
-                                            height: '100%',
-                                        }}
-                                        source={{
-                                            uri: item.ImageUrl,
-                                        }}
-                                    />
-                                </Pressable>
-                            );
-                        })}
+                        {news
+                            .filter((newFill: any) => newFill?.IsHome)
+                            .map((item: any, index: number) => {
+                                return (
+                                    <Pressable
+                                        onPress={() => navigate(APP_SCREEN.NEWS_DETAIL, item)}
+                                        style={styles.slide}
+                                        key={index}
+                                    >
+                                        <ImageBackground
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                            }}
+                                            source={{
+                                                uri: item.ImageUrl,
+                                            }}
+                                        />
+                                    </Pressable>
+                                );
+                            })}
                     </Swiper>
                 )}
             </View>
