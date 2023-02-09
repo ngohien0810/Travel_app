@@ -12,6 +12,7 @@ export enum APP_SCREEN {
     MAPS = 'MAPS',
     FAVORITE = 'FAVORITE',
     USER = 'USER',
+    USER_CONTACT = 'USER_CONTACT',
     NEWS = 'NEWS',
     NEWS_DETAIL = 'NEWS_DETAIL',
 
@@ -35,6 +36,7 @@ export type AuthorizeParamsList = {
     [APP_SCREEN.TOUR_DETAIL]: undefined;
     [APP_SCREEN.ORDER]: undefined;
     [APP_SCREEN.CONTACT]: undefined;
+    [APP_SCREEN.USER_CONTACT]: undefined;
 };
 
 export type RootStackParamList = {

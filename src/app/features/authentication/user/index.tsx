@@ -2,6 +2,8 @@ import { images } from '@assets/image';
 import { VectorIcon } from '@assets/vector-icon/vector-icon';
 import { logout } from '@common';
 import { Block, Screen, Text } from '@components';
+import { navigate } from '@navigation/navigation-service';
+import { APP_SCREEN } from '@navigation/screen-types';
 import { selectAppToken } from '@redux-selector/app';
 import React from 'react';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
@@ -36,34 +38,42 @@ const UserScreen = () => {
                 </Block>
             </Block>
             <Block padding={23}>
-                <Block
-                    marginBottom={40}
-                    marginTop={30}
-                    direction="row"
-                    alignItems="center"
-                    justifyContent="space-between"
+                <TouchableOpacity>
+                    <Block
+                        marginBottom={40}
+                        marginTop={30}
+                        direction="row"
+                        alignItems="center"
+                        justifyContent="space-between"
+                    >
+                        <Block direction="row" alignItems="center">
+                            <VectorIcon color={'#15898F'} icon="information" />
+                            <Text fontSize={14} color="#6B6B6B" style={{ paddingLeft: 23 }}>
+                                Thông tin cá nhân
+                            </Text>
+                        </Block>
+                        <Block paddingRight={7}>
+                            <VectorIcon color={'#15898F'} size={18} icon="arrow_right_2" />
+                        </Block>
+                    </Block>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigate(APP_SCREEN.USER_CONTACT);
+                    }}
                 >
-                    <Block direction="row" alignItems="center">
-                        <VectorIcon color={'#15898F'} icon="information" />
-                        <Text fontSize={14} color="#6B6B6B" style={{ paddingLeft: 23 }}>
-                            Thông tin cá nhân
-                        </Text>
+                    <Block marginBottom={40} direction="row" alignItems="center" justifyContent="space-between">
+                        <Block direction="row" alignItems="center">
+                            <VectorIcon color={'#15898F'} icon="card" />
+                            <Text fontSize={14} color="#6B6B6B" style={{ paddingLeft: 23 }}>
+                                Thông tin liên hệ
+                            </Text>
+                        </Block>
+                        <Block paddingRight={7}>
+                            <VectorIcon color={'#15898F'} size={18} icon="arrow_right_2" />
+                        </Block>
                     </Block>
-                    <Block paddingRight={7}>
-                        <VectorIcon color={'#15898F'} size={18} icon="arrow_right_2" />
-                    </Block>
-                </Block>
-                <Block marginBottom={40} direction="row" alignItems="center" justifyContent="space-between">
-                    <Block direction="row" alignItems="center">
-                        <VectorIcon color={'#15898F'} icon="card" />
-                        <Text fontSize={14} color="#6B6B6B" style={{ paddingLeft: 23 }}>
-                            Thông tin liên hệ
-                        </Text>
-                    </Block>
-                    <Block paddingRight={7}>
-                        <VectorIcon color={'#15898F'} size={18} icon="arrow_right_2" />
-                    </Block>
-                </Block>
+                </TouchableOpacity>
                 <Block marginBottom={40} direction="row" alignItems="center" justifyContent="space-between">
                     <Block direction="row" alignItems="center">
                         <VectorIcon color={'#15898F'} icon="ticket" />

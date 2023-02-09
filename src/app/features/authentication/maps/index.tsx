@@ -1,6 +1,7 @@
 import { images } from '@assets/image';
 import { Block, Icon } from '@components';
-import { goBack } from '@navigation/navigation-service';
+import { goBack, navigationRef } from '@navigation/navigation-service';
+import { StackActions } from '@react-navigation/native';
 import { HEIGHT_SCREEN, WIDTH_SCREEN } from '@theme';
 import React from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -45,7 +46,9 @@ const MapScreen = ({ route }: any) => {
                 <View style={styles.header}>
                     <TouchableOpacity
                         onPress={() => {
-                            goBack();
+                            const popAction = StackActions.pop(1);
+
+                            navigationRef.current?.dispatch(popAction);
                         }}
                     >
                         <Icon icon="arrow_down" size={36} rotate color={'black'} />

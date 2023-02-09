@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import BottomTab from './bottom-tab';
 import ContactScreen from '@features/authentication/order/Contact';
 import NewsDetailScreen from '@features/authentication/news/News.Detail';
+import UserContact from '@features/authentication/user/User.Contact';
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
@@ -54,6 +55,7 @@ export const RootNavigation = () => {
                     <RootStack.Screen name={APP_SCREEN.NEWS_DETAIL} component={NewsDetailScreen} />
                     <RootStack.Screen name={APP_SCREEN.ORDER} component={OrderScreen} />
                     <RootStack.Screen name={APP_SCREEN.CONTACT} component={ContactScreen} />
+                    <RootStack.Screen name={APP_SCREEN.USER_CONTACT} component={UserContact} />
                 </RootStack.Group>
             )}
         </RootStack.Navigator>
