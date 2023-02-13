@@ -13,6 +13,7 @@ const initialAppState: AppState = {
     loadingApp: false,
     showDialog: false,
     theme: 'default',
+    favouries: [],
 };
 const appSlice = createSlice({
     name: SLICE_NAME.APP,
@@ -45,6 +46,9 @@ const appSlice = createSlice({
         logout: (state) => {
             state.token = undefined;
             state.profile = {};
+        },
+        setFavouries: (state, { payload }) => {
+            state.favouries = payload;
         },
     },
 });

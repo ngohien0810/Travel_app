@@ -4,7 +4,8 @@ import CardTour from '@com/CardTour';
 import { Block, Modal, Screen, Skeleton, Text } from '@components';
 import { navigate } from '@navigation/navigation-service';
 import { APP_SCREEN } from '@navigation/screen-types';
-import { selectAppToken } from '@redux-selector/app';
+import { selectAppFavouries, selectAppToken } from '@redux-selector/app';
+import { appActions } from '@redux-slice';
 import { ColorDefault } from '@theme/color';
 import moment from 'moment';
 import React from 'react';
@@ -22,13 +23,15 @@ import { showMessage } from 'react-native-flash-message';
 import LinearGradient from 'react-native-linear-gradient';
 import { Rating } from 'react-native-ratings';
 import RenderHtml from 'react-native-render-html';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from '../../../layouts/Header';
 import { tourService } from './service';
 
 const TourDetailScreen = ({ route }: any) => {
     const { id } = route.params;
     const userInfo: any = useSelector(selectAppToken);
+    const favouries: any = useSelector(selectAppFavouries);
+    const dispatch = useDispatch();
     console.log('🚀 ~ file: Tour.Detail.tsx:34 ~ TourDetailScreen ~ userInfo', userInfo);
 
     const [detailTour, setDetailTour] = React.useState<any>(null);
@@ -63,6 +66,19 @@ const TourDetailScreen = ({ route }: any) => {
         });
     }, [id, callback]);
 
+    const hanldePressFavouries = () => {
+        const someFavourite = favouries.some((item: any) => {
+            return item?.tour?.id === id;
+        });
+        if (someFavourite) {
+            tourService.createFavouries(id, userInfo?.id).then((res: any) => {
+                dispatch(appActions.setFavouries([...favouries]));
+            });
+        } else {
+            dispatch(appActions.setFavouries(favouries.filter((item: any) => item?.id !== id)));
+        }
+    };
+
     return (
         <Screen unsafe scroll style={{ backgroundColor: '#fff' }}>
             <ImageBackground
@@ -89,10 +105,18 @@ const TourDetailScreen = ({ route }: any) => {
                         flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'center',
+                        tintColor: 'red',
                     }}
                     iconLeft="#222"
                     leftIcon
-                    rightIcon="heart"
+                    rightIcon={
+                        favouries?.some((item: any) => {
+                            return item?.tour?.id === id;
+                        })
+                            ? 'ic_heart_bold'
+                            : 'heart'
+                    }
+                    onRightPress={hanldePressFavouries}
                 />
                 <Block direction="row" style={{ marginBottom: -16 }} justifyContent="space-between">
                     <Block

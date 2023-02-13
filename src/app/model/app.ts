@@ -12,4 +12,5 @@ export interface AppState {
     showDialog: boolean;
 
     theme: ThemeType;
+    favouries?: any;
 }

@@ -18,6 +18,8 @@ import { APP_SCREEN } from '@navigation/screen-types';
 import { newService } from './service';
 import moment from 'moment';
 import { useDebounce } from '@hooks';
+import { ColorDefault } from '@theme/color';
+
 const data = [
     { key: 'A' },
     { key: 'B' },
@@ -46,9 +48,11 @@ const Item = ({ item }: any) => (
 const NewsScreen = () => {
     const [categories, setCategories] = React.useState([]);
     const [news, setNews] = React.useState([]);
-    console.log('🚀 ~ file: index.tsx:49 ~ NewsScreen ~ news', news);
     const [search, setSeach] = React.useState('');
     const debounce = useDebounce(search, 500);
+
+    const [category, setCategory] = React.useState<any>('');
+    const [callback, setCallback] = React.useState(false);
 
     const [loading, setLoading] = React.useState(false);
 
@@ -61,14 +65,12 @@ const NewsScreen = () => {
     React.useEffect(() => {
         setLoading(true);
         newService
-            .getNews({ search: debounce })
+            .getNews({ search: debounce, category })
             .then((res: any) => {
                 setNews(res.data?.data);
             })
             .finally(() => setLoading(false));
-    }, [debounce, callback]);
-
-    const [callback, setCallback] = React.useState(false);
+    }, [debounce, callback, category]);
 
     const [refreshing, setRefreshing] = React.useState(false);
     const onRefresh = React.useCallback(() => {
@@ -105,33 +107,42 @@ const NewsScreen = () => {
                     {categories.map((story: any) => (
                         <TouchableOpacity
                             key={story.id}
-                            style={{
-                                shadowColor: 'red',
-                                shadowOffset: {
-                                    width: 0,
-                                    height: 1,
-                                },
-                                shadowOpacity: 0.22,
-                                shadowRadius: 1.22,
+                            onPress={() => setCategory(story.id)}
+                            style={[
+                                {
+                                    shadowColor: 'red',
+                                    shadowOffset: {
+                                        width: 0,
+                                        height: 1,
+                                    },
+                                    shadowOpacity: 0.22,
+                                    shadowRadius: 1.22,
 
-                                elevation: 2,
-                            }}
+                                    elevation: 2,
+                                },
+                            ]}
                         >
                             <ImageBackground
                                 loadingIndicatorSource={images.spin}
                                 source={{
                                     uri: story?.ImageUrl,
                                 }}
-                                style={{
-                                    width: 120,
-                                    height: 170,
-                                    marginRight: 16,
-                                    borderRadius: 8,
-                                    overflow: 'hidden',
-                                    justifyContent: 'flex-end',
-                                    padding: 10,
-                                    position: 'relative',
-                                }}
+                                style={[
+                                    {
+                                        width: 120,
+                                        height: 170,
+                                        marginRight: 16,
+                                        borderRadius: 8,
+                                        overflow: 'hidden',
+                                        justifyContent: 'flex-end',
+                                        padding: 10,
+                                        position: 'relative',
+                                    },
+                                    category === story.id && {
+                                        borderWidth: 1,
+                                        borderColor: ColorDefault.button,
+                                    },
+                                ]}
                             >
                                 <Block
                                     position="absolute"

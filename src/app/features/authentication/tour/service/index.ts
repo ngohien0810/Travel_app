@@ -20,4 +20,14 @@ export const tourService = {
             params,
         });
     },
+    createFavouries: (tour_id: any, user_id: any) => {
+        console.log(tour_id, user_id);
+        return NetWorkService.Post({
+            url: '/favourites',
+            body: {
+                Tour_Id: tour_id,
+                User_Id: user_id,
+            },
+        });
+    },
 };

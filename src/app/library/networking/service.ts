@@ -7,7 +7,7 @@ import { ParamsNetwork, ResponseBase } from '@config/type';
 import { AppState } from '@model/app';
 import { appActions } from '@redux-slice';
 import Axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
-
+console.log('ENVConfig', ENVConfig);
 import { ApiConstants } from './api';
 import { handleErrorAxios, handleParameter, handleResponseAxios, onPushLogout } from './helper';
 

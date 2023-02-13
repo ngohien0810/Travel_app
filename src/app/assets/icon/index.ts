@@ -6,6 +6,7 @@ export const icons = {
     plus: require('./source/ic_plus.png'),
     home: require('./source/ic_home.png'),
     heart: require('./source/ic_heart.png'),
+    ic_heart_bold: require('./source/ic_heart_bold.png'),
     search: require('./source/ic_search.png'),
     user: require('./source/ic_user.png'),
     arrow_down: require('./source/arrow_down.png'),
