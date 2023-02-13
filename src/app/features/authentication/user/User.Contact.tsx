@@ -13,7 +13,7 @@ const UserContact = ({ navigation }: any) => {
         <Screen unsafe style={{ backgroundColor: '#f2f2f2' }}>
             {/* header */}
             <ImageBackground style={styles.header_image_bg} source={images.header_home_bg}>
-                <Block position="absolute" top={10} zIndex={10}>
+                <Block position="absolute" zIndex={10}>
                     <Header
                         style={{ backgroundColor: 'transparent', width: WIDTH_SCREEN }}
                         headerText="Thông tin liên hệ"

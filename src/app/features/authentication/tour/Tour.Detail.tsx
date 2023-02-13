@@ -4,7 +4,7 @@ import CardTour from '@com/CardTour';
 import { Block, Modal, Screen, Skeleton, Text } from '@components';
 import { navigate } from '@navigation/navigation-service';
 import { APP_SCREEN } from '@navigation/screen-types';
-import { selectAppFavouries, selectAppToken } from '@redux-selector/app';
+import { selectAppFavouries, selectAppProfile, selectAppToken } from '@redux-selector/app';
 import { appActions } from '@redux-slice';
 import { ColorDefault } from '@theme/color';
 import moment from 'moment';
@@ -29,7 +29,7 @@ import { tourService } from './service';
 
 const TourDetailScreen = ({ route }: any) => {
     const { id } = route.params;
-    const userInfo: any = useSelector(selectAppToken);
+    const userInfo: any = useSelector(selectAppProfile);
     const favouries: any = useSelector(selectAppFavouries);
     const dispatch = useDispatch();
     console.log('🚀 ~ file: Tour.Detail.tsx:34 ~ TourDetailScreen ~ userInfo', userInfo);

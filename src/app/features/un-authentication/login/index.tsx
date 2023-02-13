@@ -52,8 +52,10 @@ export const Login = () => {
                         Alert.alert(res?.msg);
                     } else {
                         save(STORAGE_KEY_TOKEN, res.data.user?.id);
-                        dispatch(appActions.setToken(res.data.user));
-                        navigate(APP_SCREEN.HOME);
+                        dispatch(appActions.setAppProfile(res.data.user));
+                        setTimeout(() => {
+                            navigate(APP_SCREEN.HOME);
+                        }, 1000);
                     }
                 });
         }

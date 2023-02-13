@@ -1,25 +1,26 @@
 import React, { useEffect } from 'react';
 
+import NewsDetailScreen from '@features/authentication/news/News.Detail';
 import OrderScreen from '@features/authentication/order';
+import ContactScreen from '@features/authentication/order/Contact';
 import ResultSearchScreen from '@features/authentication/result_search';
 import TourDetailScreen from '@features/authentication/tour/Tour.Detail';
+import UserContact from '@features/authentication/user/User.Contact';
 import { Login } from '@features/un-authentication/login';
 import { AppModule } from '@native-module';
 import { APP_SCREEN, RootStackParamList } from '@navigation/screen-types';
 import { createStackNavigator } from '@react-navigation/stack';
-import { selectAppToken } from '@redux-selector/app';
+import { selectAppProfile, selectAppToken } from '@redux-selector/app';
 import BootSplash from 'react-native-bootsplash';
 import { useSelector } from 'react-redux';
 import BottomTab from './bottom-tab';
-import ContactScreen from '@features/authentication/order/Contact';
-import NewsDetailScreen from '@features/authentication/news/News.Detail';
-import UserContact from '@features/authentication/user/User.Contact';
+import TourScreen from '@features/authentication/tour';
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
 export const RootNavigation = () => {
     // state
-    const token = useSelector(selectAppToken);
+    const token = useSelector(selectAppProfile);
 
     // effect
     useEffect(() => {
@@ -51,6 +52,7 @@ export const RootNavigation = () => {
                 <RootStack.Group>
                     <RootStack.Screen name={APP_SCREEN.AUTHORIZE} component={BottomTab} />
                     <RootStack.Screen name={APP_SCREEN.SEARCH_RESULT} component={ResultSearchScreen} />
+                    <RootStack.Screen name={APP_SCREEN.TOUR} component={TourScreen} />
                     <RootStack.Screen name={APP_SCREEN.TOUR_DETAIL} component={TourDetailScreen} />
                     <RootStack.Screen name={APP_SCREEN.NEWS_DETAIL} component={NewsDetailScreen} />
                     <RootStack.Screen name={APP_SCREEN.ORDER} component={OrderScreen} />

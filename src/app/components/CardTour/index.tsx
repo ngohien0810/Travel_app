@@ -4,13 +4,27 @@ import { Block, Text } from '@components';
 import { Rating } from 'react-native-ratings';
 import { images } from '@assets/image';
 
-const CardTour = ({ title, start_tour, price }: { title: string; start_tour: string; price?: string }) => {
+const CardTour = ({
+    title,
+    start_tour,
+    price,
+    range_tour,
+    rating,
+    tour_image,
+}: {
+    title: string;
+    start_tour: string;
+    price?: string;
+    range_tour?: any;
+    rating?: any;
+    tour_image?: any;
+}) => {
     return (
         <View style={styles.wrapper_history_tour}>
             <View style={styles.card_shadow}>
                 <View style={styles.card_history_tour}>
                     <View>
-                        <Image style={styles.image_history_tour} source={images.tour_image} />
+                        <Image style={styles.image_history_tour} source={{ uri: tour_image }} />
                     </View>
                     <View style={{ flex: 1 }}>
                         <Text numberOfLines={2} color={'#21A8B0'} fontWeight="500" fontSize={16}>
@@ -18,14 +32,14 @@ const CardTour = ({ title, start_tour, price }: { title: string; start_tour: str
                         </Text>
                         <View style={styles.wrapper_clock_style}>
                             <Image style={styles.clock_style} source={images.clock} />
-                            <Text color="#5B5B5B">4 ngày 3 đêm</Text>
+                            <Text color="#5B5B5B">{range_tour}</Text>
                         </View>
                         <View style={styles.wrapper_calendar_style}>
                             <Image style={styles.calendar_style} source={images.calendar} />
                             <Text color="#5B5B5B">{start_tour}</Text>
                         </View>
                         <Block direction="row" justifyContent="flex-start">
-                            <Rating startingValue={5} imageSize={16} style={{ paddingVertical: 10 }} />
+                            <Rating readonly startingValue={rating} imageSize={16} style={{ paddingVertical: 10 }} />
                         </Block>
 
                         <Text colorTheme="button" fontWeight="600" fontSize={17}>

@@ -8,23 +8,22 @@ import { images } from '@assets/image';
 import { Block, Screen, Text, TextField } from '@components';
 import { navigate } from '@navigation/navigation-service';
 import { APP_SCREEN } from '@navigation/screen-types';
+import { selectAppFavouries, selectAppProfile } from '@redux-selector/app';
+import { appActions } from '@redux-slice';
 import { WIDTH_SCREEN } from '@theme';
 import moment from 'moment';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Swiper from 'react-native-swiper';
-import CardTour from '../../../components/CardTour';
-import { homeService } from './service';
-import { tourService } from '../tour/service';
 import { useDispatch, useSelector } from 'react-redux';
-import { appActions } from '@redux-slice';
-import { selectAppFavouries, selectAppToken } from '@redux-selector/app';
+import CardTour from '../../../components/CardTour';
+import { tourService } from '../tour/service';
+import { homeService } from './service';
 export const wait = (timeout: number) => {
     return new Promise((resolve: any) => setTimeout(resolve, timeout));
 };
 const HomeComponent = () => {
-    const userInfo: any = useSelector(selectAppToken);
+    const userInfo: any = useSelector(selectAppProfile);
     const favouries: any = useSelector(selectAppFavouries);
-    console.log('favouries', favouries);
     const dispatch = useDispatch();
 
     const [hotTour, setHotTour] = React.useState([]);
@@ -44,9 +43,8 @@ const HomeComponent = () => {
     }, [callback]);
 
     React.useEffect(() => {
-        if (!userInfo.id) return;
+        if (!userInfo?.id) return;
         homeService.getFavouries(userInfo?.id).then((res: any) => {
-            console.log('res', res);
             dispatch(appActions.setFavouries(res?.data?.data));
         });
     }, [userInfo?.id]);
@@ -95,7 +93,13 @@ const HomeComponent = () => {
                 <Image style={styles.header_gradient_bg} source={images.header_gradient_bg} />
 
                 <Text style={styles.text_tour_special}>Tour nổi bật</Text>
-                <TouchableOpacity onPress={() => navigate(APP_SCREEN.SEARCH_RESULT)}>
+                <TouchableOpacity
+                    onPress={() =>
+                        navigate(APP_SCREEN.SEARCH_RESULT, {
+                            type: 'all_tour',
+                        })
+                    }
+                >
                     <Text style={styles.text_more}>Xem thêm</Text>
                 </TouchableOpacity>
             </View>

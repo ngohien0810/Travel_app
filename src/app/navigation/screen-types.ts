@@ -45,6 +45,7 @@ export type RootStackParamList = {
     [APP_SCREEN.TOUR_DETAIL]: any;
     [APP_SCREEN.NEWS_DETAIL]: any;
     [APP_SCREEN.MAPS]: any;
+    [APP_SCREEN.SEARCH_RESULT]: any;
 } & UnAuthorizeParamsList &
     AuthorizeParamsList;
 

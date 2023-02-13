@@ -1,19 +1,30 @@
-import { Dimensions, FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-import React from 'react';
-import { ActionSheet, Block, LocalImage, Screen, Text, Wallpaper } from '@components';
-import { images } from '@assets/image';
-import { Rating } from 'react-native-ratings';
-import Header from '../../../layouts/Header';
+import CardTour from '@com/CardTour';
+import { currencyFormat } from '@common';
+import { ActionSheet, Screen, Text, Wallpaper } from '@components';
 import { navigate } from '@navigation/navigation-service';
 import { APP_SCREEN } from '@navigation/screen-types';
-import CardTour from '@com/CardTour';
+import moment from 'moment';
+import React from 'react';
+import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import Header from '../../../layouts/Header';
+import { homeService } from '../home/service';
 
-const ResultSearchScreen = () => {
+const ResultSearchScreen = ({ route }: any) => {
+    const data = route.params;
+    const [tours, setTours] = React.useState<any>([]);
+
     const _refAction = React.useRef<ActionSheet>();
 
     const _onShowAction = async () => {
         _refAction.current?.show();
     };
+
+    React.useEffect(() => {
+        homeService.getHotTour().then((res: any) => {
+            setTours(res.data);
+        });
+    }, []);
+
     return (
         <Screen unsafe style={{ backgroundColor: '#eeee', flex: 1 }}>
             <Wallpaper backgroundImage="bg_result_search" />
@@ -26,25 +37,46 @@ const ResultSearchScreen = () => {
                     borderBottomColor: '#fff',
                 }}
                 children={
-                    <View>
+                    data?.type === 'all_tour' ? (
                         <Text fontSize={16} color="#fff" center>
-                            Hạ Long
+                            Danh sách tour
                         </Text>
-                        <Text fontSize={16} color="#fff" center>
-                            10/12/2022 - 15/12/2022
-                        </Text>
-                    </View>
+                    ) : (
+                        <View>
+                            <Text fontSize={16} color="#fff" center>
+                                Hạ Long
+                            </Text>
+                            <Text fontSize={16} color="#fff" center>
+                                10/12/2022 - 15/12/2022
+                            </Text>
+                        </View>
+                    )
                 }
                 leftIcon
                 rightIcon="filter"
                 onRightPress={_onShowAction}
             />
             <FlatList
-                data={[1, 2, 3, 4, 5, 6]}
-                keyExtractor={(item) => item.toString()}
-                renderItem={() => (
-                    <TouchableOpacity onPress={() => navigate(APP_SCREEN.TOUR_DETAIL)}>
-                        <CardTour title="demo" start_tour="12/12/2022" price="99.999" />
+                data={tours}
+                keyExtractor={(item) => item?.id?.toString()}
+                renderItem={({ item }: any) => (
+                    <TouchableOpacity onPress={() => navigate(APP_SCREEN.TOUR_DETAIL, item)}>
+                        <CardTour
+                            tour_image={item?.ImageUrl}
+                            title={item?.Title}
+                            range_tour={item?.RangeTour}
+                            rating={
+                                item?.feedbacks?.length > 0
+                                    ? (
+                                          item?.feedbacks?.reduce((prev: any, curr: any) => {
+                                              return prev + curr.Rate;
+                                          }, 0) / item?.feedbacks?.length
+                                      ).toFixed(1)
+                                    : 0
+                            }
+                            start_tour={moment(item?.DateStartTour).format('HH:mm DD/MM/YYYY')}
+                            price={currencyFormat(item?.TourPrice)}
+                        />
                     </TouchableOpacity>
                 )}
             />

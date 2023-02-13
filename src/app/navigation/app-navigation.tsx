@@ -38,7 +38,7 @@ export const AppContainer = () => {
     useEffect(() => {
         if (loadString(STORAGE_KEY_TOKEN)) {
             authService.getUserInfo(loadString(STORAGE_KEY_TOKEN)).then((res: any) => {
-                dispatch(appActions.setToken(res?.data));
+                dispatch(appActions.setAppProfile(res?.data));
             });
         }
     }, []);

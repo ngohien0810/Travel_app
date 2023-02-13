@@ -4,13 +4,13 @@ import { logout } from '@common';
 import { Block, Screen, Text } from '@components';
 import { navigate } from '@navigation/navigation-service';
 import { APP_SCREEN } from '@navigation/screen-types';
-import { selectAppToken } from '@redux-selector/app';
+import { selectAppProfile } from '@redux-selector/app';
 import React from 'react';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 
 const UserScreen = () => {
-    const userInfo: any = useSelector(selectAppToken);
+    const userInfo: any = useSelector(selectAppProfile);
 
     return (
         <Screen unsafe style={{ backgroundColor: '#fff' }}>
@@ -74,17 +74,23 @@ const UserScreen = () => {
                         </Block>
                     </Block>
                 </TouchableOpacity>
-                <Block marginBottom={40} direction="row" alignItems="center" justifyContent="space-between">
-                    <Block direction="row" alignItems="center">
-                        <VectorIcon color={'#15898F'} icon="ticket" />
-                        <Text fontSize={14} color="#6B6B6B" style={{ paddingLeft: 23 }}>
-                            Tour của tôi
-                        </Text>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigate(APP_SCREEN.TOUR);
+                    }}
+                >
+                    <Block marginBottom={40} direction="row" alignItems="center" justifyContent="space-between">
+                        <Block direction="row" alignItems="center">
+                            <VectorIcon color={'#15898F'} icon="ticket" />
+                            <Text fontSize={14} color="#6B6B6B" style={{ paddingLeft: 23 }}>
+                                Tour của tôi
+                            </Text>
+                        </Block>
+                        <Block paddingRight={7}>
+                            <VectorIcon color={'#15898F'} size={18} icon="arrow_right_2" />
+                        </Block>
                     </Block>
-                    <Block paddingRight={7}>
-                        <VectorIcon color={'#15898F'} size={18} icon="arrow_right_2" />
-                    </Block>
-                </Block>
+                </TouchableOpacity>
                 <Block marginBottom={40} direction="row" alignItems="center" justifyContent="space-between">
                     <Block direction="row" alignItems="center">
                         <VectorIcon color={'#15898F'} icon="lock" />

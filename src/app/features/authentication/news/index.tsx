@@ -104,10 +104,16 @@ const NewsScreen = () => {
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                 >
-                    {categories.map((story: any) => (
+                    {categories.map((story: any, index: number) => (
                         <TouchableOpacity
-                            key={story.id}
-                            onPress={() => setCategory(story.id)}
+                            key={99 * index}
+                            onPress={() => {
+                                if (category === story.id) {
+                                    setCategory('');
+                                } else {
+                                    setCategory(story.id);
+                                }
+                            }}
                             style={[
                                 {
                                     shadowColor: 'red',
@@ -139,8 +145,8 @@ const NewsScreen = () => {
                                         position: 'relative',
                                     },
                                     category === story.id && {
-                                        borderWidth: 1,
-                                        borderColor: ColorDefault.button,
+                                        borderWidth: 2,
+                                        borderColor: ColorDefault.primary,
                                     },
                                 ]}
                             >
@@ -175,12 +181,11 @@ const NewsScreen = () => {
                                     onPress={() => {
                                         navigate(APP_SCREEN.NEWS_DETAIL, item);
                                     }}
-                                    key={item.id}
                                 >
                                     <Item item={item} />
                                 </TouchableOpacity>
                             )}
-                            keyExtractor={(item) => item.key}
+                            keyExtractor={(item, index: number) => (88 + index).toString()}
                             initialNumToRender={5}
                             maxToRenderPerBatch={1}
                             windowSize={5}

@@ -2,6 +2,8 @@ import CardTour from '@com/CardTour';
 import MyCardTour from '@com/CardTour/MyTour';
 import { Block, Screen, Text } from '@components';
 import Header from '@layouts/Header';
+import { StackActions } from '@react-navigation/native';
+import { WIDTH_SCREEN } from '@theme';
 import { ColorDefault } from '@theme/color';
 import React from 'react';
 import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -40,7 +42,11 @@ const TourScreen = () => {
         <Screen statusBarStyle="dark-content" unsafe>
             <LinearGradient colors={['#2F94A6', '#fff']} style={{ flex: 1 }} start={{ x: 0, y: 0 }}>
                 <Header
-                    style={{ borderBottomWidth: 0 }}
+                    iconLeft="black"
+                    style={{ borderBottomWidth: 0, backgroundColor: '#fff', width: WIDTH_SCREEN }}
+                    leftIcon
+                    iconLeftSize={30}
+                    onBack={() => StackActions.pop(1)}
                     titleStyle={{ textAlign: 'center', fontSize: 18, fontWeight: 'bold', color: '#073F42' }}
                     headerText="Tour của tôi"
                 />

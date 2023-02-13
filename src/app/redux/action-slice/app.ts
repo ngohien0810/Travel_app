@@ -5,7 +5,7 @@ import { ThemeType } from '@theme';
 
 const initialAppState: AppState = {
     internetState: true,
-    profile: {},
+    profile: undefined,
     token: undefined,
     /**
      * default true to load app
@@ -45,7 +45,7 @@ const appSlice = createSlice({
         },
         logout: (state) => {
             state.token = undefined;
-            state.profile = {};
+            state.profile = undefined;
         },
         setFavouries: (state, { payload }) => {
             state.favouries = payload;
