@@ -84,7 +84,7 @@ const TourDetailScreen = ({ route }: any) => {
             <ImageBackground
                 loadingIndicatorSource={images.spin}
                 style={styles.header_tour_detail}
-                resizeMode="center"
+                resizeMode="cover"
                 source={detailTour?.ImageUrl ? { uri: detailTour?.ImageUrl } : images.spin}
             >
                 <Header

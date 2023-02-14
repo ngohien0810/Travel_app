@@ -1,20 +1,41 @@
-import { images } from '@assets/image';
-import { Block, Icon } from '@components';
-import { goBack, navigationRef } from '@navigation/navigation-service';
+import { Block, Icon, Text, TextField } from '@components';
+import { navigationRef } from '@navigation/navigation-service';
 import { StackActions } from '@react-navigation/native';
 import { HEIGHT_SCREEN, WIDTH_SCREEN } from '@theme';
 import React from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import { tourService } from '../tour/service';
 
 const GOOGLE_MAPS_APIKEY = 'AIzaSyDYYVsxVI2SU0NZhUkMEpiBw0UY_GbWwMo';
 
+const Card = React.memo(({ imageSource, title, infoDirection, index }: any) => (
+    <View style={styles.cardContainer}>
+        <Image source={{ uri: imageSource }} style={styles.image} />
+        <View style={styles.infoContainer}>
+            <Text style={styles.title}>{title}</Text>
+            <Text>{infoDirection[index]?.duration}</Text>
+        </View>
+    </View>
+));
+
 const MapScreen = ({ route }: any) => {
     const tour_id = route?.params;
 
+    const [infoDirection, setInfoDirection] = React.useState<any>([]);
+    console.log('🚀 ~ file: index.tsx:27 ~ MapScreen ~ infoDirection', infoDirection);
+
     const [destinations, setDestionations] = React.useState<any>([]);
+    const DEFAULT_REGION =
+        destinations && destinations.length > 0
+            ? {
+                  latitude: destinations[0]?.Latitude,
+                  longitude: destinations[0]?.Longtitude,
+                  latitudeDelta: 0.1,
+                  longitudeDelta: 0.0134,
+              }
+            : { latitude: 21.028511, longitude: 105.804817, latitudeDelta: 0.06, longitudeDelta: 0.0134 };
 
     React.useEffect(() => {
         if (!tour_id) return;
@@ -34,7 +55,7 @@ const MapScreen = ({ route }: any) => {
             <Block
                 direction="row"
                 justifyContent="center"
-                zIndex={1}
+                zIndex={10}
                 position="absolute"
                 margin={0}
                 padding={0}
@@ -45,6 +66,7 @@ const MapScreen = ({ route }: any) => {
             >
                 <View style={styles.header}>
                     <TouchableOpacity
+                        style={{ paddingRight: 20 }}
                         onPress={() => {
                             const popAction = StackActions.pop(1);
 
@@ -53,7 +75,17 @@ const MapScreen = ({ route }: any) => {
                     >
                         <Icon icon="arrow_down" size={36} rotate color={'black'} />
                     </TouchableOpacity>
-
+                    <Block direction="row" paddingBottom={10} flex={1} alignItems="center">
+                        <TextField
+                            containerStyle={{ zIndex: 10, width: '100%' }}
+                            unActiveTintLabelColor="#0C656A"
+                            unActiveTintBorderColor="#0C656A"
+                            activeTintLabelColor="#0C656A"
+                            activeTintBorderColor="#0C656A"
+                            typeInput="flat"
+                            label="Tìm kiếm tour?"
+                        />
+                    </Block>
                     {/* <Text>Header</Text> */}
                 </View>
             </Block>
@@ -63,7 +95,7 @@ const MapScreen = ({ route }: any) => {
                     // showsUserLocation
                     // mapType="hybrid"
                     style={{ ...styles.map }}
-                    region={{ latitude: 21.028511, longitude: 105.804817, latitudeDelta: 0.06, longitudeDelta: 0.0134 }}
+                    region={DEFAULT_REGION}
                 >
                     {destinations && destinations.length > 0 && (
                         <>
@@ -82,9 +114,14 @@ const MapScreen = ({ route }: any) => {
                                 mode="DRIVING"
                                 strokeWidth={5}
                                 strokeColors={['black', 'black', 'green']}
+                                onReady={(result: any) => {
+                                    console.log(`Distance: ${result.distance} km`);
+                                    console.log(`Duration: ${result.duration} min.`);
+                                    setInfoDirection({ distance: result.distance, duration: result.duration });
+                                }}
                             />
 
-                            <MapViewDirections
+                            {/* <MapViewDirections
                                 origin={{
                                     latitude: destinations[1]?.Latitude,
                                     longitude: destinations[1]?.Longtitude,
@@ -116,7 +153,7 @@ const MapScreen = ({ route }: any) => {
                                 mode="DRIVING"
                                 strokeWidth={5}
                                 strokeColors={['black', 'black', 'yellow']}
-                            />
+                            /> */}
                         </>
                     )}
 
@@ -130,14 +167,56 @@ const MapScreen = ({ route }: any) => {
                                         latitude: item?.Latitude,
                                         longitude: item?.Longtitude,
                                     }}
-                                    title="Nhà Hiền"
+                                    title={item?.Name}
+                                    // icon={item?.ImageUrl}
                                 >
-                                    <Image source={images.location} style={styles.myLocation} />
+                                    <Block justifyContent="center" alignItems="center">
+                                        <Text fontSize={18} fontWeight="500" colorTheme="button">
+                                            {item?.Name}
+                                        </Text>
+                                        <Image
+                                            source={{
+                                                uri: item?.ImageUrl,
+                                            }}
+                                            style={styles.myLocation}
+                                        />
+                                    </Block>
                                 </Marker>
                             );
                         })}
                 </MapView>
             </View>
+            {destinations && destinations.length > 0 && (
+                <Block
+                    direction="row"
+                    justifyContent="center"
+                    zIndex={10}
+                    position="absolute"
+                    margin={0}
+                    padding={0}
+                    bottom={125}
+                    left={2}
+                    width="100%"
+                    flex={1}
+                >
+                    <Block paddingLeft={5}>
+                        <FlatList
+                            data={destinations}
+                            keyExtractor={(item) => item.id.toString()}
+                            renderItem={({ item, index }) => (
+                                <Card
+                                    index={index}
+                                    infoDirection={infoDirection}
+                                    imageSource={item.ImageUrl}
+                                    title={item.Name}
+                                />
+                            )}
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                        />
+                    </Block>
+                </Block>
+            )}
         </View>
     );
 };
@@ -153,7 +232,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     header: {
-        height: 60,
+        height: 80,
         backgroundColor: 'rgba(255,255,255,0.9)',
         width: '92%',
         borderRadius: 12,
@@ -179,5 +258,30 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         resizeMode: 'contain',
+    },
+    cardContainer: {
+        flexDirection: 'row',
+        marginVertical: 10,
+        marginHorizontal: 6,
+        backgroundColor: 'white',
+        padding: 15,
+        borderRadius: 10,
+    },
+    image: {
+        width: 80,
+        height: 80,
+        borderRadius: 10,
+    },
+    infoContainer: {
+        marginLeft: 10,
+        maxWidth: 180,
+    },
+    title: {
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+    description: {
+        marginTop: 5,
+        fontSize: 14,
     },
 });
