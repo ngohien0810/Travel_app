@@ -7,14 +7,18 @@ import { FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-nativ
 import MapView, { Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import { tourService } from '../tour/service';
+import { findShortestPath } from './fc';
 
-const GOOGLE_MAPS_APIKEY = 'AIzaSyDYYVsxVI2SU0NZhUkMEpiBw0UY_GbWwMo';
+const GOOGLE_MAPS_APIKEY = 'AIzaSyCKp54Z8i9afLSm2yaFTUruXQ6Q_70nav8';
 
-const Card = React.memo(({ imageSource, title, infoDirection, index }: any) => (
+const Card = React.memo(({ item, infoDirection, index }: any) => (
     <View style={styles.cardContainer}>
-        <Image source={{ uri: imageSource }} style={styles.image} />
+        <Block>
+            <Image source={{ uri: item[0].ImageUrl }} style={styles.image} />
+            <Image source={{ uri: item[0].ImageUrl }} style={styles.image} />
+        </Block>
         <View style={styles.infoContainer}>
-            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.title}>{item[0]?.title}</Text>
             <Text>{infoDirection[index]?.duration}</Text>
         </View>
     </View>
@@ -27,6 +31,10 @@ const MapScreen = ({ route }: any) => {
     console.log('🚀 ~ file: index.tsx:27 ~ MapScreen ~ infoDirection', infoDirection);
 
     const [destinations, setDestionations] = React.useState<any>([]);
+
+    const findDestinations = destinations && destinations.length > 0 && findShortestPath(destinations);
+    console.log('🚀 ~ file: index.tsx:33 ~ MapScreen ~ findDestinations', findDestinations);
+
     const DEFAULT_REGION =
         destinations && destinations.length > 0
             ? {
@@ -97,65 +105,40 @@ const MapScreen = ({ route }: any) => {
                     style={{ ...styles.map }}
                     region={DEFAULT_REGION}
                 >
-                    {destinations && destinations.length > 0 && (
-                        <>
-                            <MapViewDirections
-                                origin={{
-                                    latitude: destinations[0]?.Latitude,
-                                    longitude: destinations[0]?.Longtitude,
-                                }}
-                                destination={{
-                                    latitude: destinations[1]?.Latitude,
-                                    longitude: destinations[1]?.Longtitude,
-                                }}
-                                apikey={GOOGLE_MAPS_APIKEY}
-                                // language="vi"
-                                timePrecision="now"
-                                mode="DRIVING"
-                                strokeWidth={5}
-                                strokeColors={['black', 'black', 'green']}
-                                onReady={(result: any) => {
-                                    console.log(`Distance: ${result.distance} km`);
-                                    console.log(`Duration: ${result.duration} min.`);
-                                    setInfoDirection({ distance: result.distance, duration: result.duration });
-                                }}
-                            />
-
-                            {/* <MapViewDirections
-                                origin={{
-                                    latitude: destinations[1]?.Latitude,
-                                    longitude: destinations[1]?.Longtitude,
-                                }}
-                                destination={{
-                                    latitude: destinations[2]?.Latitude,
-                                    longitude: destinations[2]?.Longtitude,
-                                }}
-                                apikey={GOOGLE_MAPS_APIKEY}
-                                // language="vi"
-                                timePrecision="now"
-                                mode="DRIVING"
-                                strokeWidth={5}
-                                strokeColors={['black', 'black', 'red']}
-                            />
-
-                            <MapViewDirections
-                                origin={{
-                                    latitude: destinations[2]?.Latitude,
-                                    longitude: destinations[2]?.Longtitude,
-                                }}
-                                destination={{
-                                    latitude: destinations[3]?.Latitude,
-                                    longitude: destinations[3]?.Longtitude,
-                                }}
-                                apikey={GOOGLE_MAPS_APIKEY}
-                                // language="vi"
-                                timePrecision="now"
-                                mode="DRIVING"
-                                strokeWidth={5}
-                                strokeColors={['black', 'black', 'yellow']}
-                            /> */}
-                        </>
-                    )}
+                    {findDestinations &&
+                        findDestinations.length > 0 &&
+                        destinations &&
+                        destinations.length > 0 &&
+                        findDestinations?.map((destination: any, index: number) => {
+                            return (
+                                <MapViewDirections
+                                    origin={{
+                                        latitude: destination[0]?.Latitude,
+                                        longitude: destination[0]?.Longtitude,
+                                    }}
+                                    destination={{
+                                        latitude: destination[1]?.Latitude,
+                                        longitude: destination[1]?.Longtitude,
+                                    }}
+                                    apikey={GOOGLE_MAPS_APIKEY}
+                                    // language="vi"
+                                    timePrecision="now"
+                                    mode="DRIVING"
+                                    strokeWidth={5}
+                                    strokeColors={[
+                                        'black',
+                                        'black',
+                                        '#' + Math.floor(Math.random() * 16777215).toString(16),
+                                    ]}
+                                    onReady={(result: any) => {
+                                        setInfoDirection((prev: any) => [
+                                            ...prev,
+                                            { distance: result.distance, duration: result.duration },
+                                        ]);
+                                    }}
+                                />
+                            );
+                        })}
 
                     {destinations &&
                         destinations.length > 0 &&
@@ -201,15 +184,10 @@ const MapScreen = ({ route }: any) => {
                 >
                     <Block paddingLeft={5}>
                         <FlatList
-                            data={destinations}
-                            keyExtractor={(item) => item.id.toString()}
+                            data={findDestinations}
+                            keyExtractor={(item) => Math.random().toString()}
                             renderItem={({ item, index }) => (
-                                <Card
-                                    index={index}
-                                    infoDirection={infoDirection}
-                                    imageSource={item.ImageUrl}
-                                    title={item.Name}
-                                />
+                                <Card infoDirection={infoDirection} index={index} item={item} />
                             )}
                             horizontal
                             showsHorizontalScrollIndicator={false}
@@ -268,8 +246,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     image: {
-        width: 80,
-        height: 80,
+        width: 40,
+        height: 40,
         borderRadius: 10,
     },
     infoContainer: {
