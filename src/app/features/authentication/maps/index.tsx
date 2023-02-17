@@ -2,6 +2,7 @@ import { Block, Icon, Text, TextField } from '@components';
 import { navigationRef } from '@navigation/navigation-service';
 import { StackActions } from '@react-navigation/native';
 import { HEIGHT_SCREEN, WIDTH_SCREEN } from '@theme';
+import { ColorDefault } from '@theme/color';
 import React from 'react';
 import { FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
@@ -14,12 +15,19 @@ const GOOGLE_MAPS_APIKEY = 'AIzaSyCKp54Z8i9afLSm2yaFTUruXQ6Q_70nav8';
 const Card = React.memo(({ item, infoDirection, index }: any) => (
     <View style={styles.cardContainer}>
         <Block>
-            <Image source={{ uri: item[0].ImageUrl }} style={styles.image} />
-            <Image source={{ uri: item[0].ImageUrl }} style={styles.image} />
+            <Image source={{ uri: item[0].ImageUrl }} style={[styles.image, { marginBottom: 6 }]} />
+            <Image source={{ uri: item[1].ImageUrl }} style={styles.image} />
         </Block>
         <View style={styles.infoContainer}>
-            <Text style={styles.title}>{item[0]?.title}</Text>
-            <Text>{infoDirection[index]?.duration}</Text>
+            <Text style={styles.title}>{`${item[0]?.Name} - ${item[1]?.Name}`}</Text>
+            <Block direction="row" paddingVertical={8}>
+                <Text>Khoảng cách: </Text>
+                <Text fontWeight="bold">{infoDirection[index]?.distance}</Text>
+            </Block>
+            <Block direction="row">
+                <Text>Thời gian: </Text>
+                <Text fontWeight="bold"> {infoDirection[index]?.duration?.toFixed(0)}</Text>
+            </Block>
         </View>
     </View>
 ));
@@ -28,12 +36,11 @@ const MapScreen = ({ route }: any) => {
     const tour_id = route?.params;
 
     const [infoDirection, setInfoDirection] = React.useState<any>([]);
-    console.log('🚀 ~ file: index.tsx:27 ~ MapScreen ~ infoDirection', infoDirection);
+    const [selectIndex, setSelectIndex] = React.useState<any>('');
 
     const [destinations, setDestionations] = React.useState<any>([]);
 
     const findDestinations = destinations && destinations.length > 0 && findShortestPath(destinations);
-    console.log('🚀 ~ file: index.tsx:33 ~ MapScreen ~ findDestinations', findDestinations);
 
     const DEFAULT_REGION =
         destinations && destinations.length > 0
@@ -186,8 +193,16 @@ const MapScreen = ({ route }: any) => {
                         <FlatList
                             data={findDestinations}
                             keyExtractor={(item) => Math.random().toString()}
-                            renderItem={({ item, index }) => (
-                                <Card infoDirection={infoDirection} index={index} item={item} />
+                            renderItem={({ item, index }: any) => (
+                                <TouchableOpacity
+                                    onPress={() => setSelectIndex(index)}
+                                    style={{
+                                        borderWidth: 2,
+                                        borderColor: 'red',
+                                    }}
+                                >
+                                    <Card infoDirection={infoDirection} index={index} item={item} />
+                                </TouchableOpacity>
                             )}
                             horizontal
                             showsHorizontalScrollIndicator={false}
@@ -246,13 +261,13 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     image: {
-        width: 40,
-        height: 40,
+        width: 50,
+        height: 50,
         borderRadius: 10,
     },
     infoContainer: {
         marginLeft: 10,
-        maxWidth: 180,
+        width: 220,
     },
     title: {
         fontWeight: 'bold',
