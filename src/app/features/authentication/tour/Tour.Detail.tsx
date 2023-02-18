@@ -194,7 +194,10 @@ const TourDetailScreen = ({ route }: any) => {
             </Block>
 
             <Block paddingHorizontal={20}>
-                <TouchableOpacity onPress={() => navigate(APP_SCREEN.MAPS, detailTour?.id)} style={styles.button}>
+                <TouchableOpacity
+                    onPress={() => navigate(APP_SCREEN.MAPS, { tour_id: detailTour?.id, ...detailTour })}
+                    style={styles.button}
+                >
                     <Text color="#333" fontWeight="bold">
                         Lộ trình gợi ý
                     </Text>

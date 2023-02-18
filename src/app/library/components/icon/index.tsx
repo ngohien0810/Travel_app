@@ -16,7 +16,14 @@ export const Icon = ({ icon, color, colorTheme, onPress, size = SIZE, resizeMode
     const theme = useTheme();
     // style
     const style = useMemo<StyleProp<ImageStyle>>(
-        () => [{ width: size, height: size, transform: rotate ? [{ rotate: '90deg' }] : [] }],
+        () => [
+            {
+                width: size,
+                height: size,
+                // eslint-disable-next-line no-nested-ternary
+                transform: rotate ? (typeof rotate === 'string' ? [{ rotate: '180deg' }] : [{ rotate: '90deg' }]) : [],
+            },
+        ],
         [size, rotate]
     );
 

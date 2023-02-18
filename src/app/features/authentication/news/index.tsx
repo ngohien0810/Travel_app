@@ -20,13 +20,6 @@ import moment from 'moment';
 import { useDebounce } from '@hooks';
 import { ColorDefault } from '@theme/color';
 
-const data = [
-    { key: 'A' },
-    { key: 'B' },
-    { key: 'C' },
-    // Add more items here
-];
-
 const wait = (timeout: number) => {
     return new Promise((resolve: any) => setTimeout(resolve, timeout));
 };
@@ -65,7 +58,7 @@ const NewsScreen = () => {
     React.useEffect(() => {
         setLoading(true);
         newService
-            .getNews({ search: debounce, category })
+            .getNews({ search: debounce, category, limit: 99 })
             .then((res: any) => {
                 setNews(res.data?.data);
             })

@@ -1,12 +1,17 @@
+import { images } from '@assets/image';
+import { currencyFormat } from '@common';
 import { Block, Icon, Text, TextField } from '@components';
-import { goBack, navigate, navigationRef } from '@navigation/navigation-service';
-import { StackActions, useIsFocused } from '@react-navigation/native';
+import { useDebounce } from '@hooks';
+import { goBack } from '@navigation/navigation-service';
+import { useIsFocused } from '@react-navigation/native';
 import { HEIGHT_SCREEN, WIDTH_SCREEN } from '@theme';
 import { ColorDefault } from '@theme/color';
+import moment from 'moment';
 import React from 'react';
 import { FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
+import { homeService } from '../home/service';
 import { tourService } from '../tour/service';
 import { findShortestPath } from './fc';
 
@@ -25,28 +30,33 @@ const Card = React.memo(({ item, infoDirection, index, selectIndex }: any) => (
                 <Text fontWeight="bold">
                     {infoDirection.find((item: any) => item.key === index)?.location?.distance}
                 </Text>
+                <Text> Km</Text>
             </Block>
             <Block direction="row">
                 <Text>Thời gian: </Text>
                 <Text fontWeight="bold">
                     {infoDirection.find((item: any) => item.key === index)?.location?.duration?.toFixed(0)}
                 </Text>
+                <Text> Phút</Text>
             </Block>
         </View>
     </View>
 ));
 
 const MapScreen = ({ route }: any) => {
-    console.log('🚀 ~ file: index.tsx:40 ~ MapScreen ~ route', route);
-    const tour_id = route?.params;
     const isFocused = useIsFocused();
-
+    const [viewDetail, setViewDetail] = React.useState(false);
+    const [tours, setTours] = React.useState([]);
+    const [searchTour, setSearchTour] = React.useState('');
+    const debounceSearchTour = useDebounce(searchTour, 500);
     const [infoDirection, setInfoDirection] = React.useState<any>([]);
     const [selectIndex, setSelectIndex] = React.useState<any>(null);
 
     const [destinations, setDestionations] = React.useState<any>([]);
-
     const findDestinations = destinations && destinations.length > 0 && findShortestPath(destinations);
+
+    const [tourId, setTourId] = React.useState('');
+    const [detailTour, setDetailTour] = React.useState<any>(null);
 
     const DEFAULT_REGION =
         destinations && destinations.length > 0
@@ -59,8 +69,13 @@ const MapScreen = ({ route }: any) => {
             : { latitude: 21.028511, longitude: 105.804817, latitudeDelta: 0.06, longitudeDelta: 0.0134 };
 
     React.useEffect(() => {
-        console.log('🚀 ~ file: index.tsx:62 ~ React.useEffect ~ tour_id', tour_id);
-        if (!tour_id) {
+        setTourId(route?.params?.tour_id);
+        setDetailTour(route?.params);
+    }, [route?.params]);
+
+    React.useEffect(() => {
+        console.log('🚀 ~ file: index.tsx:78 ~ React.useEffect ~ tourId', tourId);
+        if (!tourId) {
             setDestionations([]);
             setSelectIndex(null);
             setInfoDirection([]);
@@ -69,13 +84,21 @@ const MapScreen = ({ route }: any) => {
         (async () => {
             tourService
                 .getDestination({
-                    tour_id,
+                    tour_id: tourId,
                 })
                 .then((res: any) => {
                     setDestionations(res?.data?.data);
                 });
         })();
-    }, [tour_id, isFocused]);
+    }, [tourId, isFocused]);
+
+    React.useEffect(() => {
+        if (!debounceSearchTour) return setTours([]);
+
+        homeService.getHotTour({ search: debounceSearchTour }).then((res: any) => {
+            setTours(res.data);
+        });
+    }, [debounceSearchTour]);
 
     return (
         <View style={{ flex: 1 }}>
@@ -91,28 +114,130 @@ const MapScreen = ({ route }: any) => {
                 width="100%"
                 flex={1}
             >
-                <View style={styles.header}>
-                    <TouchableOpacity
-                        style={{ paddingRight: 20 }}
-                        onPress={() => {
-                            goBack();
-                        }}
-                    >
-                        <Icon icon="arrow_down" size={36} rotate color={'black'} />
-                    </TouchableOpacity>
-                    <Block direction="row" paddingBottom={10} flex={1} alignItems="center">
-                        <TextField
-                            containerStyle={{ zIndex: 10, width: '100%' }}
-                            unActiveTintLabelColor="#0C656A"
-                            unActiveTintBorderColor="#0C656A"
-                            activeTintLabelColor="#0C656A"
-                            activeTintBorderColor="#0C656A"
-                            typeInput="flat"
-                            label="Tìm kiếm tour?"
-                        />
-                    </Block>
-                    {/* <Text>Header</Text> */}
-                </View>
+                <Block width="100%" direction="row" justifyContent="center">
+                    <View style={styles.container_header}>
+                        <View style={styles.header}>
+                            <TouchableOpacity
+                                style={{ paddingRight: 20 }}
+                                onPress={() => {
+                                    goBack();
+                                }}
+                            >
+                                <Icon icon="arrow_down" size={36} rotate color={'black'} />
+                            </TouchableOpacity>
+                            <Block direction="row" paddingBottom={10} flex={1} alignItems="center">
+                                <TextField
+                                    containerStyle={{ zIndex: 10, width: '100%' }}
+                                    unActiveTintLabelColor="#0C656A"
+                                    unActiveTintBorderColor="#0C656A"
+                                    activeTintLabelColor="#0C656A"
+                                    activeTintBorderColor="#0C656A"
+                                    typeInput="flat"
+                                    label="Tìm kiếm tour?"
+                                    value={searchTour}
+                                    onChangeText={(text: any) => setSearchTour(text)}
+                                />
+                            </Block>
+                            {/* <Text>Header</Text> */}
+                        </View>
+                        {tours &&
+                            viewDetail &&
+                            tours?.length > 0 &&
+                            tours.map((tour: any, index: number) => {
+                                return (
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            setTourId(tour?.id);
+                                            setDetailTour(tour);
+                                            setTours([]);
+                                            setSearchTour('');
+                                            setInfoDirection([]);
+                                        }}
+                                        key={index}
+                                    >
+                                        <Block paddingBottom={20} direction="row">
+                                            <Block justifyContent="center">
+                                                <Image
+                                                    style={{ width: 70, height: 70, borderRadius: 8 }}
+                                                    source={{
+                                                        uri: tour?.ImageUrl,
+                                                    }}
+                                                />
+                                            </Block>
+                                            <Block paddingHorizontal={20} flex={1}>
+                                                <Text colorTheme="button" fontWeight="600" fontSize={15}>
+                                                    {tour?.Title}
+                                                </Text>
+                                                <Block direction="row" alignItems="center" paddingTop={6}>
+                                                    <Text fontSize={11} color="#6B6B6B">
+                                                        Giá tour: {currencyFormat(tour?.TourPrice)}đ
+                                                    </Text>
+                                                </Block>
+                                                <Block direction="row" alignItems="center" paddingTop={6}>
+                                                    <Text fontSize={11} color="#6B6B6B">
+                                                        Ngày khởi hành:{' '}
+                                                        {moment(tour.DateStartTour).format('DD/MM/YYYY')}
+                                                    </Text>
+                                                </Block>
+                                            </Block>
+                                        </Block>
+                                    </TouchableOpacity>
+                                );
+                            })}
+
+                        {!(tours?.length > 0) && viewDetail && (
+                            <Block paddingBottom={20} direction="row">
+                                <Block justifyContent="center">
+                                    <Image
+                                        style={{ width: 80, height: 80, borderRadius: 16 }}
+                                        source={{
+                                            uri: detailTour?.ImageUrl,
+                                        }}
+                                    />
+                                </Block>
+                                <Block paddingHorizontal={20} flex={1}>
+                                    <Text colorTheme="button" fontWeight="600" fontSize={15}>
+                                        {detailTour?.Title}
+                                    </Text>
+                                    <Block direction="row" alignItems="center" paddingTop={6}>
+                                        <Image source={images.location} style={{ width: 20, height: 20 }} />
+                                        <Text fontSize={11} style={{ paddingHorizontal: 6 }} color="#6B6B6B">
+                                            {findDestinations?.length || 'Chưa có'} lộ trình
+                                        </Text>
+                                    </Block>
+                                    <Block direction="row" alignItems="center" paddingTop={6}>
+                                        <Image source={images.point_tour} style={{ width: 18, height: 18 }} />
+                                        <Text fontSize={11} style={{ paddingHorizontal: 6 }} color="#6B6B6B">
+                                            Quãng đường{' '}
+                                            {infoDirection
+                                                .reduce((a: any, b: any) => a + b?.location?.distance, 0)
+                                                ?.toFixed(2)}{' '}
+                                            km
+                                        </Text>
+                                    </Block>
+                                    <Block direction="row" alignItems="center" paddingTop={6}>
+                                        <Image
+                                            source={images.clock}
+                                            style={{ width: 18, height: 18, tintColor: ColorDefault.button }}
+                                        />
+                                        <Text fontSize={11} style={{ paddingHorizontal: 6 }} color="#6B6B6B">
+                                            Thời gian{' '}
+                                            {infoDirection
+                                                .reduce((a: any, b: any) => a + b?.location?.duration, 0)
+                                                ?.toFixed(2)}{' '}
+                                            phút
+                                        </Text>
+                                    </Block>
+                                </Block>
+                            </Block>
+                        )}
+                        <Block direction="row" justifyContent="center">
+                            <TouchableOpacity onPress={() => setViewDetail((prev) => !prev)}>
+                                <Icon size={34} rotate={viewDetail ? '360' : false} icon="arrow_down" />
+                            </TouchableOpacity>
+                        </Block>
+                    </View>
+                </Block>
             </Block>
             <View style={styles.container}>
                 <MapView
@@ -141,7 +266,6 @@ const MapScreen = ({ route }: any) => {
                                         apikey={GOOGLE_MAPS_APIKEY}
                                         // language="vi"
                                         timePrecision="now"
-                                        mode="DRIVING"
                                         strokeWidth={5}
                                         strokeColors={
                                             selectIndex == index ? ['red', 'red', 'red', '#0C656A'] : ['transparent']
@@ -236,14 +360,8 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'center',
     },
-    header: {
-        height: 80,
+    container_header: {
         backgroundColor: 'rgba(255,255,255,0.9)',
-        width: '92%',
-        borderRadius: 12,
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 20,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -251,8 +369,17 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-
+        borderRadius: 12,
         elevation: 5,
+        width: '92%',
+        paddingHorizontal: 20,
+    },
+    header: {
+        paddingTop: 14,
+        paddingBottom: 8,
+        width: '92%',
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     map: {
         ...StyleSheet.absoluteFillObject,
