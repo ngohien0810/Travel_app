@@ -1,6 +1,6 @@
 import { Block, Icon, Text, TextField } from '@components';
-import { navigationRef } from '@navigation/navigation-service';
-import { StackActions } from '@react-navigation/native';
+import { goBack, navigate, navigationRef } from '@navigation/navigation-service';
+import { StackActions, useIsFocused } from '@react-navigation/native';
 import { HEIGHT_SCREEN, WIDTH_SCREEN } from '@theme';
 import { ColorDefault } from '@theme/color';
 import React from 'react';
@@ -10,10 +10,10 @@ import MapViewDirections from 'react-native-maps-directions';
 import { tourService } from '../tour/service';
 import { findShortestPath } from './fc';
 
-const GOOGLE_MAPS_APIKEY = 'AIzaSyCKp54Z8i9afLSm2yaFTUruXQ6Q_70nav8';
+const GOOGLE_MAPS_APIKEY = 'AIzaSyDTnctA4mD-u3-fBr7de1TaVCRwvsR8TwU';
 
-const Card = React.memo(({ item, infoDirection, index }: any) => (
-    <View style={styles.cardContainer}>
+const Card = React.memo(({ item, infoDirection, index, selectIndex }: any) => (
+    <View style={[styles.cardContainer, selectIndex == index && styles.cardSelect]}>
         <Block>
             <Image source={{ uri: item[0].ImageUrl }} style={[styles.image, { marginBottom: 6 }]} />
             <Image source={{ uri: item[1].ImageUrl }} style={styles.image} />
@@ -22,21 +22,27 @@ const Card = React.memo(({ item, infoDirection, index }: any) => (
             <Text style={styles.title}>{`${item[0]?.Name} - ${item[1]?.Name}`}</Text>
             <Block direction="row" paddingVertical={8}>
                 <Text>Khoảng cách: </Text>
-                <Text fontWeight="bold">{infoDirection[index]?.distance}</Text>
+                <Text fontWeight="bold">
+                    {infoDirection.find((item: any) => item.key === index)?.location?.distance}
+                </Text>
             </Block>
             <Block direction="row">
                 <Text>Thời gian: </Text>
-                <Text fontWeight="bold"> {infoDirection[index]?.duration?.toFixed(0)}</Text>
+                <Text fontWeight="bold">
+                    {infoDirection.find((item: any) => item.key === index)?.location?.duration?.toFixed(0)}
+                </Text>
             </Block>
         </View>
     </View>
 ));
 
 const MapScreen = ({ route }: any) => {
+    console.log('🚀 ~ file: index.tsx:40 ~ MapScreen ~ route', route);
     const tour_id = route?.params;
+    const isFocused = useIsFocused();
 
     const [infoDirection, setInfoDirection] = React.useState<any>([]);
-    const [selectIndex, setSelectIndex] = React.useState<any>('');
+    const [selectIndex, setSelectIndex] = React.useState<any>(null);
 
     const [destinations, setDestionations] = React.useState<any>([]);
 
@@ -53,7 +59,13 @@ const MapScreen = ({ route }: any) => {
             : { latitude: 21.028511, longitude: 105.804817, latitudeDelta: 0.06, longitudeDelta: 0.0134 };
 
     React.useEffect(() => {
-        if (!tour_id) return;
+        console.log('🚀 ~ file: index.tsx:62 ~ React.useEffect ~ tour_id', tour_id);
+        if (!tour_id) {
+            setDestionations([]);
+            setSelectIndex(null);
+            setInfoDirection([]);
+            return;
+        }
         (async () => {
             tourService
                 .getDestination({
@@ -63,7 +75,7 @@ const MapScreen = ({ route }: any) => {
                     setDestionations(res?.data?.data);
                 });
         })();
-    }, [tour_id]);
+    }, [tour_id, isFocused]);
 
     return (
         <View style={{ flex: 1 }}>
@@ -83,9 +95,7 @@ const MapScreen = ({ route }: any) => {
                     <TouchableOpacity
                         style={{ paddingRight: 20 }}
                         onPress={() => {
-                            const popAction = StackActions.pop(1);
-
-                            navigationRef.current?.dispatch(popAction);
+                            goBack();
                         }}
                     >
                         <Icon icon="arrow_down" size={36} rotate color={'black'} />
@@ -116,34 +126,37 @@ const MapScreen = ({ route }: any) => {
                         findDestinations.length > 0 &&
                         destinations &&
                         destinations.length > 0 &&
-                        findDestinations?.map((destination: any, index: number) => {
+                        findDestinations.map((destination: any, index: number) => {
                             return (
-                                <MapViewDirections
-                                    origin={{
-                                        latitude: destination[0]?.Latitude,
-                                        longitude: destination[0]?.Longtitude,
-                                    }}
-                                    destination={{
-                                        latitude: destination[1]?.Latitude,
-                                        longitude: destination[1]?.Longtitude,
-                                    }}
-                                    apikey={GOOGLE_MAPS_APIKEY}
-                                    // language="vi"
-                                    timePrecision="now"
-                                    mode="DRIVING"
-                                    strokeWidth={5}
-                                    strokeColors={[
-                                        'black',
-                                        'black',
-                                        '#' + Math.floor(Math.random() * 16777215).toString(16),
-                                    ]}
-                                    onReady={(result: any) => {
-                                        setInfoDirection((prev: any) => [
-                                            ...prev,
-                                            { distance: result.distance, duration: result.duration },
-                                        ]);
-                                    }}
-                                />
+                                <React.Fragment key={index}>
+                                    <MapViewDirections
+                                        origin={{
+                                            latitude: destination[0]?.Latitude,
+                                            longitude: destination[0]?.Longtitude,
+                                        }}
+                                        destination={{
+                                            latitude: destination[1]?.Latitude,
+                                            longitude: destination[1]?.Longtitude,
+                                        }}
+                                        apikey={GOOGLE_MAPS_APIKEY}
+                                        // language="vi"
+                                        timePrecision="now"
+                                        mode="DRIVING"
+                                        strokeWidth={5}
+                                        strokeColors={
+                                            selectIndex == index ? ['red', 'red', 'red', '#0C656A'] : ['transparent']
+                                        }
+                                        onReady={(result: any) => {
+                                            setInfoDirection((prev: any) => [
+                                                ...prev,
+                                                {
+                                                    key: index,
+                                                    location: { distance: result.distance, duration: result.duration },
+                                                },
+                                            ]);
+                                        }}
+                                    />
+                                </React.Fragment>
                             );
                         })}
 
@@ -192,16 +205,15 @@ const MapScreen = ({ route }: any) => {
                     <Block paddingLeft={5}>
                         <FlatList
                             data={findDestinations}
-                            keyExtractor={(item) => Math.random().toString()}
+                            keyExtractor={() => Math.random().toString()}
                             renderItem={({ item, index }: any) => (
-                                <TouchableOpacity
-                                    onPress={() => setSelectIndex(index)}
-                                    style={{
-                                        borderWidth: 2,
-                                        borderColor: 'red',
-                                    }}
-                                >
-                                    <Card infoDirection={infoDirection} index={index} item={item} />
+                                <TouchableOpacity onPress={() => setSelectIndex(index)}>
+                                    <Card
+                                        selectIndex={selectIndex}
+                                        infoDirection={infoDirection}
+                                        index={index}
+                                        item={item}
+                                    />
                                 </TouchableOpacity>
                             )}
                             horizontal
@@ -272,6 +284,10 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: 'bold',
         fontSize: 16,
+    },
+    cardSelect: {
+        borderWidth: 2,
+        borderColor: '#0C656A',
     },
     description: {
         marginTop: 5,

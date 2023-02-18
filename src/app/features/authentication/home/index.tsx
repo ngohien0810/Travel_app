@@ -27,6 +27,7 @@ const HomeComponent = () => {
     const dispatch = useDispatch();
 
     const [hotTour, setHotTour] = React.useState([]);
+    console.log('🚀 ~ file: index.tsx:30 ~ HomeComponent ~ hotTour', hotTour);
     const [news, setNews] = React.useState([]);
 
     const insets = useSafeAreaInsets();
