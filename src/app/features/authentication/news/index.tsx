@@ -32,7 +32,7 @@ const Item = ({ item }: any) => (
                 {item?.Title}
             </Text>
             <Text fontSize={13} color="#6B6B6B">
-                {moment(item?.CreatedDate).format('DD/MM/YYYY HH:mm')}
+                {moment(item?.CreatedDate).utc().format('DD/MM/YYYY HH:mm')}
             </Text>
         </Block>
     </Block>

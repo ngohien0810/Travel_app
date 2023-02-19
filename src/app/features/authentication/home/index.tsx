@@ -5,7 +5,7 @@ import isEqual from 'react-fast-compare';
 import LinearGradient from 'react-native-linear-gradient';
 
 import { images } from '@assets/image';
-import { Block, Screen, Text, TextField } from '@components';
+import { Block, Icon, Screen, Text, TextField } from '@components';
 import { navigate } from '@navigation/navigation-service';
 import { APP_SCREEN } from '@navigation/screen-types';
 import { selectAppFavouries, selectAppProfile } from '@redux-selector/app';
@@ -18,6 +18,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import CardTour from '../../../components/CardTour';
 import { tourService } from '../tour/service';
 import { homeService } from './service';
+import { ColorDefault } from '@theme/color';
+import { useDebounce } from '@hooks';
+import { currencyFormat } from '@common';
+import { ScrollView } from 'react-native-gesture-handler';
 export const wait = (timeout: number) => {
     return new Promise((resolve: any) => setTimeout(resolve, timeout));
 };
@@ -27,8 +31,10 @@ const HomeComponent = () => {
     const dispatch = useDispatch();
 
     const [hotTour, setHotTour] = React.useState([]);
-    console.log('🚀 ~ file: index.tsx:30 ~ HomeComponent ~ hotTour', hotTour);
     const [news, setNews] = React.useState([]);
+    const [tours, setTours] = React.useState([]);
+    const [searchTour, setSearchTour] = React.useState('');
+    const debounceSearchTour = useDebounce(searchTour, 500);
 
     const insets = useSafeAreaInsets();
     const [callback, setCallback] = React.useState(false);
@@ -58,6 +64,14 @@ const HomeComponent = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [callback]);
 
+    React.useEffect(() => {
+        if (!debounceSearchTour) return setTours([]);
+
+        homeService.getHotTour({ search: debounceSearchTour }).then((res: any) => {
+            setTours(res.data);
+        });
+    }, [debounceSearchTour]);
+
     // render
     return (
         <Screen
@@ -68,26 +82,89 @@ const HomeComponent = () => {
             style={{ backgroundColor: '#f2f2f2', paddingBottom: 140 }}
         >
             {/* header */}
-            <ImageBackground style={styles.header_image_bg} source={images.header_home_bg}>
+            <ImageBackground
+                style={[styles.header_image_bg, tours?.length > 0 && { height: 'auto', paddingBottom: 20 }]}
+                source={images.header_home_bg}
+            >
                 <Block direction="row" style={{ marginTop: 10 + insets.top }}>
                     <View style={[styles.search_tour]}>
-                        <TextField
-                            unActiveTintLabelColor="#0C656A"
-                            unActiveTintBorderColor="#0C656A"
-                            activeTintLabelColor="#0C656A"
-                            activeTintBorderColor="#0C656A"
-                            typeInput="flat"
-                            label="Bạn muốn đi đâu?"
-                        />
-                        <Block direction="row" alignItems="center" style={styles.calendar_home}>
-                            <Image style={styles.noti_icon} source={images.calendar_home} />
-                            <Text color="#0C656A" style={{ paddingLeft: 8 }} text="Từ ngày đến ngày" />
+                        <Block direction="row" alignItems="flex-end">
+                            <Block
+                                direction="row"
+                                justifyContent="center"
+                                style={{
+                                    paddingHorizontal: 10,
+                                    paddingLeft: 18,
+                                    paddingVertical: 4.91,
+                                    borderColor: ColorDefault.button,
+                                    borderBottomWidth: 1,
+                                }}
+                            >
+                                <Icon icon="search" size={17} rotate colorTheme="button" />
+                            </Block>
+                            <Block flex={1}>
+                                <TextField
+                                    containerStyle={{ zIndex: 10, width: '100%' }}
+                                    unActiveTintLabelColor="#0C656A"
+                                    unActiveTintBorderColor="#0C656A"
+                                    activeTintLabelColor="#0C656A"
+                                    activeTintBorderColor="#0C656A"
+                                    typeInput="flat"
+                                    label="Nhập để tìm kiếm tour?"
+                                    value={searchTour}
+                                    onChangeText={(text: any) => setSearchTour(text)}
+                                />
+                            </Block>
                         </Block>
+                        {tours && tours?.length > 0 && (
+                            <ScrollView
+                                showsVerticalScrollIndicator={false}
+                                style={{ maxHeight: 500, paddingVertical: 10 }}
+                            >
+                                {tours.map((tour: any, index: number) => {
+                                    return (
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                navigate(APP_SCREEN.TOUR_DETAIL, tour);
+                                            }}
+                                            key={index}
+                                        >
+                                            <Block paddingBottom={20} direction="row">
+                                                <Block justifyContent="center">
+                                                    <Image
+                                                        style={{ width: 70, height: 70, borderRadius: 8 }}
+                                                        source={{
+                                                            uri: tour?.ImageUrl,
+                                                        }}
+                                                    />
+                                                </Block>
+                                                <Block paddingHorizontal={20} flex={1}>
+                                                    <Text colorTheme="button" fontWeight="600" fontSize={15}>
+                                                        {tour?.Title}
+                                                    </Text>
+                                                    <Block direction="row" alignItems="center" paddingTop={6}>
+                                                        <Text fontSize={11} color="#6B6B6B">
+                                                            Giá tour: {currencyFormat(tour?.TourPrice)}đ
+                                                        </Text>
+                                                    </Block>
+                                                    <Block direction="row" alignItems="center" paddingTop={6}>
+                                                        <Text fontSize={11} color="#6B6B6B">
+                                                            Ngày khởi hành:{' '}
+                                                            {moment(tour.DateStartTour).format('DD/MM/YYYY')}
+                                                        </Text>
+                                                    </Block>
+                                                </Block>
+                                            </Block>
+                                        </TouchableOpacity>
+                                    );
+                                })}
+                            </ScrollView>
+                        )}
                     </View>
 
-                    <TouchableOpacity style={[styles.notifi_tour]}>
+                    {/* <TouchableOpacity style={[styles.notifi_tour]}>
                         <Image style={styles.noti_icon} source={images.noti} />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </Block>
             </ImageBackground>
             <View style={styles.wrapper_tour_special}>
@@ -281,11 +358,13 @@ const styles = StyleSheet.create({
         position: 'absolute',
     },
     search_tour: {
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        backgroundColor: '#fff',
         padding: 16,
+        paddingHorizontal: 20,
         flex: 1,
         marginHorizontal: 30,
         borderRadius: 12,
+        zIndex: 99999,
     },
     notifi_tour: {
         backgroundColor: 'rgba(255, 255, 255, 0.7)',

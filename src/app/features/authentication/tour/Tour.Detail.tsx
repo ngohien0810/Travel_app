@@ -70,7 +70,8 @@ const TourDetailScreen = ({ route }: any) => {
         const someFavourite = favouries.some((item: any) => {
             return item?.tour?.id === id;
         });
-        if (someFavourite) {
+        console.log('someFavourite', someFavourite);
+        if (!someFavourite) {
             tourService.createFavouries(id, userInfo?.id).then((res: any) => {
                 dispatch(appActions.setFavouries([...favouries]));
             });

@@ -111,7 +111,7 @@ const OrderScreen = ({ route }: any) => {
                     </Block>
                     <Block flex={1} padding={20}>
                         <Text fontSize={22} colorTheme="button" fontWeight="700">
-                            Người lớn
+                            Trẻ nhỏ
                         </Text>
                         <Block direction="row" marginTop={12}>
                             <Block
@@ -173,7 +173,7 @@ const OrderScreen = ({ route }: any) => {
                             </Block>
                         </Block>
                         <Text lineHeight={40} color="#5B5B5B">
-                            ( 120cm trở lên )
+                            ( Thấp hơn 120cm )
                         </Text>
                         <Text fontSize={20} colorTheme="button" fontWeight="700">
                             {currencyFormat((data?.TourPrice / 2).toFixed(0))} vnđ

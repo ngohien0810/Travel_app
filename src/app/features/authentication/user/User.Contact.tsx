@@ -37,14 +37,14 @@ const UserContact = ({ navigation }: any) => {
                 </Text>
                 <Block direction="row" paddingVertical={20} alignItems="center" justifyContent="center">
                     <VectorIcon style={{ paddingRight: 10 }} icon="airpods" colorTheme="button" />
-                    <Text color="#777">0123456789</Text>
+                    <Text color="#777">0981321520</Text>
                 </Block>
                 <Text textAlign="center" colorTheme="button" fontWeight="bold">
                     Email
                 </Text>
                 <Block direction="row" paddingVertical={20} alignItems="center" justifyContent="center">
                     <VectorIcon style={{ paddingRight: 10 }} icon="box" colorTheme="button" />
-                    <Text color="#777">nguyennhuy170400@gmail.com</Text>
+                    <Text color="#777">vietnamtravel@gmail.com</Text>
                 </Block>
             </Block>
         </Screen>

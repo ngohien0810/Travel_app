@@ -13,7 +13,6 @@ import { useSelector } from 'react-redux';
 
 const FavoriteScreen = () => {
     const favouries: any = useSelector(selectAppFavouries);
-    console.log('🚀 ~ file: index.tsx:16 ~ FavoriteScreen ~ favouries', favouries);
 
     return (
         <Screen unsafe>
@@ -43,7 +42,7 @@ const FavoriteScreen = () => {
                                               ).toFixed(1)
                                             : 0
                                     }
-                                    start_tour={moment(item?.tour?.DateStartTour).format('HH:mm DD/MM/YYYY')}
+                                    start_tour={moment(item?.tour?.DateStartTour).format('DD/MM/YYYY')}
                                     price={currencyFormat(item?.tour?.TourPrice)}
                                 />
                             </TouchableOpacity>

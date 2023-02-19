@@ -1,22 +1,46 @@
+import { images } from '@assets/image';
 import CardTour from '@com/CardTour';
 import MyCardTour from '@com/CardTour/MyTour';
+import { currencyFormat } from '@common';
 import { Block, Screen, Text } from '@components';
 import Header from '@layouts/Header';
 import { StackActions } from '@react-navigation/native';
+import { selectAppFavouries } from '@redux-selector/app';
 import { WIDTH_SCREEN } from '@theme';
 import { ColorDefault } from '@theme/color';
+import moment from 'moment';
 import React from 'react';
-import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { useSelector } from 'react-redux';
 
 function Tab1Screen() {
+    const favouries: any = useSelector(selectAppFavouries);
+
     return (
         <View style={styles.container}>
             <FlatList
                 showsVerticalScrollIndicator={false}
-                data={[1, 2, 3, 4]}
+                data={favouries.slice(1)}
                 keyExtractor={(item) => item.toString()}
-                renderItem={({ item, index }) => <MyCardTour title="Demo tour cá nhân" index={index} />}
+                renderItem={({ item, index }) => (
+                    <CardTour
+                        tour_image={item?.tour?.ImageUrl}
+                        title={item?.tour?.Title}
+                        range_tour={item?.tour?.RangeTour}
+                        rating={
+                            item?.tour?.feedbacks?.length > 0
+                                ? (
+                                      item?.tour?.feedbacks?.reduce((prev: any, curr: any) => {
+                                          return prev + curr.Rate;
+                                      }, 0) / item?.tour?.feedbacks?.length
+                                  ).toFixed(1)
+                                : 0
+                        }
+                        start_tour={moment(item?.tour?.DateStartTour).format('DD/MM/YYYY')}
+                        price={currencyFormat(item?.tour?.TourPrice)}
+                    />
+                )}
             />
         </View>
     );
@@ -27,9 +51,17 @@ function Tab2Screen() {
         <View style={styles.container}>
             <FlatList
                 showsVerticalScrollIndicator={false}
-                data={[1, 2, 3, 4]}
+                data={[]}
                 keyExtractor={(item) => item.toString()}
                 renderItem={({ item, index }) => <MyCardTour title="Demo tour cá nhân" index={index} />}
+                ListEmptyComponent={
+                    <Block flex={1} height={600} alignItems="center" justifyContent="center">
+                        <Text color="#fff" fontSize={18} fontWeight="500">
+                            Chưa có lịch sử đặt tour!
+                        </Text>
+                        <Image source={images.empty} style={{ height: 250, width: 250, marginTop: 20 }} />
+                    </Block>
+                }
             />
         </View>
     );
