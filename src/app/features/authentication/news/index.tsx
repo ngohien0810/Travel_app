@@ -53,7 +53,7 @@ const NewsScreen = () => {
         newService.getCategories().then((res: any) => {
             setCategories(res.data?.data);
         });
-    }, []);
+    }, [callback]);
 
     React.useEffect(() => {
         setLoading(true);

@@ -38,12 +38,13 @@ export const styles = StyleSheet.create({
     wrapTitle: {
         justifyContent: 'center',
         alignItems: 'center',
-        paddingVertical: 5,
+        paddingVertical: 10,
     },
     title: {
         fontSize: sizeScale(15),
         alignSelf: 'center',
         color: '#333333',
+        fontWeight: 'bold',
     },
     wrapTextCancel: {
         paddingVertical: 15,

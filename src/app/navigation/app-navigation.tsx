@@ -20,7 +20,7 @@ import { authService } from '@features/un-authentication/login/service';
 
 export const AppContainer = () => {
     // state
-    const { loadingApp, showDialog, theme } = useSelector(selectAppConfig);
+    const { loadingApp, showDialog, theme, callbackFavouries } = useSelector(selectAppConfig);
 
     // effect
     useEffect(() => {
@@ -41,7 +41,7 @@ export const AppContainer = () => {
                 dispatch(appActions.setAppProfile(res?.data));
             });
         }
-    }, []);
+    }, [callbackFavouries]);
 
     useEffect(() => {
         if (theme === 'dark') {

@@ -30,4 +30,16 @@ export const tourService = {
             },
         });
     },
+    deleteFavourites: (tour_id: any) => {
+        return NetWorkService.Delete({
+            url: `/favourites/${tour_id}`,
+        });
+    },
+
+    getTourOrder: (params: any) => {
+        return NetWorkService.Get({
+            url: '/orders',
+            params,
+        });
+    },
 };

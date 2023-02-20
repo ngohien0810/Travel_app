@@ -143,6 +143,7 @@ export interface InputBaseProps extends TextInputProps {
      * @default undefined
      */
     rxRemove?: RegExp;
+    typeInput?: 'flat' | 'outline';
 }
 
 export interface TextFieldProps extends InputBaseProps {

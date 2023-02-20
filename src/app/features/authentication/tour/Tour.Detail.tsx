@@ -32,7 +32,6 @@ const TourDetailScreen = ({ route }: any) => {
     const userInfo: any = useSelector(selectAppProfile);
     const favouries: any = useSelector(selectAppFavouries);
     const dispatch = useDispatch();
-    console.log('🚀 ~ file: Tour.Detail.tsx:34 ~ TourDetailScreen ~ userInfo', userInfo);
 
     const [detailTour, setDetailTour] = React.useState<any>(null);
     const { width } = useWindowDimensions();
@@ -70,13 +69,17 @@ const TourDetailScreen = ({ route }: any) => {
         const someFavourite = favouries.some((item: any) => {
             return item?.tour?.id === id;
         });
-        console.log('someFavourite', someFavourite);
         if (!someFavourite) {
             tourService.createFavouries(id, userInfo?.id).then((res: any) => {
-                dispatch(appActions.setFavouries([...favouries]));
+                dispatch(appActions.setFavouries([...favouries, { tour: detailTour }]));
             });
         } else {
-            dispatch(appActions.setFavouries(favouries.filter((item: any) => item?.id !== id)));
+            tourService.deleteFavourites(id).then((res: any) => {
+                const newFavouries = favouries.filter((item: any) => {
+                    return item?.tour?.id !== id;
+                });
+                dispatch(appActions.setFavouries(newFavouries));
+            });
         }
     };
 

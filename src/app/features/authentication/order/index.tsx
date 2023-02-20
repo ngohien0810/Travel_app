@@ -201,6 +201,7 @@ const OrderScreen = ({ route }: any) => {
                                 ticketChildren: ticketChildren,
                                 total:
                                     data?.TourPrice * ticketAdult + (data?.TourPrice / 2).toFixed(0) * ticketChildren,
+                                ...data,
                             });
                         }}
                         style={{ flex: 1 }}

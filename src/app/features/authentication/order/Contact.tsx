@@ -12,13 +12,13 @@ import { navigate } from '@navigation/navigation-service';
 import { APP_SCREEN } from '@navigation/screen-types';
 
 const ContactScreen = ({ route }: any) => {
-    const data = route.params;
-    console.log('🚀 ~ file: Contact.tsx:16 ~ ContactScreen ~ data', data);
+    const dataRoute = route.params;
     // state
     const formMethod = useForm<FormContactType>();
     const state: any = useSelector((state: any) => {
         return state;
     });
+
     // function
     const onSubmitKey = () => {
         formMethod.handleSubmit(onSubmit)();
@@ -27,13 +27,14 @@ const ContactScreen = ({ route }: any) => {
     const onSubmit = (data: any) => {
         orderService
             .createOrder({
-                CustomerID: state?.app?.token?.data?.user?.id,
-                Code: 'ORDER-0001',
-                CodeTour: 'MB20221208',
-                AdultTicket: 1,
-                ChildTicket: 1,
+                CustomerID: state?.app?.profile?.id,
+                Code: 'ORDER-' + Math.floor(1000 + Math.random() * 9000),
+                CodeTour: dataRoute?.Code,
+                AdultTicket: dataRoute?.ticketAdult,
+                ChildTicket: dataRoute?.ticketChildren,
                 PaymentMethod: 1,
-                TotalPrice: 1500000,
+                TotalPrice: dataRoute?.total,
+                TourID: dataRoute?.id,
                 StatusOrder: 0,
             })
             .then((res) => {
@@ -67,13 +68,13 @@ const ContactScreen = ({ route }: any) => {
                 <Block>
                     <FormProvider {...formMethod}>
                         <Text style={{ marginBottom: 5 }}>Họ tên</Text>
-                        <Input<FormContactType> name="name" label="Nhập họ và tên" />
+                        <Input name="name" label="Nhập họ và tên" />
                         <Text style={{ marginBottom: 5 }}>Số điện thoại</Text>
-                        <Input<FormContactType> name="phone" label="0912345***" />
+                        <Input name="phone" label="0912345***" />
                         <Text style={{ marginBottom: 5 }}>Email</Text>
-                        <Input<FormContactType> name="email" label="NguyenVanA@gmail.com" />
+                        <Input name="email" label="NguyenVanA@gmail.com" />
                         <Text style={{ marginBottom: 5 }}>Các yêu cầu khác</Text>
-                        <Input<FormContactType> name="note" label="Nhập yêu cầu của bạn" />
+                        <Input name="note" label="Nhập yêu cầu của bạn" />
                         <TouchableOpacity onPress={onSubmitKey} style={styles.button}>
                             <Text color="#fff">Xác nhận</Text>
                         </TouchableOpacity>

@@ -13,4 +13,5 @@ export interface AppState {
 
     theme: ThemeType;
     favouries?: any;
+    callbackFavouries?: boolean;
 }

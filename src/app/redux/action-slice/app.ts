@@ -14,6 +14,7 @@ const initialAppState: AppState = {
     showDialog: false,
     theme: 'default',
     favouries: [],
+    callbackFavouries: false,
 };
 const appSlice = createSlice({
     name: SLICE_NAME.APP,
@@ -49,6 +50,9 @@ const appSlice = createSlice({
         },
         setFavouries: (state, { payload }) => {
             state.favouries = payload;
+        },
+        setCallbackFavouries: (state) => {
+            state.callbackFavouries = !state?.callbackFavouries;
         },
     },
 });

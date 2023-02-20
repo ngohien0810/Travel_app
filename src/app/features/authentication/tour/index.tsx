@@ -2,8 +2,10 @@ import { images } from '@assets/image';
 import CardTour from '@com/CardTour';
 import MyCardTour from '@com/CardTour/MyTour';
 import { currencyFormat } from '@common';
-import { Block, Screen, Text } from '@components';
+import { Block, Divider, Screen, Text } from '@components';
 import Header from '@layouts/Header';
+import { navigate } from '@navigation/navigation-service';
+import { APP_SCREEN } from '@navigation/screen-types';
 import { StackActions } from '@react-navigation/native';
 import { selectAppFavouries } from '@redux-selector/app';
 import { WIDTH_SCREEN } from '@theme';
@@ -13,35 +15,174 @@ import React from 'react';
 import { FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useSelector } from 'react-redux';
+import { DetailOrder } from './components/DetailOrder';
+import { tourService } from './service';
 
 function Tab1Screen() {
-    const favouries: any = useSelector(selectAppFavouries);
+    const [tours, setTours] = React.useState<any>([]);
+    const [tourSelect, setTourSelect] = React.useState<any>(null);
+    console.log('🚀 ~ file: index.tsx:22 ~ Tab1Screen ~ tourSelect:', tourSelect);
+    const state: any = useSelector((state: any) => {
+        return state;
+    });
+    React.useEffect(() => {
+        tourService
+            .getTourOrder({
+                search: '',
+                CustomerID: state?.app?.profile?.id,
+            })
+            .then((res: any) => {
+                setTours(res?.data?.data);
+            });
+    }, []);
+
+    const _refAction = React.useRef<ActionSheet>();
+
+    const _onShowAction = async () => {
+        _refAction.current?.show();
+    };
 
     return (
         <View style={styles.container}>
             <FlatList
                 showsVerticalScrollIndicator={false}
-                data={favouries.slice(1)}
-                keyExtractor={(item) => item.toString()}
+                data={tours}
+                keyExtractor={(item) => item?.id?.toString()}
                 renderItem={({ item, index }) => (
-                    <CardTour
-                        tour_image={item?.tour?.ImageUrl}
-                        title={item?.tour?.Title}
-                        range_tour={item?.tour?.RangeTour}
-                        rating={
-                            item?.tour?.feedbacks?.length > 0
-                                ? (
-                                      item?.tour?.feedbacks?.reduce((prev: any, curr: any) => {
-                                          return prev + curr.Rate;
-                                      }, 0) / item?.tour?.feedbacks?.length
-                                  ).toFixed(1)
-                                : 0
-                        }
-                        start_tour={moment(item?.tour?.DateStartTour).format('DD/MM/YYYY')}
-                        price={currencyFormat(item?.tour?.TourPrice)}
-                    />
+                    <TouchableOpacity
+                        onPress={() => {
+                            setTourSelect(item);
+                            _refAction.current?.show();
+                        }}
+                    >
+                        <MyCardTour
+                            StatusOrder={item?.StatusOrder}
+                            tour_image={item?.tour?.ImageUrl}
+                            title={item?.tour?.Title}
+                            range_tour={item?.tour?.RangeTour}
+                            rating={
+                                item?.tour?.feedbacks?.length > 0
+                                    ? (
+                                          item?.tour?.feedbacks?.reduce((prev: any, curr: any) => {
+                                              return prev + curr.Rate;
+                                          }, 0) / item?.tour?.feedbacks?.length
+                                      ).toFixed(1)
+                                    : 0
+                            }
+                            start_tour={moment(item?.tour?.DateStartTour).format('DD/MM/YYYY')}
+                            price={currencyFormat(item?.TotalPrice)}
+                            ChildTicket={item?.ChildTicket}
+                            AdultTicket={item?.AdultTicket}
+                        />
+                    </TouchableOpacity>
                 )}
             />
+            <DetailOrder ref={_refAction}>
+                <Block padding={20}>
+                    <Block paddingHorizontal={20} marginBottom={20}>
+                        <Text colorTheme="button" fontWeight="bold" fontSize={18} textAlign="center">
+                            {tourSelect?.tour?.Title}
+                        </Text>
+                    </Block>
+                    <Block direction="row">
+                        <Block flex={1}>
+                            <Block paddingVertical={4}>
+                                <Text color="#5B5B5B">Ngày khởi hành</Text>
+                            </Block>
+                            <Text fontWeight="500">{moment(tourSelect?.tour?.DateStartTour).format('DD/MM/YYYY')}</Text>
+                        </Block>
+                        <Block flex={1}>
+                            <Block paddingVertical={4}>
+                                <Text color="#5B5B5B">Thời gian đặt</Text>
+                            </Block>
+                            <Text fontWeight="500">
+                                {moment(tourSelect?.tour?.CreatedDate).format('HH:mm DD/MM/YYYY')}
+                            </Text>
+                        </Block>
+                    </Block>
+                    <Block direction="row" marginTop={20}>
+                        <Block flex={1}>
+                            <Block paddingVertical={4}>
+                                <Text color="#5B5B5B">Trạng thái</Text>
+                            </Block>
+                            <Text fontWeight="500">{tourSelect?.StatusOrder ? 'Đã xác nhận' : 'Chờ xác nhận'}</Text>
+                        </Block>
+                        <Block flex={1}>
+                            <Block paddingVertical={4}>
+                                <Text color="#5B5B5B">Thời gian</Text>
+                            </Block>
+                            <Text fontWeight="500">{tourSelect?.tour?.RangeTour}</Text>
+                        </Block>
+                    </Block>
+                    <Block direction="row" marginTop={20}>
+                        <Block flex={1}>
+                            <Block paddingVertical={4}>
+                                <Text color="#5B5B5B">Số lượng khách</Text>
+                            </Block>
+                            <Text fontWeight="500">
+                                {(tourSelect?.AdultTicket ? `${tourSelect?.AdultTicket} người lớn` : '') +
+                                    (tourSelect?.ChildTicket ? ` - ${tourSelect?.ChildTicket} trẻ nhỏ` : '')}
+                            </Text>
+                        </Block>
+                        <Block flex={1}>
+                            <Block paddingVertical={4}>
+                                <Text color="#5B5B5B">Thời gian</Text>
+                            </Block>
+                            <Text fontWeight="500">{tourSelect?.tour?.RangeTour}</Text>
+                        </Block>
+                    </Block>
+                    <Block paddingVertical={20}>
+                        <Divider />
+                    </Block>
+                    <Block direction="row">
+                        <Block flex={1}>
+                            <Block paddingVertical={4}>
+                                <Text color="#5B5B5B">Giá tour</Text>
+                            </Block>
+                            <Text fontWeight="500">{currencyFormat(tourSelect?.tour?.TourPrice)} VNĐ</Text>
+                        </Block>
+                        <Block flex={1}>
+                            <Block paddingVertical={4}>
+                                <Text color="#5B5B5B">Tổng giá</Text>
+                            </Block>
+                            <Text fontWeight="500">{currencyFormat(tourSelect?.TotalPrice)} VNĐ</Text>
+                        </Block>
+                    </Block>
+                </Block>
+                <Block direction="row" paddingVertical={20} paddingHorizontal={20}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            _refAction.current.hide();
+                            setTourSelect(null);
+                        }}
+                        style={{ flex: 1 }}
+                    >
+                        <Block paddingVertical={14} borderRadius={10} justifyContent="center" alignItems="center">
+                            <Text color="crison">Huỷ đặt</Text>
+                        </Block>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            _refAction.current.hide();
+
+                            navigate(APP_SCREEN.TOUR_DETAIL, tourSelect.tour);
+                        }}
+                        style={{ flex: 1 }}
+                    >
+                        <Block
+                            paddingVertical={14}
+                            borderRadius={10}
+                            colorTheme="button"
+                            justifyContent="center"
+                            alignItems="center"
+                        >
+                            <Text color="#fff" fontWeight="600">
+                                Xem chi tiết tour
+                            </Text>
+                        </Block>
+                    </TouchableOpacity>
+                </Block>
+            </DetailOrder>
         </View>
     );
 }

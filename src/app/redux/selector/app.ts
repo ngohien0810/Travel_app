@@ -7,6 +7,7 @@ export const selectAppConfig = createDeepEqualSelector(
         loadingApp: app.loadingApp,
         showDialog: app.showDialog,
         theme: app.theme,
+        callbackFavouries: app.callbackFavouries,
     })
 );
 

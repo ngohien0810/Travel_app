@@ -38,7 +38,11 @@ const UserScreen = () => {
                 </Block>
             </Block>
             <Block padding={23}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigate(APP_SCREEN.USER_PROFILE);
+                    }}
+                >
                     <Block
                         marginBottom={40}
                         marginTop={30}
