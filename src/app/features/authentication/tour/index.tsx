@@ -313,10 +313,6 @@ function Tab1Screen({ setSelectedTab }: any) {
 function Tab2Screen() {
     const [tours, setTours] = React.useState<any>([]);
     const [tourSelect, setTourSelect] = React.useState<any>(null);
-    const userInfo: any = useSelector(selectAppProfile);
-    const [rate, setRate] = React.useState(0);
-    const [note, setNote] = React.useState('');
-    const [modalFeedback, setModalFeedback] = React.useState(false);
 
     const state: any = useSelector((state: any) => {
         return state;
@@ -367,6 +363,7 @@ function Tab2Screen() {
                         }}
                     >
                         <MyCardTour
+                            success
                             StatusOrder={item?.StatusOrder}
                             tour_image={item?.tour?.ImageUrl}
                             title={item?.tour?.Title}
@@ -405,7 +402,9 @@ function Tab2Screen() {
                             <Block paddingVertical={4}>
                                 <Text color="#5B5B5B">Trạng thái</Text>
                             </Block>
-                            <Text fontWeight="500">{tourSelect?.StatusOrder ? 'Đã xác nhận' : 'Chờ xác nhận'}</Text>
+                            <Text fontWeight="500" color="green">
+                                Hoàn thành
+                            </Text>
                         </Block>
                         <Block flex={1}>
                             <Block paddingVertical={4}>

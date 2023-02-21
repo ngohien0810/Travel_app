@@ -9,6 +9,7 @@ const MyCardTour = ({
     AdultTicket,
     ChildTicket,
     StatusOrder,
+    success,
 }: {
     title: string;
     price?: string;
@@ -16,6 +17,7 @@ const MyCardTour = ({
     AdultTicket?: any;
     ChildTicket?: any;
     StatusOrder?: any;
+    success?: any;
 }) => {
     return (
         <View style={styles.wrapper_history_tour}>
@@ -39,20 +41,35 @@ const MyCardTour = ({
                             </Block>
                         )}
 
-                        <Block
-                            marginTop={8}
-                            marginBottom={10}
-                            borderWidth={1}
-                            alignSelf="flex-start"
-                            paddingVertical={4}
-                            paddingHorizontal={15}
-                            borderRadius={6}
-                            borderColor={StatusOrder ? '#21A8B0' : '#FF0000'}
-                        >
-                            <Text color={StatusOrder ? '#21A8B0' : '#FF0000'}>
-                                {StatusOrder ? 'Đã xác nhận' : 'Chờ xác nhận'}
-                            </Text>
-                        </Block>
+                        {success ? (
+                            <Block
+                                marginTop={8}
+                                marginBottom={10}
+                                borderWidth={1}
+                                alignSelf="flex-start"
+                                paddingVertical={4}
+                                paddingHorizontal={15}
+                                borderRadius={6}
+                                borderColor="green"
+                            >
+                                <Text color="green">Hoàn thành</Text>
+                            </Block>
+                        ) : (
+                            <Block
+                                marginTop={8}
+                                marginBottom={10}
+                                borderWidth={1}
+                                alignSelf="flex-start"
+                                paddingVertical={4}
+                                paddingHorizontal={15}
+                                borderRadius={6}
+                                borderColor={StatusOrder ? '#21A8B0' : '#FF0000'}
+                            >
+                                <Text color={StatusOrder ? '#21A8B0' : '#FF0000'}>
+                                    {StatusOrder ? 'Đã xác nhận' : 'Chờ xác nhận'}
+                                </Text>
+                            </Block>
+                        )}
 
                         <Text colorTheme="button" fontWeight="600" fontSize={17}>
                             {price} vnđ
