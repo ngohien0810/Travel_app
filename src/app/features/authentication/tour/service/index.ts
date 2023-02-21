@@ -35,11 +35,24 @@ export const tourService = {
             url: `/favourites/${tour_id}`,
         });
     },
+    deleteOrder: (id: any) => {
+        return NetWorkService.Delete({
+            url: `/orders/${id}`,
+        });
+    },
 
     getTourOrder: (params: any) => {
         return NetWorkService.Get({
             url: '/orders',
             params,
+        });
+    },
+    changeStatusTour: (id: any) => {
+        return NetWorkService.Put({
+            url: `/ordersStatus/${id}`,
+            body: {
+                tourStatus: 1,
+            },
         });
     },
 };

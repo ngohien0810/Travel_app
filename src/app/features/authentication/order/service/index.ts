@@ -7,4 +7,10 @@ export const orderService = {
             body: payload,
         });
     },
+    createContact: (payload: any) => {
+        return NetWorkService.Post({
+            url: '/contact',
+            body: payload,
+        });
+    },
 };

@@ -26,26 +26,37 @@ const ContactScreen = ({ route }: any) => {
 
     const onSubmit = (data: any) => {
         orderService
-            .createOrder({
-                CustomerID: state?.app?.profile?.id,
-                Code: 'ORDER-' + Math.floor(1000 + Math.random() * 9000),
-                CodeTour: dataRoute?.Code,
-                AdultTicket: dataRoute?.ticketAdult,
-                ChildTicket: dataRoute?.ticketChildren,
-                PaymentMethod: 1,
-                TotalPrice: dataRoute?.total,
-                TourID: dataRoute?.id,
-                StatusOrder: 0,
+            .createContact({
+                Name: data?.name,
+                Phone: data?.phone,
+                Email: data?.email,
+                Note: data?.note,
+                OrderID: 0,
             })
-            .then((res) => {
-                Alert.alert('Thông báo', 'Đặt vé thành công', [
-                    {
-                        text: 'OK',
-                        onPress: () => {
-                            navigate(APP_SCREEN.HOME);
-                        },
-                    },
-                ]);
+            .then((res: any) => {
+                orderService
+                    .createOrder({
+                        CustomerID: state?.app?.profile?.id,
+                        Code: 'ORDER-' + Math.floor(1000 + Math.random() * 9000),
+                        CodeTour: dataRoute?.Code,
+                        AdultTicket: dataRoute?.ticketAdult,
+                        ChildTicket: dataRoute?.ticketChildren,
+                        PaymentMethod: 1,
+                        TotalPrice: dataRoute?.total,
+                        TourID: dataRoute?.id,
+                        StatusOrder: 0,
+                        ContactID: res?.data?.data?.id,
+                    })
+                    .then(() => {
+                        Alert.alert('Thông báo', 'Đặt vé thành công', [
+                            {
+                                text: 'OK',
+                                onPress: () => {
+                                    navigate(APP_SCREEN.TOUR);
+                                },
+                            },
+                        ]);
+                    });
             });
     };
 

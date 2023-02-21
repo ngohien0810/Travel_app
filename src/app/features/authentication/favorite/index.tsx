@@ -26,7 +26,7 @@ const FavoriteScreen = () => {
                 <View style={styles.body}>
                     <FlatList
                         data={favouries}
-                        keyExtractor={(item) => item?.id?.toString()}
+                        keyExtractor={(item) => Math.random()?.toString()}
                         renderItem={({ item }: any) => (
                             <TouchableOpacity onPress={() => navigate(APP_SCREEN.TOUR_DETAIL, item?.tour)}>
                                 <CardTour
