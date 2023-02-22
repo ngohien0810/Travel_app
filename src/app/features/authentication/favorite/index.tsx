@@ -5,15 +5,16 @@ import Header from '@layouts/Header';
 import { navigate } from '@navigation/navigation-service';
 import { APP_SCREEN } from '@navigation/screen-types';
 import { selectAppFavouries } from '@redux-selector/app';
+import { appActions } from '@redux-slice';
 import moment from 'moment';
 import React from 'react';
 import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const FavoriteScreen = () => {
     const favouries: any = useSelector(selectAppFavouries);
-
+    const dispatch = useDispatch();
     return (
         <Screen unsafe>
             <LinearGradient colors={['#2F94A6', '#fff']} style={{ flex: 1 }} start={{ x: 0, y: 0 }}>
@@ -28,7 +29,12 @@ const FavoriteScreen = () => {
                         data={favouries}
                         keyExtractor={(item) => Math.random()?.toString()}
                         renderItem={({ item }: any) => (
-                            <TouchableOpacity onPress={() => navigate(APP_SCREEN.TOUR_DETAIL, item?.tour)}>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    navigate(APP_SCREEN.TOUR_DETAIL, item?.tour);
+                                    dispatch(appActions.setTourView(item?.tour));
+                                }}
+                            >
                                 <CardTour
                                     tour_image={item?.tour?.ImageUrl}
                                     title={item?.tour?.Title}

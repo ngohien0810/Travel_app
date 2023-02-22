@@ -8,7 +8,7 @@ import { images } from '@assets/image';
 import { Block, Icon, Screen, Text, TextField } from '@components';
 import { navigate } from '@navigation/navigation-service';
 import { APP_SCREEN } from '@navigation/screen-types';
-import { selectAppFavouries, selectAppProfile } from '@redux-selector/app';
+import { selectAppFavouries, selectAppProfile, selectAppTourView } from '@redux-selector/app';
 import { appActions } from '@redux-slice';
 import { WIDTH_SCREEN } from '@theme';
 import moment from 'moment';
@@ -28,6 +28,7 @@ export const wait = (timeout: number) => {
 const HomeComponent = () => {
     const userInfo: any = useSelector(selectAppProfile);
     const favouries: any = useSelector(selectAppFavouries);
+    const tourViews: any = useSelector(selectAppTourView);
     const dispatch = useDispatch();
 
     const [hotTour, setHotTour] = React.useState([]);
@@ -126,6 +127,7 @@ const HomeComponent = () => {
                                         <TouchableOpacity
                                             onPress={() => {
                                                 navigate(APP_SCREEN.TOUR_DETAIL, tour);
+                                                dispatch(appActions.setTourView(tour));
                                             }}
                                             key={index}
                                         >
@@ -190,6 +192,7 @@ const HomeComponent = () => {
                         onPress={() => {
                             tourService.updateViewTour(item?.id).then(() => {
                                 navigate(APP_SCREEN.TOUR_DETAIL, { id: item?.id });
+                                dispatch(appActions.setTourView(item));
                             });
                         }}
                     >
@@ -258,12 +261,34 @@ const HomeComponent = () => {
             </View>
             <View style={[styles.wrapper_tour_special, { marginTop: 40 }]}>
                 <Text style={styles.text_tour_special}>Các tour du lịch đã xem</Text>
-                <TouchableOpacity>
-                    <Text style={styles.text_more}>Xem thêm</Text>
-                </TouchableOpacity>
             </View>
 
-            <CardTour title="demo" start_tour="12/12/2022" price="99.999" />
+            {tourViews &&
+                tourViews?.length > 0 &&
+                tourViews?.slice(0, 5)?.map((item: any) => (
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigate(APP_SCREEN.TOUR_DETAIL, item?.tour);
+                        }}
+                    >
+                        <CardTour
+                            tour_image={item?.ImageUrl}
+                            title={item?.Title}
+                            range_tour={item?.RangeTour}
+                            rating={
+                                item?.feedbacks?.length > 0
+                                    ? (
+                                          item?.feedbacks?.reduce((prev: any, curr: any) => {
+                                              return prev + curr.Rate;
+                                          }, 0) / item?.feedbacks?.length
+                                      ).toFixed(1)
+                                    : 0
+                            }
+                            start_tour={moment(item?.DateStartTour).format('DD/MM/YYYY')}
+                            price={currencyFormat(item?.TourPrice)}
+                        />
+                    </TouchableOpacity>
+                ))}
         </Screen>
     );
 };

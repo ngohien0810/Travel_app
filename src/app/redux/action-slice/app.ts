@@ -15,6 +15,7 @@ const initialAppState: AppState = {
     theme: 'default',
     favouries: [],
     callbackFavouries: false,
+    tourView: [],
 };
 const appSlice = createSlice({
     name: SLICE_NAME.APP,
@@ -53,6 +54,15 @@ const appSlice = createSlice({
         },
         setCallbackFavouries: (state) => {
             state.callbackFavouries = !state?.callbackFavouries;
+        },
+        setTourView: (state, { payload }) => {
+            // check if tourView not exist in payload
+            const exitsTourview = state.tourView?.some((item: any) => item.id === payload.id);
+            if (exitsTourview) {
+                return;
+            } else {
+                state.tourView = [...state?.tourView, payload];
+            }
         },
     },
 });

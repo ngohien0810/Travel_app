@@ -1,10 +1,11 @@
 import { images } from '@assets/image';
 import { VectorIcon } from '@assets/vector-icon/vector-icon';
 import CardTour from '@com/CardTour';
+import { currencyFormat } from '@common';
 import { Block, Modal, Screen, Skeleton, Text } from '@components';
 import { navigate } from '@navigation/navigation-service';
 import { APP_SCREEN } from '@navigation/screen-types';
-import { selectAppFavouries, selectAppProfile, selectAppToken } from '@redux-selector/app';
+import { selectAppFavouries, selectAppProfile, selectAppToken, selectAppTourView } from '@redux-selector/app';
 import { appActions } from '@redux-slice';
 import { ColorDefault } from '@theme/color';
 import moment from 'moment';
@@ -31,6 +32,8 @@ const TourDetailScreen = ({ route }: any) => {
     const { id } = route.params;
     const userInfo: any = useSelector(selectAppProfile);
     const favouries: any = useSelector(selectAppFavouries);
+    const tourViews: any = useSelector(selectAppTourView);
+
     const dispatch = useDispatch();
 
     const [detailTour, setDetailTour] = React.useState<any>(null);
@@ -334,22 +337,36 @@ const TourDetailScreen = ({ route }: any) => {
                         <Text fontWeight="bold" fontSize={17} colorTheme="button">
                             Các tour du lịch đã xem
                         </Text>
-                        <TouchableOpacity>
-                            <Text style={{ textDecorationLine: 'underline' }} color="#666">
-                                Xem thêm
-                            </Text>
-                        </TouchableOpacity>
                     </Block>
 
                     <Block>
                         <FlatList
-                            data={[1, 2, 3, 4]}
+                            data={tourViews}
                             keyExtractor={(item) => item.toString()}
                             horizontal
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item }) => (
-                                <TouchableOpacity onPress={() => navigate(APP_SCREEN.TOUR_DETAIL)}>
-                                    <CardTour title="demo" start_tour="12/12/2022" price="99.999" />
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        navigate(APP_SCREEN.TOUR_DETAIL, item?.tour);
+                                    }}
+                                >
+                                    <CardTour
+                                        tour_image={item?.ImageUrl}
+                                        title={item?.Title}
+                                        range_tour={item?.RangeTour}
+                                        rating={
+                                            item?.feedbacks?.length > 0
+                                                ? (
+                                                      item?.feedbacks?.reduce((prev: any, curr: any) => {
+                                                          return prev + curr.Rate;
+                                                      }, 0) / item?.feedbacks?.length
+                                                  ).toFixed(1)
+                                                : 0
+                                        }
+                                        start_tour={moment(item?.DateStartTour).format('DD/MM/YYYY')}
+                                        price={currencyFormat(item?.TourPrice)}
+                                    />
                                 </TouchableOpacity>
                             )}
                         />

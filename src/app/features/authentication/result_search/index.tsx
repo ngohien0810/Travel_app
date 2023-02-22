@@ -4,10 +4,12 @@ import { currencyFormat } from '@common';
 import { ActionSheet, Block, Screen, Text, Wallpaper } from '@components';
 import { navigate } from '@navigation/navigation-service';
 import { APP_SCREEN } from '@navigation/screen-types';
+import { appActions } from '@redux-slice';
 import { ColorDefault } from '@theme/color';
 import moment from 'moment';
 import React from 'react';
 import { FlatList, Image, TouchableOpacity, View } from 'react-native';
+import { useDispatch } from 'react-redux';
 import Header from '../../../layouts/Header';
 import { homeService } from '../home/service';
 import { FilterTour } from './Filter';
@@ -19,6 +21,7 @@ const ResultSearchScreen = ({ route }: any) => {
     const [tours, setTours] = React.useState<any>([]);
 
     const tourCurrent: any = React.useRef();
+    const dispatch = useDispatch();
 
     const _refAction = React.useRef<ActionSheet>();
 
@@ -68,7 +71,13 @@ const ResultSearchScreen = ({ route }: any) => {
                 data={tours}
                 keyExtractor={(item) => item?.id?.toString()}
                 renderItem={({ item }: any) => (
-                    <TouchableOpacity onPress={() => navigate(APP_SCREEN.TOUR_DETAIL, item)}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigate(APP_SCREEN.TOUR_DETAIL, item);
+
+                            dispatch(appActions.setTourView(item));
+                        }}
+                    >
                         <CardTour
                             tour_image={item?.ImageUrl}
                             title={item?.Title}

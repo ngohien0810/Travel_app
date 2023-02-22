@@ -25,3 +25,8 @@ export const selectAppFavouries = createDeepEqualSelector(
     (state: RootState) => state.app,
     (app) => app.favouries
 );
+
+export const selectAppTourView = createDeepEqualSelector(
+    (state: RootState) => state.app,
+    (app) => app.tourView
+);

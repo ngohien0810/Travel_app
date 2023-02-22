@@ -26,8 +26,14 @@ const CardTour = ({
                     <View>
                         <Image style={styles.image_history_tour} source={{ uri: tour_image }} />
                     </View>
-                    <View style={{ flex: 1 }}>
-                        <Text numberOfLines={2} color={'#21A8B0'} fontWeight="500" fontSize={16}>
+                    <View style={{ flex: 1, maxWidth: 250 }}>
+                        <Text
+                            style={{ width: '100%', flexWrap: 'wrap' }}
+                            numberOfLines={2}
+                            color={'#21A8B0'}
+                            fontWeight="500"
+                            fontSize={16}
+                        >
                             {title}
                         </Text>
                         <View style={styles.wrapper_clock_style}>
