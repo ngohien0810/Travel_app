@@ -75,7 +75,7 @@ const UserProfile = ({ navigation }: any) => {
                         </Text>
                         <Input<any> name="email" label="" />
                         <Text color="#999" style={{ marginBottom: 10, fontWeight: '500' }}>
-                            Các yêu cầu khác
+                            Địa chỉ
                         </Text>
                         <Input<any> name="address" label="" />
                         <Text color="#999" style={{ marginBottom: 10, fontWeight: '500' }}>

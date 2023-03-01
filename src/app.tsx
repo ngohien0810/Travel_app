@@ -24,6 +24,8 @@ declare module 'react' {
 LogBox.ignoreLogs([
     "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
 ]);
+LogBox.ignoreLogs(['Sending...']);
+LogBox.ignoreLogs(['Sending `onAnimatedValueUpdate` with no listeners registered.']);
 
 // const json = require('./app/assets/vector-icon/selection.json');
 // const key = json.icons.reduce((pv, curr) => {

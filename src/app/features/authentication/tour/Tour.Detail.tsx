@@ -274,9 +274,9 @@ const TourDetailScreen = ({ route }: any) => {
                             </Block>
                         </TouchableOpacity>
                     </Block>
-                    {detailTour?.feedbacks?.slice(0, recordFeedback)?.map((item: any, index: number) => {
+                    {/* {detailTour?.feedbacks?.slice(0, recordFeedback)?.map((item: any, index: number) => {
                         return (
-                            <Block key={index} marginTop={16}>
+                            <Block key={Math.random().toString()} marginTop={16}>
                                 <Block
                                     style={{
                                         backgroundColor: '#fff',
@@ -310,7 +310,7 @@ const TourDetailScreen = ({ route }: any) => {
                                 </Block>
                             </Block>
                         );
-                    })}
+                    })} */}
 
                     {detailTour?.feedbacks?.length > 3 && recordFeedback < detailTour?.feedbacks?.length && (
                         <Block direction="row" marginTop={20} justifyContent="center">
@@ -340,36 +340,38 @@ const TourDetailScreen = ({ route }: any) => {
                     </Block>
 
                     <Block>
-                        <FlatList
-                            data={tourViews}
-                            keyExtractor={(item) => item.toString()}
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            renderItem={({ item }) => (
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        navigate(APP_SCREEN.TOUR_DETAIL, item?.tour);
-                                    }}
-                                >
-                                    <CardTour
-                                        tour_image={item?.ImageUrl}
-                                        title={item?.Title}
-                                        range_tour={item?.RangeTour}
-                                        rating={
-                                            item?.feedbacks?.length > 0
-                                                ? (
-                                                      item?.feedbacks?.reduce((prev: any, curr: any) => {
-                                                          return prev + curr.Rate;
-                                                      }, 0) / item?.feedbacks?.length
-                                                  ).toFixed(1)
-                                                : 0
-                                        }
-                                        start_tour={moment(item?.DateStartTour).format('DD/MM/YYYY')}
-                                        price={currencyFormat(item?.TourPrice)}
-                                    />
-                                </TouchableOpacity>
-                            )}
-                        />
+                        {/* {tourViews && tourViews.length > 0 && (
+                            <FlatList
+                                data={tourViews}
+                                keyExtractor={() => Math.random().toString()}
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                renderItem={({ item }) => (
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            navigate(APP_SCREEN.TOUR_DETAIL, item?.tour);
+                                        }}
+                                    >
+                                        <CardTour
+                                            tour_image={item?.ImageUrl}
+                                            title={item?.Title}
+                                            range_tour={item?.RangeTour}
+                                            rating={
+                                                item?.feedbacks?.length > 0
+                                                    ? (
+                                                          item?.feedbacks?.reduce((prev: any, curr: any) => {
+                                                              return prev + curr.Rate;
+                                                          }, 0) / item?.feedbacks?.length
+                                                      ).toFixed(1)
+                                                    : 0
+                                            }
+                                            start_tour={moment(item?.DateStartTour).format('DD/MM/YYYY')}
+                                            price={currencyFormat(item?.TourPrice)}
+                                        />
+                                    </TouchableOpacity>
+                                )}
+                            />
+                        )} */}
                     </Block>
                 </Block>
                 <Modal hasGesture={false} swipingDirection="down" isVisible={modalFeedback}>
