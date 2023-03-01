@@ -54,7 +54,7 @@ export const Login = () => {
                         save(STORAGE_KEY_TOKEN, res.data.user?.id);
                         dispatch(appActions.setAppProfile(res.data.user));
                         setTimeout(() => {
-                            navigate(APP_SCREEN.HOME);
+                            navigate(APP_SCREEN.AUTHORIZE);
                         }, 1000);
                     }
                 });

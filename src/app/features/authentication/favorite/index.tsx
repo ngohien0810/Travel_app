@@ -4,7 +4,7 @@ import { Screen } from '@components';
 import Header from '@layouts/Header';
 import { navigate } from '@navigation/navigation-service';
 import { APP_SCREEN } from '@navigation/screen-types';
-import { selectAppFavouries } from '@redux-selector/app';
+import { selectAppFavouries, selectAppProfile } from '@redux-selector/app';
 import { appActions } from '@redux-slice';
 import moment from 'moment';
 import React from 'react';
@@ -14,7 +14,16 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const FavoriteScreen = () => {
     const favouries: any = useSelector(selectAppFavouries);
+    const userInfo: any = useSelector(selectAppProfile);
+
     const dispatch = useDispatch();
+
+    React.useEffect(() => {
+        if (!userInfo) {
+            navigate(APP_SCREEN.LOGIN);
+        }
+    }, [userInfo]);
+
     return (
         <Screen unsafe>
             <LinearGradient colors={['#2F94A6', '#fff']} style={{ flex: 1 }} start={{ x: 0, y: 0 }}>

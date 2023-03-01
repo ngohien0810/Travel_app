@@ -11,6 +11,7 @@ import React from 'react';
 import { FlatList, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
+import { useSelector } from 'react-redux';
 import { homeService } from '../home/service';
 import { tourService } from '../tour/service';
 import { findShortestPath } from './fc';
@@ -44,6 +45,10 @@ const Card = React.memo(({ item, infoDirection, index, selectIndex }: any) => (
 ));
 
 const MapScreen = ({ route }: any) => {
+    const state: any = useSelector((state: any) => {
+        return state;
+    });
+
     const isFocused = useIsFocused();
     const [viewDetail, setViewDetail] = React.useState(false);
     const [tours, setTours] = React.useState([]);
@@ -115,7 +120,7 @@ const MapScreen = ({ route }: any) => {
             >
                 <Block width="100%" direction="row" justifyContent="center">
                     <View style={styles.container_header}>
-                        {viewDetail && (
+                        {state?.app?.profile && viewDetail && (
                             <View style={styles.header}>
                                 <Block
                                     direction="row"
@@ -145,7 +150,7 @@ const MapScreen = ({ route }: any) => {
                                 {/* <Text>Header</Text> */}
                             </View>
                         )}
-                        {tours && viewDetail && tours?.length > 0 && (
+                        {state?.app?.profile && tours && viewDetail && tours?.length > 0 && (
                             <ScrollView
                                 showsVerticalScrollIndicator={false}
                                 style={{ maxHeight: 500, paddingVertical: 10 }}
@@ -322,7 +327,7 @@ const MapScreen = ({ route }: any) => {
                         })}
                 </MapView>
             </View>
-            {destinations && destinations.length > 0 && (
+            {state?.app?.profile && destinations && destinations.length > 0 && (
                 <Block
                     direction="row"
                     justifyContent="center"

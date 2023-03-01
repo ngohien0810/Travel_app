@@ -41,27 +41,22 @@ export const RootNavigation = () => {
     // render
     return (
         <RootStack.Navigator screenOptions={{ headerShown: false }}>
-            {token === undefined ? (
-                <RootStack.Group
-                    screenOptions={{
-                        animationTypeForReplace: 'pop',
-                    }}
-                >
-                    <RootStack.Screen name={APP_SCREEN.LOGIN} component={Login} />
-                </RootStack.Group>
-            ) : (
-                <RootStack.Group>
-                    <RootStack.Screen name={APP_SCREEN.AUTHORIZE} component={BottomTab} />
-                    <RootStack.Screen name={APP_SCREEN.SEARCH_RESULT} component={ResultSearchScreen} />
-                    <RootStack.Screen name={APP_SCREEN.TOUR} component={TourScreen} />
-                    <RootStack.Screen name={APP_SCREEN.TOUR_DETAIL} component={TourDetailScreen} />
-                    <RootStack.Screen name={APP_SCREEN.NEWS_DETAIL} component={NewsDetailScreen} />
-                    <RootStack.Screen name={APP_SCREEN.ORDER} component={OrderScreen} />
-                    <RootStack.Screen name={APP_SCREEN.CONTACT} component={ContactScreen} />
-                    <RootStack.Screen name={APP_SCREEN.USER_CONTACT} component={UserContact} />
-                    <RootStack.Screen name={APP_SCREEN.USER_PROFILE} component={UserProfile} />
-                </RootStack.Group>
-            )}
+            <RootStack.Group
+                screenOptions={{
+                    animationTypeForReplace: 'pop',
+                }}
+            >
+                <RootStack.Screen name={APP_SCREEN.LOGIN} component={Login} />
+                <RootStack.Screen name={APP_SCREEN.AUTHORIZE} component={BottomTab} />
+                <RootStack.Screen name={APP_SCREEN.SEARCH_RESULT} component={ResultSearchScreen} />
+                <RootStack.Screen name={APP_SCREEN.TOUR} component={TourScreen} />
+                <RootStack.Screen name={APP_SCREEN.TOUR_DETAIL} component={TourDetailScreen} />
+                <RootStack.Screen name={APP_SCREEN.NEWS_DETAIL} component={NewsDetailScreen} />
+                <RootStack.Screen name={APP_SCREEN.ORDER} component={OrderScreen} />
+                <RootStack.Screen name={APP_SCREEN.CONTACT} component={ContactScreen} />
+                <RootStack.Screen name={APP_SCREEN.USER_CONTACT} component={UserContact} />
+                <RootStack.Screen name={APP_SCREEN.USER_PROFILE} component={UserProfile} />
+            </RootStack.Group>
         </RootStack.Navigator>
     );
 };

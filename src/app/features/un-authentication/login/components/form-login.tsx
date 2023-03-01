@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -12,6 +12,8 @@ import { Input } from './input';
 import { Block, Button, Text } from '@components';
 import { useLoginStyle } from '../style';
 import { FormLoginProps } from '../type';
+import { navigate } from '@navigation/navigation-service';
+import { APP_SCREEN } from '@navigation/screen-types';
 
 export const FormLogin = ({ onSubmit }: FormLoginProps) => {
     // state
@@ -45,11 +47,13 @@ export const FormLogin = ({ onSubmit }: FormLoginProps) => {
                     Mật khẩu
                 </Text>
                 <Input<FormLoginType> name={'password'} label={'Mật khẩu'} secureTextEntry />
-                <Block direction="row" justifyContent="flex-end">
-                    <Text style={{ marginBottom: 5 }} colorTheme="button">
-                        Quên mật khẩu?
-                    </Text>
-                </Block>
+                <TouchableOpacity onPress={() => navigate(APP_SCREEN.AUTHORIZE)}>
+                    <Block direction="row" justifyContent="flex-end">
+                        <Text style={{ marginBottom: 5 }} colorTheme="button">
+                            Tra cứu ngay
+                        </Text>
+                    </Block>
+                </TouchableOpacity>
                 <Button
                     buttonColorTheme="button"
                     textStyle={{ textAlign: 'center', fontWeight: 'bold' }}

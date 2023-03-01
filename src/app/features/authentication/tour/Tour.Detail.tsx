@@ -118,11 +118,12 @@ const TourDetailScreen = ({ route }: any) => {
                         iconLeft="#222"
                         leftIcon
                         rightIcon={
-                            favouries?.some((item: any) => {
+                            userInfo &&
+                            (favouries?.some((item: any) => {
                                 return item?.tour?.id === id;
                             })
                                 ? 'ic_heart_bold'
-                                : 'heart'
+                                : 'heart')
                         }
                         onRightPress={hanldePressFavouries}
                     />
@@ -203,11 +204,17 @@ const TourDetailScreen = ({ route }: any) => {
 
                 <Block paddingHorizontal={20}>
                     <TouchableOpacity
-                        onPress={() => navigate(APP_SCREEN.MAPS, { tour_id: detailTour?.id, ...detailTour })}
+                        onPress={() => {
+                            if (userInfo) {
+                                navigate(APP_SCREEN.MAPS, { tour_id: detailTour?.id, ...detailTour });
+                            } else {
+                                navigate(APP_SCREEN.LOGIN);
+                            }
+                        }}
                         style={styles.button}
                     >
                         <Text color="#333" fontWeight="bold">
-                            Lộ trình gợi ý
+                            {userInfo ? 'Lộ trình gợi ý' : 'Đăng nhập'}
                         </Text>
                     </TouchableOpacity>
                 </Block>
@@ -255,11 +262,13 @@ const TourDetailScreen = ({ route }: any) => {
                                 </Block>
                             </View>
                         </Block>
-                        <TouchableOpacity onPress={() => setModalFeedback(true)}>
+
+                        <TouchableOpacity onPress={() => userInfo && setModalFeedback(true)}>
                             <Block
                                 style={{
                                     borderWidth: 1,
                                     borderColor: '#fff',
+                                    backgroundColor: userInfo ? 'transparent' : '#ccc',
                                     paddingHorizontal: 20,
                                     paddingVertical: 10,
                                     borderRadius: 10,
@@ -340,38 +349,33 @@ const TourDetailScreen = ({ route }: any) => {
                     </Block>
 
                     <Block>
-                        {/* {tourViews && tourViews.length > 0 && (
-                            <FlatList
-                                data={tourViews}
-                                keyExtractor={() => Math.random().toString()}
-                                horizontal
-                                showsHorizontalScrollIndicator={false}
-                                renderItem={({ item }) => (
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            navigate(APP_SCREEN.TOUR_DETAIL, item?.tour);
-                                        }}
-                                    >
-                                        <CardTour
-                                            tour_image={item?.ImageUrl}
-                                            title={item?.Title}
-                                            range_tour={item?.RangeTour}
-                                            rating={
-                                                item?.feedbacks?.length > 0
-                                                    ? (
-                                                          item?.feedbacks?.reduce((prev: any, curr: any) => {
-                                                              return prev + curr.Rate;
-                                                          }, 0) / item?.feedbacks?.length
-                                                      ).toFixed(1)
-                                                    : 0
-                                            }
-                                            start_tour={moment(item?.DateStartTour).format('DD/MM/YYYY')}
-                                            price={currencyFormat(item?.TourPrice)}
-                                        />
-                                    </TouchableOpacity>
-                                )}
-                            />
-                        )} */}
+                        {tourViews &&
+                            tourViews?.length > 0 &&
+                            tourViews?.slice(0, 5)?.map((item: any) => (
+                                <TouchableOpacity
+                                    key={Math.random().toString()}
+                                    onPress={() => {
+                                        navigate(APP_SCREEN.TOUR_DETAIL, item?.tour);
+                                    }}
+                                >
+                                    <CardTour
+                                        tour_image={item?.ImageUrl}
+                                        title={item?.Title}
+                                        range_tour={item?.RangeTour}
+                                        rating={
+                                            item?.feedbacks?.length > 0
+                                                ? (
+                                                      item?.feedbacks?.reduce((prev: any, curr: any) => {
+                                                          return prev + curr.Rate;
+                                                      }, 0) / item?.feedbacks?.length
+                                                  ).toFixed(1)
+                                                : 0
+                                        }
+                                        start_tour={moment(item?.DateStartTour).format('DD/MM/YYYY')}
+                                        price={currencyFormat(item?.TourPrice)}
+                                    />
+                                </TouchableOpacity>
+                            ))}
                     </Block>
                 </Block>
                 <Modal hasGesture={false} swipingDirection="down" isVisible={modalFeedback}>
@@ -456,12 +460,16 @@ const TourDetailScreen = ({ route }: any) => {
             <Block paddingHorizontal={20} paddingBottom={25} marginTop={10}>
                 <TouchableOpacity
                     onPress={() => {
-                        navigate(APP_SCREEN.ORDER, detailTour);
+                        if (userInfo) {
+                            navigate(APP_SCREEN.ORDER, detailTour);
+                        } else {
+                            navigate(APP_SCREEN.LOGIN);
+                        }
                     }}
                     style={[styles.button, { backgroundColor: ColorDefault.button }]}
                 >
                     <Text fontWeight="bold" color="#fff">
-                        Đặt tour
+                        {userInfo ? 'Đặt tour' : 'Đăng nhập'}
                     </Text>
                 </TouchableOpacity>
             </Block>

@@ -12,6 +12,12 @@ import { useSelector } from 'react-redux';
 const UserScreen = () => {
     const userInfo: any = useSelector(selectAppProfile);
 
+    React.useEffect(() => {
+        if (!userInfo) {
+            navigate(APP_SCREEN.LOGIN);
+        }
+    }, [userInfo]);
+
     return (
         <Screen unsafe style={{ backgroundColor: '#fff' }}>
             {/* block thì căn giữ 2 chiều */}
