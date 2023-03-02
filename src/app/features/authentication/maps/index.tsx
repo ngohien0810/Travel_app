@@ -16,7 +16,7 @@ import { homeService } from '../home/service';
 import { tourService } from '../tour/service';
 import { findShortestPath } from './fc';
 
-const GOOGLE_MAPS_APIKEY = 'AIzaSyDTnctA4mD-u3-fBr7de1TaVCRwvsR8TwU';
+const GOOGLE_MAPS_APIKEY = 'AIzaSyCJkKq1RRBvTzamDHadr1e1wU3JpZeNoP4';
 
 const Card = React.memo(({ item, infoDirection, index, selectIndex }: any) => (
     <View style={[styles.cardContainer, selectIndex == index && styles.cardSelect]}>

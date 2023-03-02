@@ -280,6 +280,7 @@ function Tab1Screen({ setSelectedTab }: any) {
                                         Name: userInfo?.Name,
                                         Phone: userInfo?.Phone,
                                         Email: userInfo?.Email,
+                                        Avatar: userInfo?.Avatar,
                                         Rate: rate,
                                         Note: note,
                                         TourId: tourSelect?.tour?.id,

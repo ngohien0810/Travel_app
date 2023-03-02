@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux';
 import BottomTab from './bottom-tab';
 import TourScreen from '@features/authentication/tour';
 import UserProfile from '@features/authentication/user/User.Profile';
+import UserPassword from '@features/authentication/user/User.Password';
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
@@ -46,8 +47,8 @@ export const RootNavigation = () => {
                     animationTypeForReplace: 'pop',
                 }}
             >
-                <RootStack.Screen name={APP_SCREEN.LOGIN} component={Login} />
                 <RootStack.Screen name={APP_SCREEN.AUTHORIZE} component={BottomTab} />
+                <RootStack.Screen name={APP_SCREEN.LOGIN} component={Login} />
                 <RootStack.Screen name={APP_SCREEN.SEARCH_RESULT} component={ResultSearchScreen} />
                 <RootStack.Screen name={APP_SCREEN.TOUR} component={TourScreen} />
                 <RootStack.Screen name={APP_SCREEN.TOUR_DETAIL} component={TourDetailScreen} />
@@ -56,6 +57,7 @@ export const RootNavigation = () => {
                 <RootStack.Screen name={APP_SCREEN.CONTACT} component={ContactScreen} />
                 <RootStack.Screen name={APP_SCREEN.USER_CONTACT} component={UserContact} />
                 <RootStack.Screen name={APP_SCREEN.USER_PROFILE} component={UserProfile} />
+                <RootStack.Screen name={APP_SCREEN.CHANGE_PASSWORD} component={UserPassword} />
             </RootStack.Group>
         </RootStack.Navigator>
     );

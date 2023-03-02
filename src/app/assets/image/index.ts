@@ -25,6 +25,7 @@ export const images = {
     children: require('./source/children.png'),
     empty: require('./source/empty.png'),
     spin: require('./source/spin.gif'),
+    camera: require('./source/camera.png'),
 };
 
 export type ImageTypes = keyof typeof images;

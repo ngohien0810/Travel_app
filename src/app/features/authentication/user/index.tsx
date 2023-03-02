@@ -32,7 +32,12 @@ const UserScreen = () => {
                 style={{ backgroundColor: '#53B7B1', paddingVertical: 38, paddingHorizontal: 68 }}
             >
                 <Block>
-                    <Image style={styles.avatar} source={images.avatar} />
+                    <Image
+                        style={styles.avatar}
+                        source={{
+                            uri: userInfo?.Avatar,
+                        }}
+                    />
                 </Block>
                 <Block style={{ paddingLeft: 20 }}>
                     <Text fontSize={20} lineHeight={40} color="#fff">
@@ -101,17 +106,23 @@ const UserScreen = () => {
                         </Block>
                     </Block>
                 </TouchableOpacity>
-                <Block marginBottom={40} direction="row" alignItems="center" justifyContent="space-between">
-                    <Block direction="row" alignItems="center">
-                        <VectorIcon color={'#15898F'} icon="lock" />
-                        <Text fontSize={14} color="#6B6B6B" style={{ paddingLeft: 23 }}>
-                            Đổi mật khẩu
-                        </Text>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigate(APP_SCREEN.CHANGE_PASSWORD);
+                    }}
+                >
+                    <Block marginBottom={40} direction="row" alignItems="center" justifyContent="space-between">
+                        <Block direction="row" alignItems="center">
+                            <VectorIcon color={'#15898F'} icon="lock" />
+                            <Text fontSize={14} color="#6B6B6B" style={{ paddingLeft: 23 }}>
+                                Đổi mật khẩu
+                            </Text>
+                        </Block>
+                        <Block paddingRight={7}>
+                            <VectorIcon color={'#15898F'} size={18} icon="arrow_right_2" />
+                        </Block>
                     </Block>
-                    <Block paddingRight={7}>
-                        <VectorIcon color={'#15898F'} size={18} icon="arrow_right_2" />
-                    </Block>
-                </Block>
+                </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => {
                         logout();
@@ -140,5 +151,6 @@ const styles = StyleSheet.create({
     avatar: {
         width: 80,
         height: 80,
+        borderRadius: 999,
     },
 });

@@ -268,7 +268,7 @@ const HomeComponent = () => {
                 tourViews?.slice(0, 5)?.map((item: any) => (
                     <TouchableOpacity
                         onPress={() => {
-                            navigate(APP_SCREEN.TOUR_DETAIL, item?.tour);
+                            navigate(APP_SCREEN.TOUR_DETAIL, item);
                         }}
                     >
                         <CardTour

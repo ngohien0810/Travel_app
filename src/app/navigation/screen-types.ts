@@ -16,6 +16,7 @@ export enum APP_SCREEN {
     USER_PROFILE = 'USER_PROFILE',
     NEWS = 'NEWS',
     NEWS_DETAIL = 'NEWS_DETAIL',
+    CHANGE_PASSWORD = 'CHANGE_PASSWORD',
 
     // screen not bottom tab
     SEARCH_RESULT = 'SEARCH_RESULT',
@@ -39,6 +40,7 @@ export type AuthorizeParamsList = {
     [APP_SCREEN.CONTACT]: undefined;
     [APP_SCREEN.USER_CONTACT]: undefined;
     [APP_SCREEN.USER_PROFILE]: undefined;
+    [APP_SCREEN.CHANGE_PASSWORD]: undefined;
 };
 
 export type RootStackParamList = {

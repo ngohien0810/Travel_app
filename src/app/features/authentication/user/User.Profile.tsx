@@ -1,35 +1,69 @@
-import { ImageBackground, StyleSheet, TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import { images } from '@assets/image';
 import { Block, Screen, Text } from '@components';
 import Header from '@layouts/Header';
-import { images } from '@assets/image';
-import { WIDTH_SCREEN } from '@theme';
-import { VectorIcon } from '@assets/vector-icon/vector-icon';
-import { navigationRef } from '@navigation/navigation-service';
 import { StackActions } from '@react-navigation/native';
-import FastImage from 'react-native-fast-image';
-import { FormProvider, useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
-import { Input } from '../order/components/input';
+import { selectAppProfile } from '@redux-selector/app';
+import { appActions } from '@redux-slice';
+import { WIDTH_SCREEN } from '@theme';
 import { ColorDefault } from '@theme/color';
+import axios from 'axios';
+import React from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import FastImage from 'react-native-fast-image';
+import { showMessage } from 'react-native-flash-message';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { launchImageLibrary } from 'react-native-image-picker';
+import { useDispatch, useSelector } from 'react-redux';
+import { Input } from '../order/components/input';
+import { userService } from './service';
 
 const UserProfile = ({ navigation }: any) => {
+    const dispatch = useDispatch();
     const [gender, setGender] = React.useState<any>();
     // state
     const formMethod = useForm<any>();
     const state: any = useSelector((state: any) => {
         return state;
     });
+    const userInfo: any = useSelector(selectAppProfile);
+    const [avatar, setAvatar] = React.useState('');
+
+    const [loading, setLoading] = React.useState(false);
 
     // function
     const onSubmitKey = () => {
         formMethod.handleSubmit(onSubmit)();
     };
 
-    const onSubmit = (data: any) => {};
+    const onSubmit = (data: any) => {
+        const dataSend = {
+            Name: data?.name,
+            Email: data?.email,
+            Phone: data?.phone,
+            Gender: gender,
+            Address: data?.address,
+            Avatar: avatar,
+            id: userInfo?.id,
+        };
+
+        userService.updateProfile(dataSend).then((res: any) => {
+            dispatch(
+                appActions.setAppProfile({
+                    ...userInfo,
+                    ...dataSend,
+                })
+            );
+            showMessage({
+                message: 'Cập nhật thành công',
+                titleStyle: { textAlign: 'center' },
+                type: 'success',
+            });
+        });
+    };
 
     React.useEffect(() => {
-        console.log('🚀 ~ file: User.Profile.tsx:31 ~ React.useEffect ~ state?.profile?.name:', state?.app?.profile);
+        setAvatar(userInfo?.Avatar);
         formMethod.setValue('name', state?.app?.profile?.Name);
         formMethod.setValue('phone', state?.app?.profile?.Phone);
         formMethod.setValue('email', state?.app?.profile?.Email);
@@ -37,8 +71,46 @@ const UserProfile = ({ navigation }: any) => {
         setGender(state?.app?.profile?.Gender);
     }, [state?.profile]);
 
+    const pickImage = () => {
+        launchImageLibrary(
+            {
+                mediaType: 'photo',
+                quality: 1,
+            },
+            async (response: any) => {
+                if (response.didCancel) {
+                    console.log('User cancelled image picker');
+                } else if (response.error) {
+                    console.log('ImagePicker Error: ', response.error);
+                } else {
+                    setLoading(true);
+
+                    // Create form data with image data to upload
+                    const formData = new FormData();
+                    formData.append('file', {
+                        uri: response?.assets?.[0]?.uri?.replace('file://', ''),
+                        type: response?.assets?.[0]?.type,
+                        name: response?.assets?.[0]?.name || 'image.jpg',
+                    });
+                    formData.append('upload_preset', 'breqd0hm');
+                    formData.append('cloud_name', 'hunre');
+
+                    fetch('https://api.cloudinary.com/v1_1/hunre/image/upload', {
+                        method: 'POST',
+                        body: formData,
+                    })
+                        .then((res) => res.json())
+                        .then((data: any) => {
+                            setAvatar(data?.secure_url);
+                            setLoading(false);
+                        });
+                }
+            }
+        );
+    };
+
     return (
-        <Screen unsafe style={{ backgroundColor: '#f2f2f2' }}>
+        <Screen dialogLoading={loading} unsafe style={{ backgroundColor: '#f2f2f2' }}>
             {/* header */}
             <Header
                 style={{ backgroundColor: '#fff', width: WIDTH_SCREEN }}
@@ -51,14 +123,10 @@ const UserProfile = ({ navigation }: any) => {
             />
             <Block flex={1} color="#fff">
                 <Block paddingVertical={20} style={{ alignSelf: 'center' }}>
-                    <FastImage style={styles.avatar} resizeMode="cover" source={{ uri: 'https://i.pravatar.cc/500' }} />
-                    {/* <TouchableOpacity style={styles.btnCamera}>
-                                        <FastImage
-                                            style={styles.cameraIcon}
-                                            resizeMode="cover"
-                                            source={assets.images.camera}
-                                        />
-                                    </TouchableOpacity> */}
+                    <FastImage style={styles.avatar} resizeMode="cover" source={{ uri: avatar }} />
+                    <TouchableOpacity onPress={() => pickImage()} style={styles.btnCamera}>
+                        <FastImage style={styles.cameraIcon} resizeMode="cover" source={images.camera} />
+                    </TouchableOpacity>
                 </Block>
                 <Block paddingHorizontal={30}>
                     <FormProvider {...formMethod}>
@@ -69,7 +137,7 @@ const UserProfile = ({ navigation }: any) => {
                         <Text color="#999" style={{ marginBottom: 10, fontWeight: '500' }}>
                             Số điện thoại
                         </Text>
-                        <Input<any> name="phone" label="" />
+                        <Input<any> disabled name="phone" containerStyle={{ backgroundColor: '#ccc' }} label="" />
                         <Text color="#999" style={{ marginBottom: 10, fontWeight: '500' }}>
                             Email
                         </Text>
@@ -116,9 +184,7 @@ const UserProfile = ({ navigation }: any) => {
                             </Block>
                         </Block>
                         <TouchableOpacity
-                            // onPress={() => {
-                            //     navigate(APP_SCREEN.ORDER, detailTour);
-                            // }}
+                            onPress={onSubmitKey}
                             style={[styles.button, { backgroundColor: ColorDefault.button }]}
                         >
                             <Text color="#fff" fontWeight="bold">
@@ -150,5 +216,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 20,
+    },
+    btnCamera: {
+        backgroundColor: ColorDefault.button,
+        position: 'absolute',
+        right: 0,
+        bottom: 30,
+        height: 35,
+        width: 35,
+        borderRadius: 50,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    cameraIcon: {
+        height: 20,
+        width: 20,
     },
 });

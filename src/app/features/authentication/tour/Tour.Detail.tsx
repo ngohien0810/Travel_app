@@ -37,6 +37,7 @@ const TourDetailScreen = ({ route }: any) => {
     const dispatch = useDispatch();
 
     const [detailTour, setDetailTour] = React.useState<any>(null);
+    console.log('🚀 ~ file: Tour.Detail.tsx:40 ~ TourDetailScreen ~ detailTour:', detailTour);
     const { width } = useWindowDimensions();
     const [loading, setLoading] = React.useState(false);
     const [page, setPage] = React.useState(1);
@@ -283,7 +284,7 @@ const TourDetailScreen = ({ route }: any) => {
                             </Block>
                         </TouchableOpacity>
                     </Block>
-                    {/* {detailTour?.feedbacks?.slice(0, recordFeedback)?.map((item: any, index: number) => {
+                    {detailTour?.feedbacks?.slice(0, recordFeedback)?.map((item: any, index: number) => {
                         return (
                             <Block key={Math.random().toString()} marginTop={16}>
                                 <Block
@@ -295,7 +296,10 @@ const TourDetailScreen = ({ route }: any) => {
                                 >
                                     <Block direction="row" alignItems="center" justifyContent="space-between">
                                         <Block direction="row" alignItems="center">
-                                            <Image source={images.avatar} style={{ width: 50, height: 50 }} />
+                                            <Image
+                                                source={item?.Avatar ? { uri: item?.Avatar } : images.avatar}
+                                                style={{ width: 50, height: 50, borderRadius: 999 }}
+                                            />
                                             <Block marginLeft={10} alignItems="center">
                                                 <Text>{item.Name}</Text>
                                                 <View style={styles.wrapper_clock_style}>
@@ -319,7 +323,7 @@ const TourDetailScreen = ({ route }: any) => {
                                 </Block>
                             </Block>
                         );
-                    })} */}
+                    })}
 
                     {detailTour?.feedbacks?.length > 3 && recordFeedback < detailTour?.feedbacks?.length && (
                         <Block direction="row" marginTop={20} justifyContent="center">
@@ -355,7 +359,7 @@ const TourDetailScreen = ({ route }: any) => {
                                 <TouchableOpacity
                                     key={Math.random().toString()}
                                     onPress={() => {
-                                        navigate(APP_SCREEN.TOUR_DETAIL, item?.tour);
+                                        navigate(APP_SCREEN.TOUR_DETAIL, item);
                                     }}
                                 >
                                     <CardTour
@@ -434,6 +438,7 @@ const TourDetailScreen = ({ route }: any) => {
                                             Name: userInfo?.Name,
                                             Phone: userInfo?.Phone,
                                             Email: userInfo?.Email,
+                                            Avatar: userInfo?.Avatar,
                                             Rate: rate,
                                             Note: note,
                                             TourId: detailTour?.id,
