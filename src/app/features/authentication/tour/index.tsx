@@ -450,7 +450,7 @@ function Tab2Screen() {
                     </Block>
                 </Block>
                 <Block direction="row" paddingVertical={20} paddingHorizontal={20}>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         onPress={() => {
                             Alert.alert('Thông báo', 'Bạn có chắc chắn muốn huỷ đặt tour này không?', [
                                 {
@@ -475,7 +475,7 @@ function Tab2Screen() {
                         <Block paddingVertical={14} borderRadius={10} justifyContent="center" alignItems="center">
                             <Text color="crison">Huỷ đặt</Text>
                         </Block>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <TouchableOpacity
                         onPress={() => {
                             _refAction.current.hide();

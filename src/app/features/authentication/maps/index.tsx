@@ -62,21 +62,25 @@ const MapScreen = ({ route }: any) => {
 
     const [tourId, setTourId] = React.useState('');
     const [detailTour, setDetailTour] = React.useState<any>(null);
-
-    const DEFAULT_REGION =
-        destinations && destinations.length > 0
-            ? {
-                  latitude: destinations[0]?.Latitude,
-                  longitude: destinations[0]?.Longtitude,
-                  latitudeDelta: 0.1,
-                  longitudeDelta: 0.0134,
-              }
-            : { latitude: 21.028511, longitude: 105.804817, latitudeDelta: 0.06, longitudeDelta: 0.0134 };
+    const [region, setRegion] = React.useState<any>();
 
     React.useEffect(() => {
         setTourId(route?.params?.tour_id);
         setDetailTour(route?.params);
     }, [route?.params]);
+
+    React.useEffect(() => {
+        if (destinations && destinations.length > 0) {
+            setRegion({
+                latitude: destinations[0]?.Latitude,
+                longitude: destinations[0]?.Longtitude,
+                latitudeDelta: 0.1,
+                longitudeDelta: 0.0134,
+            });
+        } else {
+            setRegion({ latitude: 21.028511, longitude: 105.804817, latitudeDelta: 0.06, longitudeDelta: 0.0134 });
+        }
+    }, [destinations]);
 
     React.useEffect(() => {
         if (!tourId) {
@@ -259,7 +263,7 @@ const MapScreen = ({ route }: any) => {
                     // showsUserLocation
                     // mapType="hybrid"
                     style={{ ...styles.map }}
-                    region={DEFAULT_REGION}
+                    region={region}
                 >
                     {findDestinations &&
                         findDestinations.length > 0 &&
@@ -345,7 +349,17 @@ const MapScreen = ({ route }: any) => {
                             data={findDestinations}
                             keyExtractor={() => Math.random().toString()}
                             renderItem={({ item, index }: any) => (
-                                <TouchableOpacity onPress={() => setSelectIndex(index)}>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        setRegion({
+                                            latitude: destinations[index]?.Latitude,
+                                            longitude: destinations[index]?.Longtitude,
+                                            latitudeDelta: 0.1,
+                                            longitudeDelta: 0.0134,
+                                        });
+                                        setSelectIndex(index);
+                                    }}
+                                >
                                     <Card
                                         selectIndex={selectIndex}
                                         infoDirection={infoDirection}

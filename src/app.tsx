@@ -26,6 +26,7 @@ LogBox.ignoreLogs([
 ]);
 LogBox.ignoreLogs(['Sending...']);
 LogBox.ignoreLogs(['Sending `onAnimatedValueUpdate` with no listeners registered.']);
+LogBox.ignoreLogs(['Each child in a list should have a unique "key" prop.']);
 
 // const json = require('./app/assets/vector-icon/selection.json');
 // const key = json.icons.reduce((pv, curr) => {

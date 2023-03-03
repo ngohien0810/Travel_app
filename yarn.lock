@@ -1486,7 +1486,7 @@
 
 "@rnmapbox/maps@rnmapbox/maps#main":
   version "10.0.0-beta.72"
-  resolved "https://codeload.github.com/rnmapbox/maps/tar.gz/75a900fc1481a8f2f8a52478f772cf7f8533eed9"
+  resolved "https://codeload.github.com/rnmapbox/maps/tar.gz/fe70b2111bee46c37e74a5450795b7eb2100e7bc"
   dependencies:
     "@mapbox/geo-viewport" ">=0.4.0"
     "@turf/along" "6.5.0"
@@ -1754,9 +1754,9 @@
   integrity sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==
 
 "@types/node@*":
-  version "18.14.3"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.14.3.tgz#485070908df2e7b476ecaf83108e50b4d925a153"
-  integrity sha512-1y36CC5iL5CMyKALzwX9cwwxcWIxvIBe3gzs4GrXWXEQ8klQnCZ2U/WDGiNrXHmQcUhnaun17XG9TEIDlGj2RA==
+  version "18.14.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.14.4.tgz#0e64ec0b35a772e1e3d849f9a0ff61782d0cb647"
+  integrity sha512-VhCw7I7qO2X49+jaKcAUwi3rR+hbxT5VcYF493+Z5kMLI0DL568b7JI4IDJaxWFH0D/xwmGJNoXisyX+w7GH/g==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.1"

@@ -1,8 +1,8 @@
-//  Để giải quyết bài toán tìm đường đi ngắn nhất dựa vào kinh độ và vĩ độ, ta có thể sử dụng thuật toán TSP (Traveling Salesman Problem) để tìm ra chu trình Hamilton ngắn nhất trong đồ thị có trọng số.
+// Tuy nhiên, bài toán của chúng ta là tìm đường đi ngắn nhất từ điểm bắt đầu có OrderIndex = 1
+// và đi qua tất cả các điểm khác đúng 1 lần. Do đó, ta có thể sử dụng thuật toán nearest neighbor để giải quyết bài toán này.
 
-// Tuy nhiên, bài toán của chúng ta là tìm đường đi ngắn nhất từ điểm bắt đầu có OrderIndex = 1 và đi qua tất cả các điểm khác đúng 1 lần. Do đó, ta có thể sử dụng thuật toán nearest neighbor để giải quyết bài toán này.
-
-// Thuật toán nearest neighbor sẽ chọn điểm gần nhất với điểm hiện tại và tiếp tục chọn điểm gần nhất với điểm mới cho đến khi tìm được đường đi qua tất cả các điểm.
+// Thuật toán nearest neighbor sẽ chọn điểm gần nhất với điểm hiện tại và tiếp tục chọn điểm gần nhất với điểm mới cho
+//  đến khi tìm được đường đi qua tất cả các điểm.
 
 export function findShortestPath(data: any) {
     const startIndex = 0; // Vị trí điểm bắt đầu

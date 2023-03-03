@@ -47,13 +47,7 @@ export const FormLogin = ({ onSubmit }: FormLoginProps) => {
                     Mật khẩu
                 </Text>
                 <Input<FormLoginType> name={'password'} label={'Mật khẩu'} secureTextEntry />
-                <TouchableOpacity onPress={() => navigate(APP_SCREEN.AUTHORIZE)}>
-                    <Block direction="row" justifyContent="flex-end">
-                        <Text style={{ marginBottom: 5 }} colorTheme="button">
-                            Tra cứu ngay
-                        </Text>
-                    </Block>
-                </TouchableOpacity>
+
                 <Button
                     buttonColorTheme="button"
                     textStyle={{ textAlign: 'center', fontWeight: 'bold' }}

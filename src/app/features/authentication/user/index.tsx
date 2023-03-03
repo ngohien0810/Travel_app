@@ -7,6 +7,7 @@ import { APP_SCREEN } from '@navigation/screen-types';
 import { selectAppProfile } from '@redux-selector/app';
 import React from 'react';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { useSelector } from 'react-redux';
 
 const UserScreen = () => {
@@ -32,7 +33,7 @@ const UserScreen = () => {
                 style={{ backgroundColor: '#53B7B1', paddingVertical: 38, paddingHorizontal: 68 }}
             >
                 <Block>
-                    <Image
+                    <FastImage
                         style={styles.avatar}
                         source={{
                             uri: userInfo?.Avatar,

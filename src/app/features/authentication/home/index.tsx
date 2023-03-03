@@ -185,7 +185,7 @@ const HomeComponent = () => {
             </View>
             <FlatList
                 style={{ paddingHorizontal: 20, flexGrow: 0 }}
-                data={hotTour.filter((item: any) => item?.IsHome)}
+                data={hotTour?.filter((item: any) => item?.IsHome)}
                 keyExtractor={(record: any) => record?.id}
                 renderItem={({ item }: any) => (
                     <TouchableOpacity
